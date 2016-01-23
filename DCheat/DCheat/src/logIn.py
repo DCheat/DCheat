@@ -12,6 +12,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import *
 from DCheat import config
 from DCheat.src import networkServer
+from DCheat.src import selectCourse
 
 class logIn(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -24,12 +25,16 @@ class logIn(QtWidgets.QDialog):
     @pyqtSlot()
     def slot_login(self):
         userID =  self.ui.lineEdit.text()
-        self.ui.close()
-        self.sock = networkServer.networkServer(userID)
-        loginResult = self.sock.send_login_message()
+        # 나중에 주석 해제
+        # self.sock = networkServer.networkServer(userID)
+        # self.sock.send_login_message()
 
-        if loginResult is 1:
+        loginResult = '1,2,3,4,5'
+
+        if loginResult is -1:
             pass
 
         else:
+            self.ui.reject()
+            course = selectCourse.selectCourse(courseList=loginResult)
             pass
