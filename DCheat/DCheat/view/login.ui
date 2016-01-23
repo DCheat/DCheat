@@ -56,6 +56,12 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>LogIn</string>
    </property>
@@ -69,8 +75,14 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string>Cancel</string>
+    <string>취소</string>
    </property>
   </widget>
  </widget>

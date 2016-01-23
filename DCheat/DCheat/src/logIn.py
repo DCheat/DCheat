@@ -17,7 +17,7 @@ from DCheat.src import selectCourse
 class logIn(QtWidgets.QDialog):
     def __init__(self, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi(config.config.ROOT_PATH +'/view/login.ui', self)
+        self.ui = uic.loadUi(config.config.ROOT_PATH +'view/login.ui', self)
         self.ui.show()
 
         self.sock = object
@@ -36,5 +36,5 @@ class logIn(QtWidgets.QDialog):
 
         else:
             self.ui.reject()
-            course = selectCourse.selectCourse(courseList=loginResult)
+            course = selectCourse.selectCourse(courseList=loginResult, socket=self.sock)
             pass

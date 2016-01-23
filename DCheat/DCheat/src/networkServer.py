@@ -24,6 +24,23 @@ class networkServer(object):
             self.clientsock.close()
         return loginResult
 
+    def send_select_course(self, courseName):
+        self.clientsock.sendall(courseName)
+        totalmessage = self.clientsock.recv(1024)
+
+        totalmessage = totalmessage.split('^')
+        banProgram = totalmessage[0].split(',')
+        allowWeb = totalmessage[1].split(',')
+
+        fwProgram = open(config.ROOT_PATH+'pList.bat', 'wb')
+        fwWeb = open(config.ROOT_PATH+'wList.bat', 'wb')
+
+        fwProgram.writelines(banProgram)
+        fwWeb.writelines(allowWeb)
+
+        fwProgram.close()
+        fwWeb.close()
+
     def send_process_info(self):
         # 작성중.....
         pass

@@ -11,12 +11,14 @@ from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtCore import *
 from DCheat import config
-from DCheat.src import networkServer
+from DCheat.src import webView
 
 class selectCourse(QtWidgets.QDialog):
-    def __init__(self, courseList, parent=None):
+    def __init__(self, courseList, socket, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi(config.config.ROOT_PATH +'/view/selectCourse.ui', self)
+        self.ui = uic.loadUi(config.config.ROOT_PATH +'view/selectCourse.ui', self)
+
+        self.sock = socket
 
         self.courseList = courseList
         self.courseList = courseList.split(',')
@@ -28,5 +30,7 @@ class selectCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def slot_select(self):
-        a = self.ui.listWidget.currentRow()
-        print(a, self.courseList[a])
+        index = self.ui.listWidget.currentRow()
+        # self.sock.send_selectCourse(self.courseList[index])
+        print(index, self.courseList[index])
+        webView.webView()
