@@ -32,5 +32,6 @@ class selectCourse(QtWidgets.QDialog):
     def slot_select(self):
         index = self.ui.listWidget.currentRow()
         # self.sock.send_selectCourse(self.courseList[index])
-        print(index, self.courseList[index])
+        # print(index, self.courseList[index])
+        self.ui.reject()
         webView.webView()
