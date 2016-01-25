@@ -31,7 +31,11 @@ class selectCourse(QtWidgets.QDialog):
     @pyqtSlot()
     def slot_select(self):
         index = self.ui.listWidget.currentRow()
-        # self.sock.send_selectCourse(self.courseList[index])
+        # banProgram, allowWeb = self.sock.send_selectCourse(self.courseList[index])
         # print(index, self.courseList[index])
+        banProgram = ['KakaoTalk', 'Skype']
+        allowWeb = ['https://algolab.kookmin.ac.kr', 'http://www.daum.net']
+
         self.ui.reject()
-        webView.webView()
+
+        webView.webView(program = banProgram, web = allowWeb)

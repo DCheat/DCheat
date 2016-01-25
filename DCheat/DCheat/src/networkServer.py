@@ -14,7 +14,7 @@ class networkServer(object):
     def __init__(self, userID):
         self.clientsock = socket(AF_INET, SOCK_STREAM)
         self.clientsock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-        self.clientsock.connect((config.HOST, config.PORT))
+        self.clientsock.connect((config.config.HOST, config.config.PORT))
         self.userID = userID
 
     def send_login_message(self):
@@ -32,14 +32,7 @@ class networkServer(object):
         banProgram = totalmessage[0].split(',')
         allowWeb = totalmessage[1].split(',')
 
-        fwProgram = open(config.ROOT_PATH+'pList.bat', 'wb')
-        fwWeb = open(config.ROOT_PATH+'wList.bat', 'wb')
-
-        fwProgram.writelines(banProgram)
-        fwWeb.writelines(allowWeb)
-
-        fwProgram.close()
-        fwWeb.close()
+        return banProgram, allowWeb
 
     def send_process_info(self):
         # 작성중.....
