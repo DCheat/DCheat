@@ -1,2 +1,1 @@
-[![Build Status]](https://travis-ci.org/dollking/DCheat.svg?branch=master)
-# DCheat
+# DCheat [![Build Status]](https://travis-ci.org/dollking/DCheat.svg?branch=master)
