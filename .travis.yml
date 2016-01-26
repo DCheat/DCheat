@@ -4,6 +4,6 @@ python:
 # command to install dependencies
 install:
   - sudo apt-get update
-  - sudo apt-get install python3-pyqt5
+  - sudo apt-get install qtcreator pyqt5-dev-tools
 # command to run tests
 script: nosetests
