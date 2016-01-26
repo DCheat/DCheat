@@ -3,7 +3,6 @@ python:
   - "3.4"
 # command to install dependencies
 install:
-  - sudo apt-get update
-  - sudo apt-get install qtcreator pyqt5-dev-tools
+  - sudo apt-get install SIP
 # command to run tests
 script: nosetests
