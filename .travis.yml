@@ -8,7 +8,7 @@ install:
   - sudo apt-get install python3-setuptools -y
   - sudo pip install psutil
   - sudo apt-get install python3-PyQt4 -y
-  - sudo apt-get upgrade
+  - sudo apt-get upgrade -y
   - sudo apt-get python3-PyQt5 -y
 # command to run tests
 script: nosetests
