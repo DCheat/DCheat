@@ -8,7 +8,7 @@ install:
   - sudo pip install psutil
   - sudo apt-get install python3
   - sudo apt-get install python3-dev -y
-  - sudo apt-get install python3-setuptools -y
+  - sudo apt-get install python3-pip -y
   - sudo pip3 install psutil
   - sudo apt-get install python3-PyQt4 -y
   - sudo apt-get python3-PyQt5 -y
