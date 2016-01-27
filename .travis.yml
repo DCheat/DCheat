@@ -3,6 +3,11 @@ python:
   - "3.4"
 # command to install dependencies
 install:
+  - sudo apt-get update
+  - sudo apt-get install python3.4.4 -y
+  - sudo apt-get install python3-dev -y
+  - sudo apt-get install python3-setuptools -y
+  - sudo pip3 install psutil
   - sudo apt-get install python3-pyqt4
   - sudo apt-get install python3-pyqt5
 # command to run tests
