@@ -61,6 +61,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>listWidget</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>Dialog</receiver>
+   <slot>slot_select()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>262</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>367</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slot_select()</slot>

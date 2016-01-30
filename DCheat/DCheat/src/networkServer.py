@@ -10,6 +10,8 @@
 from socket import *
 from DCheat import config
 
+BUFFER_SIZE = 10240
+
 class networkServer(object):
     def __init__(self, userID):
         self.clientsock = socket(AF_INET, SOCK_STREAM)
@@ -17,20 +19,20 @@ class networkServer(object):
         self.clientsock.connect((config.config.HOST, config.config.PORT))
         self.userID = userID
 
-    def send_login_message(self):
+    def send_login_message(self, loginMsg):
         self.clientsock.sendall(self.userID)
-        loginResult = self.clientsock.recv(1024)
+        loginResult = self.clientsock.recv(BUFFER_SIZE)
         if loginResult is -1:
             self.clientsock.close()
         return loginResult
 
     def send_select_course(self, courseName):
         self.clientsock.sendall(courseName)
-        totalmessage = self.clientsock.recv(1024)
+        totalMessage = self.clientsock.recv(BUFFER_SIZE)
 
-        totalmessage = totalmessage.split('^')
-        banProgram = totalmessage[0].split(',')
-        allowWeb = totalmessage[1].split(',')
+        message = totalMessage.split('^')
+        banProgram = message[0].split(',')
+        allowWeb = message[1].split(',')
 
         return banProgram, allowWeb
 

@@ -25,16 +25,19 @@ class logIn(QtWidgets.QDialog):
     @pyqtSlot()
     def slot_login(self):
         userID =  self.ui.lineEdit.text()
+        password = self.ui.lineEdit_2.text()
+
         # 나중에 주석 해제
-        # self.sock = networkServer.networkServer(userID)
-        # self.sock.send_login_message()
+        # loginMessage = 'LUSER:{0}^{1}'.format(userID, password)
+        # self.sock = networkServer.networkServer()
+        # courses = self.sock.send_login_message(loginMessage)
 
-        loginResult = '1,2,3,4,5'
+        courses = '1,2,3,4,5'
 
-        if loginResult is -1:
+        if courses is -1:
             pass
 
         else:
             self.ui.reject()
-            course = selectCourse.selectCourse(courseList=loginResult, socket=self.sock)
+            course = selectCourse.selectCourse(courseList=courses, socket=self.sock)
             pass

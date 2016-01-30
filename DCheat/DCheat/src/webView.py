@@ -17,12 +17,13 @@ from PyQt5.QtWebKit import *
 from DCheat import config
 
 class webView(QtWidgets.QMainWindow):
-    def __init__(self, program, web, parent=None):
+    def __init__(self, program, web, sock, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH + 'view/webView.ui', self)
 
         self.banProgram = program
         self.allowWeb = web
+        self.sock = sock
 
         for i in range(len(self.allowWeb)):
             view = QWebView()
