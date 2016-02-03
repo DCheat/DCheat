@@ -13,6 +13,7 @@ from PyQt5.QtCore import *
 from DCheat import config
 from DCheat.src import networkServer
 from DCheat.src import selectCourse
+from DCheat.src import adminSelectCourse
 
 class logIn(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -36,6 +37,10 @@ class logIn(QtWidgets.QDialog):
 
         if courses is -1:
             pass
+
+        elif courses:
+            self.ui.reject()
+            course = adminSelectCourse.adminSelectCourse(courseList=courses, socket=self.sock)
 
         else:
             self.ui.reject()
