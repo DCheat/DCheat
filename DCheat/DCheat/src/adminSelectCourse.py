@@ -34,7 +34,8 @@ class adminSelectCourse(QtWidgets.QDialog):
             countLabel.setAlignment(Qt.AlignHCenter)
 
             button = QtWidgets.QPushButton("수정")
-            button.clicked.connect(lambda: self.modify_test())
+            button.clicked.connect(self.modify_test)
+
 
             self.ui.gridLayout.addWidget(courseLabel, i, 0)
             self.ui.gridLayout.addWidget(startLabel, i, 1)
@@ -50,4 +51,6 @@ class adminSelectCourse(QtWidgets.QDialog):
         print('asdfasdf')
 
     def modify_test(self):
-        print('sadf')
+        sender = self.sender()
+        dataPos = int((sender.pos().y() - 21) / 41)
+        print('sadf', dataPos)
