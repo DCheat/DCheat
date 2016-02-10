@@ -23,6 +23,11 @@ if __name__ == '__main__':
     import socket
     import threading
 
+        # 데이터베이스 처리 
+    from DCheat_Server.database import DBManager
+    DBManager.init("mysql+mysqlconnector://root:dkfrhflwma@localhost/DCheat")    
+    DBManager.init_db()
+
     address = ('localhost', 0)  # let the kernel assign a port
     server = ForkingEchoServer(address,
                                ForkingEchoRequestHandler)
