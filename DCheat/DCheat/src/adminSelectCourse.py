@@ -11,6 +11,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtCore import *
 from DCheat import config
+from DCheat.src import registerCourse
 
 class adminSelectCourse(QtWidgets.QDialog):
     def __init__(self, courseList, socket, parent=None):
@@ -49,6 +50,10 @@ class adminSelectCourse(QtWidgets.QDialog):
     @pyqtSlot()
     def insert_test(self):
         print('asdfasdf')
+        try:
+            register = registerCourse.registerCourse(self.sock)
+        except Exception as e:
+            print(e)
 
     def modify_test(self):
         sender = self.sender()
