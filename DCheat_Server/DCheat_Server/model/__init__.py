@@ -4,7 +4,7 @@
 
     DCheat_server에 적용될 model에 대한 패키지 초기화 모듈.
 
-    :copyright: (c) 2015 kookminUniv
+    :copyright: (c) 2016 Lee Jong Seok
 """
 
 

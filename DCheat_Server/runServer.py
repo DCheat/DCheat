@@ -8,7 +8,7 @@ class ForkingEchoRequestHandler(socketserver.BaseRequestHandler):
         # Echo the back to the client
         data = self.request.recv(1024)
         cur_pid = os.getpid()
-        response = b'%d: %s' % (cur_pid, data)
+        response = bytes('%d: %s' % (cur_pid, data), 'utf-8')
         self.request.send(response)
         return
 
@@ -25,8 +25,12 @@ if __name__ == '__main__':
 
         # 데이터베이스 처리 
     from DCheat_Server.database import DBManager
-    DBManager.init("mysql+mysqlconnector://root:dkfrhflwma@localhost/DCheat")    
-    DBManager.init_db()
+    try:
+        DBManager.init("mysql+pymysql://root:dkfrhflwma@localhost/DCheat")
+        DBManager.init_db()
+
+    except Exception as e:
+        print(e)
 
     address = ('localhost', 0)  # let the kernel assign a port
     server = ForkingEchoServer(address,
