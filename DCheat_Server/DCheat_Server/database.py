@@ -43,25 +43,36 @@ class DBManager:
     
     @staticmethod
     def init_db():
-#         from DCheat_Server.model import *
+        from DCheat_Server.model.allowList import AllowList
+        from DCheat_Server.model.allowSite import AllowSite
+        from DCheat_Server.model.banList import BanList
+        from DCheat_Server.model.banProgram import BanProgram
+        from DCheat_Server.model.master import Master
+        from DCheat_Server.model.testInfo import TestInfo
+        from DCheat_Server.model.testingUser import TestingUser
+        from DCheat_Server.model.user import User
         from DCheat_Server.model import Base
         #metadata 연결
         Base.metadata.create_all(bind = DBManager.__engine)
 
         # Init Date Input
-#         from datetime import datetime
-#             from werkzeug.security import generate_password_hash
-#             
-#             from GradeServer.utils.utilUserQuery import insert_members,\
-#                                                         insert_member_id,\
-#                                                         insert_organization,\
-#                                                         select_match_organization,\
-#                                                         select_match_member_id
-#             from GradeServer.utils.utilCourseQuery import insert_language
-#             from GradeServer.resource.setResources import SETResources
-#             
-#             from GradeServer.utils.parameter.memberParameter import MemberParameter
-            
-#         from GradeServer.GradeServer_py3des import TripleDES
+        try:
+            from datetime import datetime
+            from werkzeug.security import generate_password_hash
+            #from DCheat_Server.py3Des import TripleDES
+            from DCheat_Server.utils.insertQuery import insert_allow_site,\
+                                                        insert_ban_program
+            dao.add(insert_allow_site("http://cyber2010.kookmin.ac.kr", "KMU CYBER CAMPUS"))
+            dao.add(insert_allow_site("https://algolab.kookmin.ac.kr", "KMU GRADE SERVER"))
+            dao.add(insert_ban_program("KakaoTalk", "KakaoTalk", "Kakao", "KakaoTalk", 5223))
+            dao.add(insert_ban_program("LINE", "LINE", "LINE", "0", 443))
+            dao.add(insert_ban_program("NATEON", "NateOnMain", "SK Communications", "NATEON", 5004))
+            dao.add(insert_ban_program("Skype", "Skype", "Skype", "0", 12350))
+            dao.add(insert_ban_program("Tictoc", "Tictoc", "Tictoc", "0", 23018))
+            dao.add(insert_ban_program("Between", "couple", "Between", "0", 0))
+            dao.commit()
+        except Exception as e:
+            print(e)
+            dao.rollback()
         
     dao = None

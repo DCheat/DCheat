@@ -18,9 +18,9 @@ class AllowSite (Base) :
             primary_key =True,
             autoincrement = True,
             nullable =False)
-    siteURL =  Column(VARCHAR(1024),
+    siteURL =  Column(VARCHAR(255),
                  nullable = False)
-    siteName = Column(VARCHAR(1024),
+    siteName = Column(VARCHAR(255),
                       nullable =False,
                       unique = True)
     

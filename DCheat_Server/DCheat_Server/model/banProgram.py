@@ -18,12 +18,17 @@ class BanProgram (Base) :
             primary_key = True,
             autoincrement = True,
             nullable = False)
-    programName = Column(VARCHAR(1024),
+    programName = Column(VARCHAR(255),
                  nullable = False,
                  unique = True)
-    processName = Column(VARCHAR(1024),
+    processName = Column(VARCHAR(255),
                  nullable = False)
-    processPath = Column(VARCHAR(1024),
+    processPath1 = Column(VARCHAR(255),
+                 default = "0",
+                 nullable = False)
+    processPath2 = Column(VARCHAR(255),
+                 default = "0",
                  nullable = False)
     processPort = Column(INTEGER(unsigned = True),
+                 default = 0,
                  nullable = False)

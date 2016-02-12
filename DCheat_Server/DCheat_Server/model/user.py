@@ -18,9 +18,9 @@ class User (Base) :
             primary_key =True,
             autoincrement = True,
             nullable =False)
-    id =  Column(VARCHAR(1024),
+    id =  Column(VARCHAR(255),
                  nullable = False,
                  unique = True)
-    name = Column(VARCHAR(1024),
+    name = Column(VARCHAR(255),
                       nullable =False)
     

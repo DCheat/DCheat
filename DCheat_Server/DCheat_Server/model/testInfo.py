@@ -24,7 +24,7 @@ class TestInfo (Base) :
                                    ondelete = 'CASCADE'),
                         autoincrement = True,
                         nullable =False)
-    testName = Column(VARCHAR(1024),
+    testName = Column(VARCHAR(255),
                  nullable = False,
                  unique = True)
     startDate = Column(DATETIME,

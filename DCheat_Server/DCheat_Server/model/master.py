@@ -18,11 +18,11 @@ class Master (Base) :
             primary_key =True,
             autoincrement = True,
             nullable =False)
-    id =  Column(VARCHAR(1024),
+    id =  Column(VARCHAR(255),
                  nullable = False,
                  unique = True)
-    password = Column(VARCHAR(1024),
+    password = Column(VARCHAR(255),
                       nullable =False)
-    emailAddress = Column(VARCHAR(1024),
+    emailAddress = Column(VARCHAR(255),
                           nullable =True)
     
