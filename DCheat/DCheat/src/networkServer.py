@@ -7,26 +7,35 @@
     :copyright: Hwang Sek-jin
 """
 
-from socket import *
-from DCheat.c import config
+import socket
+from DCheat import config
 
-BUFFER_SIZE = 10240
+BUFFER_SIZE = 4096
 
 class networkServer(object):
     def __init__(self, userID):
-        self.clientsock = socket(AF_INET, SOCK_STREAM)
-        self.clientsock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        self.clientsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.clientsock.connect((config.config.HOST, config.config.PORT))
-        self.userID = userID
+        self.userNumber = 0
 
-    def send_login_message(self, loginMsg):
-        self.clientsock.sendall(self.userID)
-        loginResult = self.clientsock.recv(BUFFER_SIZE)
-        if loginResult is -1:
+    def send_login_message(self, userID, password):
+        message = '0;{};{},{}'.format(config.config.HEADER_LOGIN, userID, password)
+
+        self.clientsock.sendall(message)
+        recvMessage = self.clientsock.recv(BUFFER_SIZE)
+        recvMessage = recvMessage.split('^')
+
+        self.userNumber = recvMessage[0]
+
+        if self.userNumber is 0:
             self.clientsock.close()
-        return loginResult
+            return self.userNumber
+
+        return recvMessage[1].split(',')
 
     def send_select_course(self, courseName):
+        message = '0;{};{}'.format(config.config.HEADER_SELECT_COURSE, courseName)
+
         self.clientsock.sendall(courseName)
         totalMessage = self.clientsock.recv(BUFFER_SIZE)
 

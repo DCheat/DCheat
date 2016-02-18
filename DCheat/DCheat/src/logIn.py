@@ -29,16 +29,15 @@ class logIn(QtWidgets.QDialog):
         password = self.ui.lineEdit_2.text()
 
         # 나중에 주석 해제
-        # loginMessage = 'LUSER:{0}^{1}'.format(userID, password)
         # self.sock = networkServer.networkServer()
-        # courses = self.sock.send_login_message(loginMessage)
+        # courses = self.sock.send_login_message(userID, password)
 
         courses = '1,2,3,4,5'
 
-        if courses is -1:
+        if courses is 0:
             pass
 
-        elif courses:
+        if len(password) is 0:
             self.ui.reject()
             course = adminSelectCourse.adminSelectCourse(courseList=courses, socket=self.sock)
 
