@@ -37,7 +37,7 @@ class DBManager:
                                                           autoflush = False, 
                                                           bind = DBManager.__engine))
 
-        # 전역 변수로 선언
+                # 전역 변수로 선언
         global dao
         dao = DBManager.__session
     
@@ -65,14 +65,16 @@ class DBManager:
             dao.add(insert_allow_site("http://cyber2010.kookmin.ac.kr", "KMU CYBER CAMPUS"))
             dao.add(insert_allow_site("https://algolab.kookmin.ac.kr", "KMU GRADE SERVER"))
             dao.add(insert_ban_program("KakaoTalk", "KakaoTalk", "Kakao", "KakaoTalk", 5223))
-            dao.add(insert_ban_program("LINE", "LINE", "LINE", "0", 443))
+            dao.add(insert_ban_program("LINE", "LINE", "LINE", "LINE", 443))
             dao.add(insert_ban_program("NATEON", "NateOnMain", "SK Communications", "NATEON", 5004))
-            dao.add(insert_ban_program("Skype", "Skype", "Skype", "0", 12350))
-            dao.add(insert_ban_program("Tictoc", "Tictoc", "Tictoc", "0", 23018))
+            dao.add(insert_ban_program("Skype", "Skype", "Skype", "phone", 12350))
+            dao.add(insert_ban_program("Tictoc", "Tictoc", "Tictoc", "bin", 23018))
             dao.add(insert_ban_program("Between", "couple", "Between", "0", 0))
+            dao.add(insert_ban_program("Internet Explorer", "iexplorer", "Internet Explorer", "0", 0))
+            dao.add(insert_ban_program("Chrome", "chrome", "Google", "Chrome", 0))
+            dao.add(insert_ban_program("Firefox", "firefox", "Mozilla Firefox", "0", 0))
             dao.commit()
         except Exception as e:
-            print(e)
             dao.rollback()
-        
-    dao = None
+
+dao = None

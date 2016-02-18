@@ -31,8 +31,12 @@ if __name__ == '__main__':
 
     except Exception as e:
         print(e)
+    
+    from DCheat_Server.utils.selectQuery import select_allow_site_list,\
+                                                aaa
+    allowSiteList = select_allow_site_list()
 
-    address = ('localhost', 0)  # let the kernel assign a port
+    address = ('localhost', 9410)  # let the kernel assign a port
     server = ForkingEchoServer(address,
                                ForkingEchoRequestHandler)
     ip, port = server.server_address  # what port was assigned?
