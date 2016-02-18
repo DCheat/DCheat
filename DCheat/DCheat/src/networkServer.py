@@ -8,7 +8,7 @@
 """
 
 from socket import *
-from DCheat import config
+from DCheat.c import config
 
 BUFFER_SIZE = 10240
 
