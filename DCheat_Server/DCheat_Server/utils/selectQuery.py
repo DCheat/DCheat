@@ -13,6 +13,15 @@ from DCheat_Server.model.testingUser import TestingUser
 from DCheat_Server.model.master import Master
 from datetime import datetime
                      
+def select_user_info(userIndex):
+    return dao.query(User.id,
+                     User.name).\
+              filter(User.index == userIndex).first()
+def select_master_info(masterIndex):
+    return dao.query(Master.id,
+                     Master.email).\
+              filter(Master.index == masterIndex).first()    
+                     
 def select_allow_site_list():
     return dao.query(AllowSite.siteURL,
                      AllowSite.siteName).all()
@@ -53,4 +62,11 @@ def select_unfinished_test_course_for_master():
                 join(TestingUser,
                      TestingUser.testIndex == TestInfo.index).\
                 filter(TestInfo.endDate > datetime(now)).all()
+                
+def select_master_email():
+    return dao.query(Master.email).\
+                join(TestInfo,
+                     TestInfo.masterIndex == Master.index).first()
+
+
     
