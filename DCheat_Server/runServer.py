@@ -1,5 +1,6 @@
 import os
 import socketserver
+from socketserver import ThreadingTCPServer
 
 
 class ForkingEchoRequestHandler(socketserver.BaseRequestHandler):
@@ -14,15 +15,11 @@ class ForkingEchoRequestHandler(socketserver.BaseRequestHandler):
         return
 
 
-class ForkingEchoServer(socketserver.ForkingMixIn,
-                        socketserver.TCPServer,
-                        ):
-    pass
+class ForkingEchoServer(ThreadingTCPServer):
+    allow_reuse_address = True
 
 
 if __name__ == '__main__':
-    import socket
-    import threading
 
         # 데이터베이스 처리 
     from DCheat_Server.database import DBManager
@@ -41,10 +38,8 @@ if __name__ == '__main__':
                                ForkingEchoRequestHandler)
     ip, port = server.server_address  # what port was assigned?
 
-    t = threading.Thread(target=server.serve_forever)
-    t.setDaemon(True)  # don't hang on exit
-    t.start()
     print('Server loop running in process:', os.getpid())
+    server.serve_forever()
 
     # Clean up
     #server.shutdown()
