@@ -5,6 +5,7 @@ Insert Query
 from DCheat_Server.database import dao
 from DCheat_Server.model.allowSite import AllowSite
 from DCheat_Server.model.banProgram import BanProgram
+from DCheat_Server.model.master import Master
 '''
 Insert Allow Site List
 '''
@@ -21,3 +22,11 @@ def insert_ban_program(programName, processName, processPath1, processPath2, pro
                       processPath1 = processPath1,
                       processPath2 = processPath2,
                       processPort = processPort)
+    
+'''
+Insert Master
+'''
+def insert_master(id, password, emailAddress):
+    return Master(id = id,
+                  password = password,
+                  emailAddress = emailAddress)

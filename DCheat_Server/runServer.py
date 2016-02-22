@@ -6,10 +6,11 @@ class ForkingEchoRequestHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         # Echo the back to the client
-        data = self.request.recv(1024)
+        data = self.request.recv(4096)
         cur_pid = os.getpid()
         response = bytes('%d: %s' % (cur_pid, data), 'utf-8')
         self.request.send(response)
+        print("AAAAA")
         return
 
 
@@ -32,11 +33,10 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
     
-    from DCheat_Server.utils.selectQuery import select_allow_site_list,\
-                                                aaa
+    from DCheat_Server.utils.selectQuery import select_allow_site_list
     allowSiteList = select_allow_site_list()
 
-    address = ('localhost', 9410)  # let the kernel assign a port
+    address = ('10.0.2.15', 9410)  # let the kernel assign a portf
     server = ForkingEchoServer(address,
                                ForkingEchoRequestHandler)
     ip, port = server.server_address  # what port was assigned?
@@ -46,20 +46,6 @@ if __name__ == '__main__':
     t.start()
     print('Server loop running in process:', os.getpid())
 
-    # Connect to the server
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((ip, port))
-
-    # Send the data
-    message = 'Hello, world'.encode()
-    print('Sending : {!r}'.format(message))
-    len_sent = s.send(message)
-
-    # Receive a response
-    response = s.recv(1024)
-    print('Received: {!r}'.format(response))
-
     # Clean up
-    server.shutdown()
-    s.close()
-    server.socket.close()
+    #server.shutdown()
+    #server.socket.close()

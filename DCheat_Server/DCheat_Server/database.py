@@ -10,6 +10,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import scoped_session, sessionmaker
+from werkzeug.security import generate_password_hash
 
 
 class DBManager:
@@ -59,9 +60,11 @@ class DBManager:
         try:
             from datetime import datetime
             from werkzeug.security import generate_password_hash
-            #from DCheat_Server.py3Des import TripleDES
+            from DCheat_Server.DCheat_py3des import TripleDES
+            TripleDES.init()
             from DCheat_Server.utils.insertQuery import insert_allow_site,\
-                                                        insert_ban_program
+                                                        insert_ban_program,\
+                                                        insert_master
             dao.add(insert_allow_site("http://cyber2010.kookmin.ac.kr", "KMU CYBER CAMPUS"))
             dao.add(insert_allow_site("https://algolab.kookmin.ac.kr", "KMU GRADE SERVER"))
             dao.add(insert_ban_program("KakaoTalk", "KakaoTalk", "Kakao", "KakaoTalk", 5223))
@@ -73,8 +76,10 @@ class DBManager:
             dao.add(insert_ban_program("Internet Explorer", "iexplorer", "Internet Explorer", "0", 0))
             dao.add(insert_ban_program("Chrome", "chrome", "Google", "Chrome", 0))
             dao.add(insert_ban_program("Firefox", "firefox", "Mozilla Firefox", "0", 0))
+            dao.add(insert_master("algolab", generate_password_hash(TripleDES.encrypt(str('rhflwma5106!'))), 'hikoukigumo@naver.com'))
             dao.commit()
         except Exception as e:
+            print(e)
             dao.rollback()
 
 dao = None
