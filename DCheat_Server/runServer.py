@@ -33,7 +33,7 @@ if __name__ == '__main__':
     from DCheat_Server.utils.selectQuery import select_allow_site_list
     allowSiteList = select_allow_site_list()
 
-    address = ('10.0.2.15', 9410)  # let the kernel assign a portf
+    address = ('', 9410)  # let the kernel assign a portf
     server = ForkingEchoServer(address,
                                ForkingEchoRequestHandler)
     ip, port = server.server_address  # what port was assigned?
