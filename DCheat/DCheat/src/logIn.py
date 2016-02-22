@@ -29,8 +29,11 @@ class logIn(QtWidgets.QDialog):
         password = self.ui.lineEdit_2.text()
 
         # 나중에 주석 해제
-        # self.sock = networkServer.networkServer()
-        # courses = self.sock.send_login_message(userID, password)
+        try:
+            self.sock = networkServer.networkServer()
+            courses = self.sock.send_login_message(userID, password)
+        except Exception as e:
+            print(e)
 
         courses = '1,2,3,4,5'
 
@@ -39,9 +42,10 @@ class logIn(QtWidgets.QDialog):
 
         if len(password) is 0:
             self.ui.reject()
-            course = adminSelectCourse.adminSelectCourse(courseList=courses, socket=self.sock)
+            course = selectCourse.selectCourse(courseList=courses, socket=self.sock)
+
 
         else:
             self.ui.reject()
-            course = selectCourse.selectCourse(courseList=courses, socket=self.sock)
+            course = adminSelectCourse.adminSelectCourse(courseList=courses, socket=self.sock)
             pass

@@ -10,7 +10,7 @@ import os
 
 class config(object):
     ROOT_PATH = "%s/%s/" % (os.getcwd(), 'DCheat')
-    HOST = '***.***.***.***'
+    HOST = '203.246.112.179'
     PORT = 9410
 
     OS_WINDOWS = 'Windows'
@@ -21,8 +21,12 @@ class config(object):
 
     CONNECTION_STATUS_ESTABLISHED = 'ESTABLISHED'
 
-    HEADER_LOGIN = 'LIN'
+    HEADER_SIGNIN = 'SIN'
+    HEADER_SIGNUP = 'SUP'
     HEADER_SELECT_COURSE = 'SCS'
     HEADER_CHEACK = 'PCH'
     HEADER_ADD_COURSE = 'ACS'
     HEADER_UPDATE_COURSE = 'UCS'
+
+    BAN_PROGRAM = ['banProgram', 'KakaoTalk', 'Line', 'NateOn', 'Skype', 'Tictoc', 'Between', 'IExplorer', 'Chrome', 'FireFox']
+    ALLOW_SITE = ['allowSite', 'http://cyber2010.kookmin.ac.kr/', 'https://algolab.kookmin.ac.kr']

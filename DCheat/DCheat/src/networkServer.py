@@ -13,13 +13,17 @@ from DCheat import config
 BUFFER_SIZE = 4096
 
 class networkServer(object):
-    def __init__(self, userID):
+    def __init__(self):
         self.clientsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.clientsock.connect((config.config.HOST, config.config.PORT))
+        try:
+            self.clientsock.connect((config.config.HOST, config.config.PORT))
+        except Exception as e:
+            print(e)
+        print('asdf')
         self.userNumber = 0
 
-    def send_login_message(self, userID, password):
-        message = '0;{};{},{}'.format(config.config.HEADER_LOGIN, userID, password)
+    def send_login_message(self, userID = '', password = ''):
+        message = '0;{};{},{}'.format(config.config.HEADER_SIGNIN, userID, password)
 
         self.clientsock.sendall(message)
         recvMessage = self.clientsock.recv(BUFFER_SIZE)

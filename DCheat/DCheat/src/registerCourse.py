@@ -18,8 +18,17 @@ class registerCourse(QtWidgets.QDialog):
     def __init__(self, socket, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/registerCourse.ui', self)
-
         self.sock = socket
+
+        for i in range(1, len(config.config.BAN_PROGRAM)):
+            checkBox = QtWidgets.QCheckBox()
+            label = QtWidgets.QLabel(config.config.BAN_PROGRAM[i])
+            self.ui.formLayout.addRow(checkBox, label)
+
+        for i in range(1, len(config.config.ALLOW_SITE)):
+            checkBox = QtWidgets.QCheckBox()
+            label = QtWidgets.QLabel(config.config.ALLOW_SITE[i])
+            self.ui.formLayout_2.addRow(checkBox, label)
 
         self.ui.show()
 
