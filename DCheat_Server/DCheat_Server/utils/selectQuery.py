@@ -12,6 +12,7 @@ from DCheat_Server.model.user import User
 from DCheat_Server.model.testingUser import TestingUser
 from DCheat_Server.model.master import Master
 from datetime import datetime
+from sqlalchemy import func
                      
 def select_user_info(userIndex):
     return dao.query(User.id,
@@ -29,39 +30,39 @@ def select_allow_site_list():
 def select_allow_site_in_test():
     return dao.query(AllowSite.siteURL,
                      AllowSite.siteName).\
-                join(TestInfo,
-                     TestInfo.index == AllowList.testIndex).\
                 join(AllowList,
-                     AllowList.webIndex == AllowSite.index).all()
+                     AllowList.webIndex == AllowSite.index).\
+                join(TestInfo,
+                     TestInfo.index == AllowList.testIndex).all()
                     
 def select_ban_program_in_test():
     return dao.query(BanProgram.processName,
                      BanProgram.processPath1,
                      BanProgram.processPath2,
                      BanProgram.processPort).\
-                join(TestInfo,
-                     TestInfo.index == BanList.testIndex).\
                 join(BanList,
-                     BanList.banIndex == BanProgram.index).all()
+                     BanList.banIndex == BanProgram.index).\
+                join(TestInfo,
+                     TestInfo.index == BanList.testIndex).all()
 
 def select_unfinished_test_course_for_user():
     return dao.query(TestInfo.testName).\
                 join(TestingUser,
-                     TestingUser.testIndex == TestInfo.testIndex),\
+                     TestingUser.testIndex == TestInfo.index).\
                 join(User,
                      User.index == TestingUser.userIndex).\
-                filter(TestInfo.endDate > datetime(now)).all()
+                filter(TestInfo.endDate > datetime.now()).all()
         
 def select_unfinished_test_course_for_master():
     return dao.query(TestInfo.testName,
                      TestInfo.startDate,
                      TestInfo.endDate,
-                     count(TestingUser.userIndex)).\
-                join(Master,
-                     Master.index == TestInfo.masterIndex).\
+                     func.count(TestingUser.userIndex)).\
                 join(TestingUser,
                      TestingUser.testIndex == TestInfo.index).\
-                filter(TestInfo.endDate > datetime(now)).all()
+                join(Master,
+                     Master.index == TestInfo.masterIndex).\
+                filter(TestInfo.endDate > datetime.now()).all()
                 
 def select_master_email():
     return dao.query(Master.emailAddress).\
