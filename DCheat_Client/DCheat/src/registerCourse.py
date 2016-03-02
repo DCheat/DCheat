@@ -19,14 +19,18 @@ class registerCourse(QtWidgets.QDialog):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/registerCourse.ui', self)
         self.sock = socket
+        self.banList = []
+        self.allowList = []
 
         for i in range(1, len(config.config.BAN_PROGRAM)):
             checkBox = QtWidgets.QCheckBox()
+            checkBox.clicked.connect(self.setBanList)
             label = QtWidgets.QLabel(config.config.BAN_PROGRAM[i])
             self.ui.formLayout.addRow(checkBox, label)
 
         for i in range(1, len(config.config.ALLOW_SITE)):
             checkBox = QtWidgets.QCheckBox()
+            checkBox.clicked.connect(self.setAllowList)
             label = QtWidgets.QLabel(config.config.ALLOW_SITE[i])
             self.ui.formLayout_2.addRow(checkBox, label)
 
@@ -47,3 +51,29 @@ class registerCourse(QtWidgets.QDialog):
     @pyqtSlot()
     def register_slot(self):
         print('zxcv')
+
+    def setBanList(self):
+        sender = self.sender()
+
+        pos = int((sender.pos().y() - 9) / 19) + 1
+
+        if pos in self.banList:
+            self.banList.remove(pos)
+
+        else:
+            self.banList.append(pos)
+
+        print(self.banList)
+
+    def setAllowList(self):
+        sender = self.sender()
+
+        pos = int((sender.pos().y() - 9) / 19) + 1
+
+        if pos in self.allowList:
+            self.allowList.remove(pos)
+
+        else:
+            self.allowList.append(pos)
+
+        print(self.allowList)

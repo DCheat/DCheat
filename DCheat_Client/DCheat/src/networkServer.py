@@ -23,7 +23,7 @@ class networkServer(object):
         self.userNumber = 0
 
     def send_login_message(self, userID = '', password = ''):
-        message = '0;{};{},{}'.format(config.config.HEADER_SIGNIN, userID, password)
+        message = config.config.messageForm.format(0, config.config.HEADER_SIGNIN, userID, password)
 
         self.clientsock.sendall(message)
         recvMessage = self.clientsock.recv(BUFFER_SIZE)

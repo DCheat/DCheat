@@ -20,14 +20,15 @@ class checkSystem(object):
 
         self.ext = ''
 
-        if self.clientOS == config.OS_WINDOWS:
+        if self.clientOS == config.config.OS_WINDOWS:
             self.ext = '.exe'
 
     def startChecking(self):
         self.preCheck()
-        while(1):
-            if self.clientOS == config.OS_WINDOWS:
+        while True:
+            if self.clientOS == config.config.OS_WINDOWS:
                 self.checkInWindows()
+
             else:
                 self.checkInLinux()
 
@@ -53,7 +54,7 @@ class checkSystem(object):
 
             else:
                 checkingPoint = 0
-                processPath = process.ExecutablePath.split(config.WINDOWS_DIRECTORY_SEPARATOR)
+                processPath = process.ExecutablePath.split(config.config.WINDOWS_DIRECTORY_SEPARATOR)
 
                 checkingPoint += self.checkName(process.Name)
                 checkingPoint += self.checkPath(processPath)
@@ -82,7 +83,7 @@ class checkSystem(object):
                     continue
 
                 checkingPoint = 0
-                processPath = process.exe().split(config.LINUX_DIRECTORY_SEPARATOR)
+                processPath = process.exe().split(config.config.LINUX_DIRECTORY_SEPARATOR)
 
                 checkingPoint += self.checkName(process.name())
                 checkingPoint += self.checkPath(processPath)
@@ -108,9 +109,10 @@ class checkSystem(object):
         pathCheck = 0
 
         for pro in self.banList:
-            if pro[1] in processPath is True:
+            if pro[1] in processPath:
                 pathCheck += 1
-            if pro[2] in processPath is True:
+
+            if pro[2] in processPath:
                 pathCheck += 1
 
             if pathCheck > 0:
@@ -127,7 +129,7 @@ class checkSystem(object):
         connecList = processInfo.connections()
 
         for connec in connecList:
-            if connec[5] ==  config.CONNECTION_STATUS_ESTABLISHED:
+            if connec[5] == config.config.CONNECTION_STATUS_ESTABLISHED:
                 for pro in self.banList:
                     if connec[4][1] == pro[3]:
                         return 4

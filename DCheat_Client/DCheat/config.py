@@ -28,5 +28,7 @@ class config(object):
     HEADER_ADD_COURSE = 'ACS'
     HEADER_UPDATE_COURSE = 'UCS'
 
+    messageForm = '{};{};{},{}'
+
     BAN_PROGRAM = ['banProgram', 'KakaoTalk', 'Line', 'NateOn', 'Skype', 'Tictoc', 'Between', 'IExplorer', 'Chrome', 'FireFox']
     ALLOW_SITE = ['allowSite', 'http://cyber2010.kookmin.ac.kr/', 'https://algolab.kookmin.ac.kr']

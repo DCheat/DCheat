@@ -29,11 +29,11 @@ class logIn(QtWidgets.QDialog):
         password = self.ui.lineEdit_2.text()
 
         # 나중에 주석 해제
-        try:
-            self.sock = networkServer.networkServer()
-            courses = self.sock.send_login_message(userID, password)
-        except Exception as e:
-            print(e)
+        # try:
+        #     self.sock = networkServer.networkServer()
+        #     courses = self.sock.send_login_message(userID, password)
+        # except Exception as e:
+        #     print(e)
 
         courses = '1,2,3,4,5'
 
