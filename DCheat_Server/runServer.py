@@ -1,21 +1,9 @@
 import os
 import socketserver
 from socketserver import ThreadingTCPServer
+from DCheat_Server.messageHandler import ForkingRequestHandler
 
-
-class ForkingEchoRequestHandler(socketserver.BaseRequestHandler):
-
-    def handle(self):
-        # Echo the back to the client
-        data = self.request.recv(4096)
-        cur_pid = os.getpid()
-        response = bytes('%d: %s' % (cur_pid, data), 'utf-8')
-        self.request.send(response)
-        print("AAAAA")
-        return
-
-
-class ForkingEchoServer(ThreadingTCPServer):
+class ForkingServer(ThreadingTCPServer):
     allow_reuse_address = True
 
 
@@ -30,12 +18,15 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
     
-    from DCheat_Server.utils.selectQuery import select_allow_site_list
+    from DCheat_Server.utils.selectQuery import select_allow_site_list,\
+                                                select_master_email
     allowSiteList = select_allow_site_list()
+    emailAddress = select_master_email()
+    print(emailAddress)
 
     address = ('', 9410)  # let the kernel assign a portf
-    server = ForkingEchoServer(address,
-                               ForkingEchoRequestHandler)
+    server = ForkingServer(address,
+                               ForkingRequestHandler)
     ip, port = server.server_address  # what port was assigned?
 
     print('Server loop running in process:', os.getpid())
