@@ -64,7 +64,7 @@ def select_unfinished_test_course_for_master():
                 filter(TestInfo.endDate > datetime(now)).all()
                 
 def select_master_email():
-    return dao.query(Master.email).\
+    return dao.query(Master.emailAddress).\
                 join(TestInfo,
                      TestInfo.masterIndex == Master.index).first()
 
