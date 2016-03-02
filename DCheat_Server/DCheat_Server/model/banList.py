@@ -24,8 +24,7 @@ class BanList (Base) :
                         ForeignKey(TestInfo.index,
                                    onupdate = 'CASCADE',
                                    ondelete = 'CASCADE'),
-                 nullable = False,
-                 unique = True)
+                 nullable = False)
     banIndex = Column(INTEGER(unsigned = True),
                       ForeignKey(BanProgram.index,
                                  onupdate = 'CASCADE',

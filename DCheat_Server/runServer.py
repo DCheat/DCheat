@@ -19,10 +19,18 @@ if __name__ == '__main__':
         print(e)
     
     from DCheat_Server.utils.selectQuery import select_allow_site_list,\
-                                                select_master_email
+                                                select_master_email,\
+                                                select_allow_site_in_test,\
+                                                select_ban_program_in_test,\
+                                                select_unfinished_test_course_for_user,\
+                                                select_unfinished_test_course_for_master
     allowSiteList = select_allow_site_list()
     emailAddress = select_master_email()
-    print(emailAddress)
+    allowSiteListInTest = select_allow_site_in_test()
+    banProgramInTest = select_ban_program_in_test()
+    unfinishedTestCourseForUser = select_unfinished_test_course_for_user()
+    unfinishedTestCourseForMaster = select_unfinished_test_course_for_master()
+    print(unfinishedTestCourseForMaster)
 
     address = ('', 9410)  # let the kernel assign a portf
     server = ForkingServer(address,
