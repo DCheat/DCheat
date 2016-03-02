@@ -24,17 +24,17 @@ class checkSystem(object):
             self.ext = '.exe'
 
     def startChecking(self):
-        self.preCheck()
+        self.pre_check()
         while True:
             if self.clientOS == config.config.OS_WINDOWS:
-                self.checkInWindows()
+                self.check_in_windows()
 
             else:
-                self.checkInLinux()
+                self.check_in_linux()
 
             time.sleep(58)
 
-    def preCheck(self):
+    def pre_check(self):
         processes = psutil.pids()
 
         for pid in processes:
@@ -45,7 +45,7 @@ class checkSystem(object):
                     process.kill()
                     break
 
-    def checkInWindows(self):
+    def check_in_windows(self):
         processes = wmi.WMI()
 
         for process in processes.Win32_Process():
@@ -56,9 +56,9 @@ class checkSystem(object):
                 checkingPoint = 0
                 processPath = process.ExecutablePath.split(config.config.WINDOWS_DIRECTORY_SEPARATOR)
 
-                checkingPoint += self.checkName(process.Name)
-                checkingPoint += self.checkPath(processPath)
-                checkingPoint += self.checkPort(process.ProcessId)
+                checkingPoint += self.check_name(process.Name)
+                checkingPoint += self.check_path(processPath)
+                checkingPoint += self.check_port(process.ProcessId)
 
                 if checkingPoint > 10:
                     print('사용')
@@ -69,7 +69,7 @@ class checkSystem(object):
                 else:
                     pass
 
-    def checkInLinux(self):
+    def check_in_linux(self):
         processes = psutil.pids()
 
         for pid in processes:
@@ -85,9 +85,9 @@ class checkSystem(object):
                 checkingPoint = 0
                 processPath = process.exe().split(config.config.LINUX_DIRECTORY_SEPARATOR)
 
-                checkingPoint += self.checkName(process.name())
-                checkingPoint += self.checkPath(processPath)
-                checkingPoint += self.checkPort(pid)
+                checkingPoint += self.check_name(process.name())
+                checkingPoint += self.check_path(processPath)
+                checkingPoint += self.check_port(pid)
 
                 if checkingPoint > 10:
                     print('사용')
@@ -98,14 +98,14 @@ class checkSystem(object):
                 else:
                     pass
 
-    def checkName(self, name):
+    def check_name(self, name):
         for pro in self.banList:
             if pro[0] + self.ext == name:
                 return 10
 
         return 0
 
-    def checkPath(self, processPath):
+    def check_path(self, processPath):
         pathCheck = 0
 
         for pro in self.banList:
@@ -120,7 +120,7 @@ class checkSystem(object):
 
         return 0
 
-    def checkPort(self, pid):
+    def check_port(self, pid):
         try:
             processInfo = psutil.Process(pid)
         except Exception as e:
