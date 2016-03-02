@@ -23,8 +23,7 @@ class AllowList (Base) :
                         ForeignKey(TestInfo.index,
                                    onupdate = 'CASCADE',
                                    ondelete = 'CASCADE'),
-                 nullable = False,
-                 unique = True)
+                 nullable = False)
     webIndex = Column(INTEGER(unsigned = True),
                       ForeignKey(AllowSite.index,
                                  onupdate = 'CASCADE',
