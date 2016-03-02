@@ -30,7 +30,9 @@ if __name__ == '__main__':
     banProgramInTest = select_ban_program_in_test()
     unfinishedTestCourseForUser = select_unfinished_test_course_for_user()
     unfinishedTestCourseForMaster = select_unfinished_test_course_for_master()
-    print(unfinishedTestCourseForMaster)
+    for i in unfinishedTestCourseForMaster:
+        print(i.testName, i.startDate, i.endDate)
+    #print(allowSiteList)
 
     address = ('', 9410)  # let the kernel assign a portf
     server = ForkingServer(address,
