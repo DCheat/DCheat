@@ -44,8 +44,6 @@ class logIn(QtWidgets.QDialog):
             self.ui.reject()
             course = selectCourse.selectCourse(courseList=courses, socket=self.sock)
 
-
         else:
             self.ui.reject()
             course = adminSelectCourse.adminSelectCourse(courseList=courses, socket=self.sock)
-            pass

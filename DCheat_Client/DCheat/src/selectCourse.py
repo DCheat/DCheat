@@ -34,8 +34,10 @@ class selectCourse(QtWidgets.QDialog):
         print(index)
 
         # 나중에 주석 해제
-        # selectMessage = 'SLTT:{0}'.format(self.courseList[index])
         # banProgram, allowWeb = self.sock.send_selectCourse(self.courseList[index])
+        # if banProgram is -1:
+        #     asdf
+
         banProgram = ['KakaoTalk', 'Skype']
         allowWeb = ['https://algolab.kookmin.ac.kr', 'http://www.daum.net']
 

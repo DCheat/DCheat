@@ -23,32 +23,53 @@ class networkServer(object):
         self.userNumber = 0
 
     def send_login_message(self, userID = '', password = ''):
-        message = config.config.messageForm.format(0, config.config.HEADER_SIGNIN, userID, password)
+        loginInfo = '{},{}'.format(userID, password)
+        message = bytes(config.config.MESSAGE_FORM.format(0, config.config.HEADER_SIGNIN, loginInfo))
 
-        self.clientsock.sendall(message)
-        recvMessage = self.clientsock.recv(BUFFER_SIZE)
+        try:
+            self.clientsock.sendall(message)
+            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).encode('utf-8')
+
+        except Exception as e:
+            return -1
+
+        if recvMessage == '0':
+            self.clientsock.close()
+            return 0
+
         recvMessage = recvMessage.split('^')
 
         self.userNumber = recvMessage[0]
 
-        if self.userNumber is 0:
-            self.clientsock.close()
-            return self.userNumber
-
         return recvMessage[1].split(',')
 
     def send_select_course(self, courseName):
-        message = '0;{};{}'.format(config.config.HEADER_SELECT_COURSE, courseName)
+        message = bytes(config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, courseName))
 
-        self.clientsock.sendall(courseName)
-        totalMessage = self.clientsock.recv(BUFFER_SIZE)
+        try:
+            self.clientsock.sendall(courseName)
+            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).encode('utf-8')
 
-        message = totalMessage.split('^')
+        except Exception as e:
+            return -1
+
+        message = recvMessage.split('^')
         banProgram = message[0].split(',')
         allowWeb = message[1].split(',')
 
         return banProgram, allowWeb
 
-    def send_process_info(self):
-        # 작성중.....
-        pass
+    def send_sensing_info(self, programIndex, point):
+        sensingMessage = '{},{}'.format(programIndex, point)
+        message = bytes(config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, sensingMessage))
+
+        while True:
+            try:
+                self.clientsock.sendall(message)
+                recvMessage = self.clientsock.recv(BUFFER_SIZE)
+
+            except Exception as e:
+                return -1
+
+            if recvMessage.encode('utf-8') == '1':
+                break
