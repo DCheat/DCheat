@@ -56,12 +56,12 @@ def select_ban_program_in_test():
 def select_ban_list_in_test(testIndex):
     return dao.query(BanList.banIndex).all()
 
-def select_unfinished_test_course_for_user():
+def select_unfinished_test_course_for_user(userIndex):
     return dao.query(TestInfo.testName).\
                 join(TestingUser,
                      TestingUser.testIndex == TestInfo.index).\
                 join(User,
-                     User.index == TestingUser.userIndex).\
+                     User.index == userIndex).\
                 filter(and_(TestInfo.endDate > datetime.now(),
                             TestInfo.startDate <= datetime.now())).all()
         

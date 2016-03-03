@@ -10,23 +10,30 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                                             select_allow_site_index
         # Echo the back to the client
         data = self.request.recv(4096)
+        data = data.decode()
         cur_pid = os.getpid()
         response = bytes('%d: %s' % (cur_pid, data), 'utf-8')
         self.request.send(response)
         print("AAAAA")
         if data.find("SIN") != -1:
-            userId = data.split()[4]
-            courseList = select_unfinished_test_course_for_user()
-            userIndex = select_user_index(userId)
-            return [userIndex+"^"+courseList]
-        if data.find("SCS") != -1:
-            testIndex = int(data.split()[0])
-            programIndexList = select_ban_list_in_test(testIndex)
-            siteIndexList = select_allow_site_index()
-            return [programIndexList+"^"+siteIndexList]
+            login_handler(data)
+        #if data.find("SCS") != -1:
+        #    testIndex = int(data.split()[0])
+        #    programIndexList = select_ban_list_in_test(testIndex)
+        #    siteIndexList = select_allow_site_index()
+        #    return [programIndexList+"^"+siteIndexList]
     
-    def login_handler():
-        return
+    def login_handler(self, data):
+        userId = data.split(";")[2]
+        sendData = ''
+        try:
+            userIndex = select_user_index(userId)
+        except:
+            return 0
+        courseList = select_unfinished_test_course_for_user(userIndex)
+        courseList = str(courseList).strip('[]').replace(' ', '')
+        sendData = userIndex+"^"+courseList
+        return sendData
     def sign_up_handler():
         return
     def user_allow_ban_list_handler():
