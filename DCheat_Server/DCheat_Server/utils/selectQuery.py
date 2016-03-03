@@ -12,12 +12,17 @@ from DCheat_Server.model.user import User
 from DCheat_Server.model.testingUser import TestingUser
 from DCheat_Server.model.master import Master
 from datetime import datetime
-from sqlalchemy import func
+from sqlalchemy import func, and_
                      
 def select_user_info(userIndex):
     return dao.query(User.id,
                      User.name).\
               filter(User.index == userIndex).first()
+
+def select_user_index(userId):
+    return dao.query(User.index).\
+              filter(User.id == userId).first()            
+              
 def select_master_info(masterIndex):
     return dao.query(Master.id,
                      Master.email).\
@@ -26,6 +31,9 @@ def select_master_info(masterIndex):
 def select_allow_site_list():
     return dao.query(AllowSite.siteURL,
                      AllowSite.siteName).all()
+
+def select_allow_site_index():
+    return dao.query(AllowSite.index).all()
 
 def select_allow_site_in_test():
     return dao.query(AllowSite.siteURL,
@@ -44,6 +52,9 @@ def select_ban_program_in_test():
                      BanList.banIndex == BanProgram.index).\
                 join(TestInfo,
                      TestInfo.index == BanList.testIndex).all()
+            
+def select_ban_list_in_test(testIndex):
+    return dao.query(BanList.banIndex).all()
 
 def select_unfinished_test_course_for_user():
     return dao.query(TestInfo.testName).\
@@ -51,7 +62,8 @@ def select_unfinished_test_course_for_user():
                      TestingUser.testIndex == TestInfo.index).\
                 join(User,
                      User.index == TestingUser.userIndex).\
-                filter(TestInfo.endDate > datetime.now()).all()
+                filter(and_(TestInfo.endDate > datetime.now(),
+                            TestInfo.startDate <= datetime.now())).all()
         
 def select_unfinished_test_course_for_master():
     return dao.query(TestInfo.testName,
