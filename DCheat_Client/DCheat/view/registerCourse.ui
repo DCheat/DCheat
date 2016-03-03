@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>688</width>
-    <height>491</height>
+    <height>508</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -112,32 +112,37 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5">
     <item>
-     <widget class="QDateEdit" name="dateEdit"/>
+     <widget class="QDateEdit" name="dateEdit">
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
     <item>
-     <widget class="QTimeEdit" name="timeEdit"/>
+     <widget class="QTimeEdit" name="timeEdit">
+      <property name="displayFormat">
+       <string>hh:mm</string>
+      </property>
+      <property name="calendarPopup">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item>
-     <widget class="QTimeEdit" name="timeEdit_2"/>
+     <widget class="QTimeEdit" name="timeEdit_2">
+      <property name="displayFormat">
+       <string>hh:mm</string>
+      </property>
+     </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QTextEdit" name="textEdit">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>103</y>
-     <width>191</width>
-     <height>25</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QTextEdit" name="textEdit_2">
    <property name="geometry">
     <rect>
-     <x>372</x>
-     <y>404</y>
-     <width>221</width>
+     <x>302</x>
+     <y>422</y>
+     <width>291</width>
      <height>25</height>
     </rect>
    </property>
@@ -146,7 +151,7 @@
    <property name="geometry">
     <rect>
      <x>592</x>
-     <y>404</y>
+     <y>422</y>
      <width>75</width>
      <height>25</height>
     </rect>
@@ -166,8 +171,8 @@
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>272</x>
-     <y>407</y>
+     <x>200</x>
+     <y>425</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -189,7 +194,7 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>450</y>
+     <y>468</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -234,7 +239,7 @@
      <x>30</x>
      <y>180</y>
      <width>201</width>
-     <height>211</height>
+     <height>231</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout"/>
@@ -245,7 +250,7 @@
      <x>250</x>
      <y>180</y>
      <width>371</width>
-     <height>211</height>
+     <height>231</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout_2"/>
@@ -272,6 +277,16 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
@@ -283,7 +298,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>570</x>
-     <y>234</y>
+     <y>468</y>
     </hint>
     <hint type="destinationlabel">
      <x>487</x>
@@ -299,7 +314,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>619</x>
-     <y>178</y>
+     <y>422</y>
     </hint>
     <hint type="destinationlabel">
      <x>587</x>

@@ -12,6 +12,7 @@ from PyQt5 import uic
 from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from DCheat import config
+import datetime
 import csv
 
 class registerCourse(QtWidgets.QDialog):
@@ -38,7 +39,7 @@ class registerCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def search_slot(self):
-        filename, _filter = QtWidgets.QFileDialog.getOpenFileName(self, 'open file', '', 'CSV파일 (*.csv)', '*.csv')
+        filename, _filter = QtWidgets.QFileDialog.getOpenFileName(self, 'open file', '/', 'CSV파일 (*.csv)', '*.csv')
 
         print(filename, _filter)
         self.ui.textEdit_2.setText(filename)
@@ -50,7 +51,19 @@ class registerCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def register_slot(self):
-        print('zxcv')
+        self.banList.sort()
+        self.allowList.sort()
+
+        date = str(datetime.date(self.ui.dateEdit.date().year(), self.ui.dateEdit.date().month(), self.ui.dateEdit.date().day()))
+        startTime = str(datetime.time(self.timeEdit.time().hour(), self.timeEdit.time().minute()))
+        endTime = str(datetime.time(self.timeEdit_2.time().hour(), self.timeEdit_2.time().minute()))
+
+        startDate = '{} {}'.format(date, startTime)
+        endDate = '{} {}'.format(date, endTime)
+
+        print(startDate, endDate)
+
+        self.sock.make_course(self.ui.lineEdit.text(), startDate, endDate, self.banList, self.allowList)
 
     def set_ban_list(self):
         sender = self.sender()
@@ -76,4 +89,4 @@ class registerCourse(QtWidgets.QDialog):
         else:
             self.allowList.append(pos)
 
-        print(self.allowList)
+        print(self.allowList, self.ui.lineEdit.text())

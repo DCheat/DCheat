@@ -33,7 +33,7 @@ class networkServer(object):
         except Exception as e:
             return -1
 
-        if recvMessage == '0':
+        if recvMessage == 0:
             self.clientsock.close()
             return 0
 
@@ -47,7 +47,7 @@ class networkServer(object):
         message = bytes(config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, courseName))
 
         try:
-            self.clientsock.sendall(courseName)
+            self.clientsock.sendall(message)
             recvMessage = (self.clientsock.recv(BUFFER_SIZE)).encode('utf-8')
 
         except Exception as e:
@@ -71,5 +71,18 @@ class networkServer(object):
             except Exception as e:
                 return -1
 
-            if recvMessage.encode('utf-8') == '1':
+            if recvMessage.encode('utf-8') == 1:
                 break
+
+    def make_course(self, courseName, startDate, endDate, programList, siteList):
+        pList = str(programList[0])
+        for i in range(1, len(programList)):
+            pList = pList + ',' + str(programList[i])
+
+        sList = str(siteList[0])
+        for i in range(1, len(siteList)):
+            sList = sList + ',' + str(siteList[i])
+
+
+    def update_course(self):
+        asdf
