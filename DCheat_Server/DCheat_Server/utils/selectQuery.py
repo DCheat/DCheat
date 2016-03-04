@@ -26,14 +26,19 @@ def select_user_index(userId):
 def select_master_info(masterIndex):
     return dao.query(Master.id,
                      Master.email).\
-              filter(Master.index == masterIndex).first()    
-                     
+              filter(Master.index == masterIndex).first()
+              
+def select_course_index(courseName):
+    return dao.query(TestInfo.index).\
+              filter(TestInfo.testName == courseName).first().index          
+        
 def select_allow_site_list():
     return dao.query(AllowSite.siteURL,
                      AllowSite.siteName).all()
 
-def select_allow_site_index():
-    return dao.query(AllowSite.index).all()
+def select_allow_list_index(testIndex):
+    return dao.query(AllowList.webIndex).\
+              filter(AllowList.testIndex == testIndex).all()
 
 def select_allow_site_in_test():
     return dao.query(AllowSite.siteURL,
@@ -42,6 +47,10 @@ def select_allow_site_in_test():
                      AllowList.webIndex == AllowSite.index).\
                 join(TestInfo,
                      TestInfo.index == AllowList.testIndex).all()
+                     
+def select_ban_list_index(testIndex):
+    return dao.query(BanList.banIndex).\
+              filter(BanList.testIndex == testIndex).all()
                     
 def select_ban_program_in_test():
     return dao.query(BanProgram.processName,
