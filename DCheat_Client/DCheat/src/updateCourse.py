@@ -15,24 +15,37 @@ from DCheat import config
 import datetime
 import csv
 
-class registerCourse(QtWidgets.QDialog):
-    def __init__(self, socket, parent=None):
+class updateCourse(QtWidgets.QDialog):
+    def __init__(self, name, startTime, endTime, banList, allowList, socket, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/registerCourse.ui', self)
         self.sock = socket
-        self.banList = []
-        self.allowList = []
-        self.students = []
+
+        self.name = name
+        self.startTime = startTime
+        self.endTime = endTime
+        self.banList = banList
+        self.allowList = allowList
 
         for i in range(1, len(config.config.BAN_PROGRAM)):
-            checkBox = QtWidgets.QCheckBox(config.config.BAN_PROGRAM[i])
+            checkBox = QtWidgets.QCheckBox()
             checkBox.clicked.connect(self.set_ban_list)
-            self.ui.formLayout.addRow(checkBox)
+            label = QtWidgets.QLabel(config.config.BAN_PROGRAM[i])
+
+            if str(i) in self.banList:
+                checkBox.setChecked(True)
+
+            self.ui.formLayout.addRow(checkBox, label)
 
         for i in range(1, len(config.config.ALLOW_SITE)):
-            checkBox = QtWidgets.QCheckBox(config.config.ALLOW_SITE[i])
+            checkBox = QtWidgets.QCheckBox()
             checkBox.clicked.connect(self.set_allow_list)
-            self.ui.formLayout_2.addRow(checkBox)
+            label = QtWidgets.QLabel(config.config.ALLOW_SITE[i])
+
+            if str(i) in self.allowList:
+                checkBox.setChecked(True)
+
+            self.ui.formLayout_2.addRow(checkBox, label)
 
         self.ui.show()
 

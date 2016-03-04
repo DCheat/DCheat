@@ -20,10 +20,19 @@ class adminSelectCourse(QtWidgets.QDialog):
 
         self.sock = socket
         self.courseList = courseList
-        self.courseList = courseList.split(',')
 
         i = 0
+        self.courseList = self.courseList.split(',')
         for course in self.courseList:
+            # courseInfo = course.split('$')
+            #
+            # courseLabel = QtWidgets.QLabel(courseInfo[0])
+            # startLabel = QtWidgets.QLabel(courseInfo[1])
+            # endLabel = QtWidgets.QLabel(courseInfo[2])
+            # countLabel = QtWidgets.QLabel(courseInfo[3])
+            # banProrgam = courseInfo[4].split(',')
+            # allowSite = courseInfo[5].split(',')
+
             courseLabel = QtWidgets.QLabel(course)
             startLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
             endLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
@@ -36,7 +45,6 @@ class adminSelectCourse(QtWidgets.QDialog):
 
             button = QtWidgets.QPushButton("수정")
             button.clicked.connect(self.modify_test)
-
 
             self.ui.gridLayout.addWidget(courseLabel, i, 0)
             self.ui.gridLayout.addWidget(startLabel, i, 1)
@@ -58,4 +66,13 @@ class adminSelectCourse(QtWidgets.QDialog):
     def modify_test(self):
         sender = self.sender()
         dataPos = int((sender.pos().y() - 21) / 41)
+
+        # courseInfo = course[dataPos].split('$')
+        #
+        # name = courseInfo[0]
+        # startTime = courseInfo[1]
+        # endTime = courseInfo[2]
+        # banProrgam = courseInfo[4].split(',')
+        # allowSite = courseInfo[5].split(',')
+
         print('sadf', dataPos)
