@@ -44,7 +44,7 @@ if __name__ == '__main__':
     banListIndexInTest = select_ban_list_index(testIndex)
     print(str(siteListIndexInTest).strip('[]').replace(' ','').replace('(','').replace(',)',''))
     print(str(banListIndexInTest).strip('[]').replace(' ','').replace('(','').replace(',)',''))
-
+    
     address = ('', 9410)  # let the kernel assign a portf
     server = ForkingServer(address,
                                ForkingRequestHandler)
