@@ -21,7 +21,7 @@ def select_user_info(userIndex):
 
 def select_user_index(userId):
     return dao.query(User.index).\
-              filter(User.id == userId).first()            
+              filter(User.id == userId).first().userIndex      
               
 def select_master_info(masterIndex):
     return dao.query(Master.id,
@@ -30,7 +30,11 @@ def select_master_info(masterIndex):
               
 def select_course_index(courseName):
     return dao.query(TestInfo.index).\
-              filter(TestInfo.testName == courseName).first().index          
+              filter(TestInfo.testName == courseName).first().index
+              
+def select_course(masterIndex):
+    return dao.query(TestInfo.index).\
+              filter(TestInfo.masterIndex == masterIndex).first().index   
         
 def select_allow_site_list():
     return dao.query(AllowSite.siteURL,

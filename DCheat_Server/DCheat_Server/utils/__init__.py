@@ -6,4 +6,4 @@
     :@author: algolab
 """
 
-__all__ = ['insertQuery','selectQuery']
+__all__ = ['insertQuery','selectQuery','updateQuery']
