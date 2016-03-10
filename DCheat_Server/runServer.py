@@ -33,12 +33,12 @@ if __name__ == '__main__':
     banProgramInTest = select_ban_program_in_test()
     unfinishedTestCourseForUser = select_unfinished_test_course_for_user(1)
     unfinishedTestCourseForMaster = select_unfinished_test_course_for_master()
-    #print(str(unfinishedTestCourseForMaster).strip('[]').replace(' ', ''))
-    #temp = ''
-    #for i in unfinishedTestCourseForMaster:
-    #    temp = i.testName+","+str(i.startDate)+","+str(i.endDate)
-    #print(temp)
-    #print(select_unfinished_test_course_for_user(1))
+    print(str(unfinishedTestCourseForMaster).strip('[]').replace(' ', ''))
+    temp = ''
+    for i in unfinishedTestCourseForMaster:
+        temp = i.testName+","+str(i.startDate)+","+str(i.endDate)
+    print(temp)
+    print(select_unfinished_test_course_for_user(1))
     testIndex = select_course_index('test1')
     siteListIndexInTest = select_allow_list_index(testIndex)
     banListIndexInTest = select_ban_list_index(testIndex)

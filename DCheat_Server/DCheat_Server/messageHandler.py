@@ -1,6 +1,5 @@
 import os
 import socketserver
-from sqlalchemy_utils.relationships import select_correlated_expression
 
 class ForkingRequestHandler(socketserver.BaseRequestHandler):
 
@@ -16,7 +15,11 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                                                     insert_course,\
                                                     insert_user_in_course,\
                                                     insert_user
-        from DCheat_Server.utils.updateQuery import modify_course
+        from DCheat_Server.utils.updateQuery import modify_course,\
+                                                    delete_ban_list_in_course,\
+                                                    modifyd_ban_list_in_course,\
+                                                    delete_allow_list_in_course,\
+                                                    modifyd_allow_list_in_course
                                                     
         # Echo the back to the client
         data = self.request.recv(4096)
@@ -89,21 +92,11 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                     return
                 dao.commit()
                 userIndex = select_user_index(userInfo[0])
-            try:
                 dao.add(insert_user_in_course(testIndex, userIndex))
-            except:
-                dao.rollback()
-                return
         for banProgram in banList:
-            try:
-                dao.add(insert_ban_list_in_course(testIndex, int(banProgram)))
-            except:
-                dao.rollback()
+            dao.add(insert_ban_list_in_course(testIndex, int(banProgram)))
         for allowSite in allowList:
-            try:
-                dao.add(inset_allow_list_in_course(testIndex, int(allowSite)))
-            except:
-                dao.rollback()
+            dao.add(inset_allow_list_in_course(testIndex, int(allowSite)))
         dao.commit()
         return
     def master_modify_course_handler(self, data):
@@ -111,6 +104,9 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         updateList = data.split(";")[2].split("^")
         startDate = updateList[0].split(",")[0]
         endDate = updateList[0].split(",")[1]
+        banList = updateList[1].replace(",", '')
+        allowList = updateList[2].replace(",", '')
+        userList = updateList[3].split("$")
         courseIndex = select_course(masterIndex)
         modify_course(startDate = startDate,
                       endDate = endDate)
@@ -118,6 +114,31 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             dao.commit()
         except:
             dao.rollback()
+        try:
+            delete_ban_list_in_course(courseIndex)
+            delete_allow_list_in_course(courseIndex)
+            dao.commit()
+        except:
+            dao.rollback()
+        for banIndex in banList:
+            try:
+                modify_ban_list_in_course(courseIndex, int(banIndex))
+            except:
+                insert_ban_list_in_course(courseIndex, int(banIndex))
+        for webIndex in AllowList:
+            try:
+                modify_allow_list_in_course(courseIndex, int(webIndex))
+            except:
+                modify_allow_list_in_course(courseIndex, int(webIndex))
+        for userInfo in userList:
+            try:
+                userIndex = select_user_index(userInfo[0])
+            except:
+                dao.add(insert_user(userInfo[0], userInfo[2]))
+                dao.commit()
+                userIndex = select_user_index(userInfo[0])
+                dao.add(insert_user_in_course(testIndex, userIndex))
+                
         return 
     def sign_up_handler():
         return

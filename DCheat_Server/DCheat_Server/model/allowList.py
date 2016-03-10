@@ -5,7 +5,7 @@
 """
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.dialects.mysql import INTEGER
+from sqlalchemy.dialects.mysql import INTEGER, ENUM
 
 from DCheat_Server.model import Base
 from DCheat_Server.model.testInfo import TestInfo
@@ -29,4 +29,7 @@ class AllowList (Base) :
                                  onupdate = 'CASCADE',
                                  ondelete = 'CASCADE'),
                       nullable =False)
-    
+    isDeleted = Column(ENUM ('TRUE',
+                             'FALSE'),
+                       default = 'FALSE',
+                       nullable = False)
