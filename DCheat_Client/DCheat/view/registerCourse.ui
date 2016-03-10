@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>688</width>
-    <height>508</height>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -105,7 +105,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>79</y>
+     <y>71</y>
      <width>461</width>
      <height>73</height>
     </rect>
@@ -141,7 +141,7 @@
    <property name="geometry">
     <rect>
      <x>302</x>
-     <y>422</y>
+     <y>348</y>
      <width>291</width>
      <height>25</height>
     </rect>
@@ -151,7 +151,7 @@
    <property name="geometry">
     <rect>
      <x>592</x>
-     <y>422</y>
+     <y>348</y>
      <width>75</width>
      <height>25</height>
     </rect>
@@ -172,7 +172,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>425</y>
+     <y>351</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -194,7 +194,7 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>468</y>
+     <y>394</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -215,7 +215,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>158</y>
+     <y>142</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -233,33 +233,11 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QWidget" name="formLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>180</y>
-     <width>201</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout"/>
-  </widget>
-  <widget class="QWidget" name="formLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>180</y>
-     <width>371</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout_2"/>
-  </widget>
   <widget class="QLabel" name="label_10">
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>158</y>
+     <y>142</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -281,11 +259,63 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>100</y>
+     <y>92</y>
      <width>191</width>
      <height>31</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QScrollArea" name="scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>29</x>
+     <y>164</y>
+     <width>191</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOn</enum>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>172</width>
+      <height>159</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QScrollArea" name="scrollArea_2">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>164</y>
+     <width>411</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOn</enum>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>392</width>
+      <height>159</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

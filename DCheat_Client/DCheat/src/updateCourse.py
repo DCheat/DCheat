@@ -16,36 +16,57 @@ import datetime
 import csv
 
 class updateCourse(QtWidgets.QDialog):
-    def __init__(self, name, startTime, endTime, banList, allowList, socket, parent=None):
+    def __init__(self, socket, name, testDate, startTime, endTime, banList, allowList, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi(config.config.ROOT_PATH +'view/registerCourse.ui', self)
+        self.ui = uic.loadUi(config.config.ROOT_PATH +'view/updateCourse.ui', self)
         self.sock = socket
 
         self.name = name
-        self.startTime = startTime
-        self.endTime = endTime
+        self.date = testDate.split('-')
+        self.startTime = startTime.split(':')
+        self.endTime = endTime.split(':')
         self.banList = banList
         self.allowList = allowList
 
-        for i in range(1, len(config.config.BAN_PROGRAM)):
-            checkBox = QtWidgets.QCheckBox()
-            checkBox.clicked.connect(self.set_ban_list)
-            label = QtWidgets.QLabel(config.config.BAN_PROGRAM[i])
+        self.ui.label_5.setText(self.name)
 
-            if str(i) in self.banList:
+
+        self.ui.dateEdit.setDate(QDate(int(self.date[0]), int(self.date[1]), int(self.date[2])))
+        self.ui.timeEdit.setTime(QTime(int(self.startTime[0]), int(self.startTime[1])))
+        self.ui.timeEdit_2.setTime(QTime(int(self.endTime[0]), int(self.endTime[1])))
+
+        pListWidget = QtWidgets.QWidget()
+        self.ui.scrollArea.setWidgetResizable(True)
+        self.ui.scrollArea.setWidget(pListWidget)
+        pListLayout = QtWidgets.QVBoxLayout()
+        pListLayout.setAlignment(Qt.AlignTop)
+        pListWidget.setLayout(pListLayout)
+
+        for i in range(1, len(config.config.BAN_PROGRAM)):
+            checkBox = QtWidgets.QCheckBox(config.config.BAN_PROGRAM[i])
+            checkBox.clicked.connect(self.set_ban_list)
+
+            if i in self.banList:
                 checkBox.setChecked(True)
 
-            self.ui.formLayout.addRow(checkBox, label)
+            pListLayout.addWidget(checkBox)
+
+
+        sListWidget = QtWidgets.QWidget()
+        self.ui.scrollArea_2.setWidgetResizable(True)
+        self.ui.scrollArea_2.setWidget(sListWidget)
+        sListLayout = QtWidgets.QVBoxLayout()
+        sListLayout.setAlignment(Qt.AlignTop)
+        sListWidget.setLayout(sListLayout)
 
         for i in range(1, len(config.config.ALLOW_SITE)):
-            checkBox = QtWidgets.QCheckBox()
+            checkBox = QtWidgets.QCheckBox(config.config.ALLOW_SITE[i])
             checkBox.clicked.connect(self.set_allow_list)
-            label = QtWidgets.QLabel(config.config.ALLOW_SITE[i])
 
-            if str(i) in self.allowList:
+            if i in self.allowList:
                 checkBox.setChecked(True)
 
-            self.ui.formLayout_2.addRow(checkBox, label)
+            sListLayout.addWidget(checkBox)
 
         self.ui.show()
 
@@ -60,7 +81,7 @@ class updateCourse(QtWidgets.QDialog):
         self.students = csv.reader(csvFile)
 
     @pyqtSlot()
-    def register_slot(self):
+    def update_slot(self):
         self.banList.sort()
         self.allowList.sort()
 
@@ -72,7 +93,7 @@ class updateCourse(QtWidgets.QDialog):
 
         print(courseDate)
 
-        self.sock.make_course(self.ui.lineEdit.text(), courseDate, self.banList, self.allowList, self.students)
+        self.sock.update_course(self.name, courseDate, self.banList, self.allowList, self.students)
 
     def set_ban_list(self):
         sender = self.sender()
@@ -98,4 +119,4 @@ class updateCourse(QtWidgets.QDialog):
         else:
             self.allowList.append(pos)
 
-        print(self.allowList, self.ui.lineEdit.text())
+        print(self.allowList)

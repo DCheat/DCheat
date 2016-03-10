@@ -24,15 +24,29 @@ class registerCourse(QtWidgets.QDialog):
         self.allowList = []
         self.students = []
 
+        pListWidget = QtWidgets.QWidget()
+        self.ui.scrollArea.setWidgetResizable(True)
+        self.ui.scrollArea.setWidget(pListWidget)
+        pListLayout = QtWidgets.QVBoxLayout()
+        pListLayout.setAlignment(Qt.AlignTop)
+        pListWidget.setLayout(pListLayout)
+
         for i in range(1, len(config.config.BAN_PROGRAM)):
             checkBox = QtWidgets.QCheckBox(config.config.BAN_PROGRAM[i])
             checkBox.clicked.connect(self.set_ban_list)
-            self.ui.formLayout.addRow(checkBox)
+            pListLayout.addWidget(checkBox)
+
+        sListWidget = QtWidgets.QWidget()
+        self.ui.scrollArea_2.setWidgetResizable(True)
+        self.ui.scrollArea_2.setWidget(sListWidget)
+        sListLayout = QtWidgets.QVBoxLayout()
+        sListLayout.setAlignment(Qt.AlignTop)
+        sListWidget.setLayout(sListLayout)
 
         for i in range(1, len(config.config.ALLOW_SITE)):
             checkBox = QtWidgets.QCheckBox(config.config.ALLOW_SITE[i])
             checkBox.clicked.connect(self.set_allow_list)
-            self.ui.formLayout_2.addRow(checkBox)
+            sListLayout.addWidget(checkBox)
 
         self.ui.show()
 

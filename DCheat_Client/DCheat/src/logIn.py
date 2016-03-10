@@ -19,6 +19,7 @@ class logIn(QtWidgets.QDialog):
     def __init__(self, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/login.ui', self)
+        self.ui.lineEdit_2.setEchoMode(2)
         self.ui.show()
 
         self.sock = object

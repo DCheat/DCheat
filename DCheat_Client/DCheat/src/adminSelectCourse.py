@@ -12,6 +12,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import *
 from DCheat import config
 from DCheat.src import registerCourse
+from DCheat.src import updateCourse
 
 class adminSelectCourse(QtWidgets.QDialog):
     def __init__(self, courseList, socket, parent=None):
@@ -70,9 +71,26 @@ class adminSelectCourse(QtWidgets.QDialog):
         # courseInfo = course[dataPos].split('$')
         #
         # name = courseInfo[0]
-        # startTime = courseInfo[1]
-        # endTime = courseInfo[2]
-        # banProrgam = courseInfo[4].split(',')
-        # allowSite = courseInfo[5].split(',')
+        # testDate = courseInfo[1].split(' ')[0]
+        # startTime = courseInfo[1].split(' ')[1]
+        # endTime = courseInfo[2].split(' ')[1]
+        # bantemp = courseInfo[4].split(',')
+        # allowtemp = courseInfo[5].split(',')
+        #
+        # banProgram = []
+        # allowSite = []
+        #
+        # for i in bantemp:
+        #     banProgram.append(int(i))
+        #
+        # for i in allotemp:
+        #     allowSite.append(int(i))
 
-        print('sadf', dataPos)
+        name = 'asdf'
+        testDate = '2012-01-01'
+        startTime = '11:00:00'
+        endTime = '12:00:00'
+        banProgram = [1,2,3,4,5]
+        allowSite = [1]
+
+        register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime, banProgram, allowSite)

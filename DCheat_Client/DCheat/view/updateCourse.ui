@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>688</width>
-    <height>508</height>
+    <width>679</width>
+    <height>394</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -105,7 +105,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>79</y>
+     <y>71</y>
      <width>461</width>
      <height>73</height>
     </rect>
@@ -141,7 +141,7 @@
    <property name="geometry">
     <rect>
      <x>302</x>
-     <y>422</y>
+     <y>307</y>
      <width>291</width>
      <height>25</height>
     </rect>
@@ -151,7 +151,7 @@
    <property name="geometry">
     <rect>
      <x>592</x>
-     <y>422</y>
+     <y>307</y>
      <width>75</width>
      <height>25</height>
     </rect>
@@ -172,7 +172,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>425</y>
+     <y>310</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -194,7 +194,7 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>468</y>
+     <y>353</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -208,14 +208,14 @@
     </font>
    </property>
    <property name="text">
-    <string>등  록</string>
+    <string>수  정</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>158</y>
+     <y>141</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -233,33 +233,11 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QWidget" name="formLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>180</y>
-     <width>201</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout"/>
-  </widget>
-  <widget class="QWidget" name="formLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>180</y>
-     <width>371</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout_2"/>
-  </widget>
   <widget class="QLabel" name="label_10">
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>158</y>
+     <y>141</y>
      <width>101</width>
      <height>20</height>
     </rect>
@@ -281,7 +259,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>106</y>
+     <y>97</y>
      <width>191</width>
      <height>21</height>
     </rect>
@@ -293,25 +271,61 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QScrollArea" name="scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>29</x>
+     <y>163</y>
+     <width>171</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOn</enum>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>152</width>
+      <height>129</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QScrollArea" name="scrollArea_2">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>163</y>
+     <width>411</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOn</enum>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>392</width>
+      <height>129</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>register_slot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>570</x>
-     <y>468</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>487</x>
-     <y>234</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
@@ -328,9 +342,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_slot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>588</x>
+     <y>365</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>532</x>
+     <y>356</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>register_slot()</slot>
+  <slot>update_slot()</slot>
   <slot>search_slot()</slot>
  </slots>
 </ui>

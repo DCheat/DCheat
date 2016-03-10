@@ -117,5 +117,29 @@ class networkServer(object):
 
 
 
-    def update_course(self):
-        asdf
+    def update_course(self, courseName, courseDate, programList, siteList, students):
+        programList = str(programList).strip('[]').replace(' ', '')
+        siteList = str(siteList).strip('[]').replace(' ', '')
+
+        stdList = ''
+
+        for std in students:
+            stdList = stdList + (str(std).strip('[]').replace(' ', '')) + '$'
+
+        stdList.rstrip('$')
+
+        makeMessage = '{}^{}^{}^{}^{}'.format(courseName, courseDate, programList, siteList, stdList)
+        message = config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)
+
+        try:
+            self.clientsock.sendall(message)
+            recvMessage = self.clientsock.recv(BUFFER_SIZE)
+
+        except Exception as e:
+            return -1
+
+        if recvMessage.encode('utf-8') == '1':
+            pass
+
+        else:
+            print('asdf')
