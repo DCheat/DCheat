@@ -17,25 +17,23 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                                                     insert_user
         from DCheat_Server.utils.updateQuery import modify_course,\
                                                     delete_ban_list_in_course,\
-                                                    modifyd_ban_list_in_course,\
+                                                    modify_ban_list_in_course,\
                                                     delete_allow_list_in_course,\
-                                                    modifyd_allow_list_in_course
+                                                    modify_allow_list_in_course
                                                     
         # Echo the back to the client
         data = self.request.recv(4096)
         data = data.decode()
-        cur_pid = os.getpid()
-        response = bytes('%d: %s' % (cur_pid, data), 'utf-8')
-        self.request.send(response)
+        
         print("AAAAA")
         if data.find("SIN") != -1:
-            login_handler(data)
+            self.login_handler(data)
         elif data.find("SCS") != -1:
-            select_course(data)
+            self.select_course(data)
         elif data.find("ACS") != -1:
-            master_add_course_handler(data)
+            self.master_add_course_handler(data)
         elif data.find("UCS") != -1:
-            master_modify_course_handler(data)
+            self.master_modify_course_handler(data)
         #if data.find("SCS") != -1:
         #    testIndex = int(data.split()[0])
         #    programIndexList = select_ban_list_in_test(testIndex)
@@ -52,7 +50,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         courseList = select_unfinished_test_course_for_user(userIndex)
         courseList = str(courseList).strip('[]').replace(' ', '')
         sendData = userIndex+"^"+courseList
-        return sendData
+        self.request.send(sendData.encode('utf-8'))
     
     def select_course(self, data):
         courseName = data.split(";")[2]
@@ -63,7 +61,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         programIndexList = select_ban_list_index(courseIndex)
         programIndexList = str(programIndexList).strip('[]').replace(' ','').replace('(','').replace(',)','')
         sendData = programIndexList+"^"+siteIndexList
-        return sendData
+        self.request.send(sendData.encode('utf-8'))
     
     def master_add_course_handler(self, data):
         masterIndex = int(data.split(";")[0])
