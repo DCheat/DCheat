@@ -6,7 +6,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
                                             select_user_index,\
-                                            select_master_index.\
+                                            select_master_index,\
                                             select_course_index,\
                                             select_course,\
                                             select_allow_list_index,\
