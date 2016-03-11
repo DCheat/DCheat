@@ -6,6 +6,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
                                             select_user_index,\
+                                            select_master_index.\
                                             select_course_index,\
                                             select_course,\
                                             select_allow_list_index,\
@@ -41,15 +42,20 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         #    return [programIndexList+"^"+siteIndexList]
     
     def login_handler(self, data):
-        userId = data.split(";")[2].split(",")[0]
+        id = data.split(";")[2].split(",")[0]
+        password = data.split(";")[2].split(",")[1]
         sendData = ''
         try:
-            userIndex = select_user_index(userId)
+            if password.len != 0:
+                idIndex = select_master_index(id)
+                courseList = select_unfinished_test_course_for_master(idIndex)
+            else:
+                idIndex = select_user_index(id)
+                courseList = select_unfinished_test_course_for_user(idIndex)
         except:
             return 0
-        courseList = select_unfinished_test_course_for_user(userIndex)
         courseList = str(courseList).strip('[]').replace(' ', '')
-        sendData = userIndex+"^"+courseList
+        sendData = idIndex+"^"+courseList
         self.request.send(sendData.encode('utf-8'))
     
     def select_course(self, data):
