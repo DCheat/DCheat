@@ -1,26 +1,28 @@
 import os
 import socketserver
-
-class ForkingRequestHandler(socketserver.BaseRequestHandler):
-
-    def handle(self):
-        from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
+from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
                                             select_user_index,\
                                             select_master_index,\
                                             select_course_index,\
                                             select_course,\
                                             select_allow_list_index,\
                                             select_ban_list_index
-        from DCheat_Server.utils.insertQuery import insert_allow_list_in_course,\
-                                                    insert_ban_list_in_course,\
-                                                    insert_course,\
-                                                    insert_user_in_course,\
-                                                    insert_user
-        from DCheat_Server.utils.updateQuery import modify_course,\
-                                                    delete_ban_list_in_course,\
-                                                    modify_ban_list_in_course,\
-                                                    delete_allow_list_in_course,\
-                                                    modify_allow_list_in_course
+from DCheat_Server.utils.insertQuery import insert_allow_list_in_course,\
+                                            insert_ban_list_in_course,\
+                                            insert_course,\
+                                            insert_user_in_course,\
+                                            insert_user
+from DCheat_Server.utils.updateQuery import modify_course,\
+                                            delete_ban_list_in_course,\
+                                            modify_ban_list_in_course,\
+                                            delete_allow_list_in_course,\
+                                            modify_allow_list_in_course
+
+
+class ForkingRequestHandler(socketserver.BaseRequestHandler):
+
+    def handle(self):
+        
                                                     
         # Echo the back to the client
         data = self.request.recv(4096)
@@ -46,7 +48,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         password = data.split(";")[2].split(",")[1]
         sendData = ''
         try:
-            if password.len != 0:
+            if len(password) != 0:
                 idIndex = select_master_index(id)
                 courseList = select_unfinished_test_course_for_master(idIndex)
             else:
