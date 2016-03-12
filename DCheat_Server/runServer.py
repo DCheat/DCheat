@@ -1,4 +1,5 @@
 import os
+import DCheat_Server
 import socketserver
 from socketserver import ThreadingTCPServer
 from DCheat_Server.messageHandler import ForkingRequestHandler
@@ -8,16 +9,6 @@ class ForkingServer(ThreadingTCPServer):
 
 
 if __name__ == '__main__':
-
-        # 데이터베이스 처리 
-    from DCheat_Server.database import DBManager
-    try:
-        DBManager.init("mysql+pymysql://root:dkfrhflwma@localhost/DCheat")
-        DBManager.init_db()
-
-    except Exception as e:
-        print(e)
-    
     address = ('', 9410)  # let the kernel assign a portf
     server = ForkingServer(address,
                                ForkingRequestHandler)

@@ -6,4 +6,6 @@
     :@author: algolab
 """
 
+import DCheat_Server
+
 __all__ = ['insertQuery','selectQuery','updateQuery']
