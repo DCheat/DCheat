@@ -12,8 +12,9 @@ import wmi
 import psutil
 from DCheat import config
 import time
+import multiprocessing
 
-class checkSystem(object):
+class checkSystem(multiprocessing.Process):
     def __init__(self, banList):
         self.clientOS = platform.system()
         self.banList = banList
@@ -23,7 +24,7 @@ class checkSystem(object):
         if self.clientOS == config.config.OS_WINDOWS:
             self.ext = '.exe'
 
-    def startChecking(self):
+    def run(self):
         self.pre_check()
         while True:
             if self.clientOS == config.config.OS_WINDOWS:
@@ -32,7 +33,7 @@ class checkSystem(object):
             else:
                 self.check_in_linux()
 
-            time.sleep(58)
+            time.sleep(59)
 
     def pre_check(self):
         processes = psutil.pids()
@@ -112,7 +113,7 @@ class checkSystem(object):
             if pro[1] in processPath:
                 pathCheck += 1
 
-            if pro[2] in processPath:
+            if pro[2] in processPath or pro[2] == '':
                 pathCheck += 1
 
             if pathCheck > 0:

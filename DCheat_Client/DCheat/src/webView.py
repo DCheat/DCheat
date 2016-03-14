@@ -15,6 +15,7 @@ from PyQt5.QtWebKitWidgets import QWebView
 from PyQt5.QtCore import *
 from PyQt5.QtWebKit import *
 from DCheat import config
+from DCheat.src import checkSystem
 
 class webView(QtWidgets.QMainWindow):
     def __init__(self, program, web, sock, parent=None):
@@ -31,6 +32,10 @@ class webView(QtWidgets.QMainWindow):
             self.ui.tabWidget.addTab(view, self.allowWeb[i].lstrip('https://www.'))
 
         self.ui.webView.load(QUrl('http://www.kookmin.ac.kr'))
+
+        self.mp = checkSystem.checkSystem(self.banProgram)
+        self.mp.daemon = True
+        self.mp.start()
 
         self.ui.show()
 
@@ -54,4 +59,4 @@ class webView(QtWidgets.QMainWindow):
         from DCheat.src import warningPopup
 
         event.ignore()
-        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock)
+        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, self.mp)
