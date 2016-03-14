@@ -19,7 +19,10 @@ class logIn(QtWidgets.QDialog):
     def __init__(self, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/login.ui', self)
+
         self.ui.lineEdit_2.setEchoMode(2)
+        QtWidgets.QWidget.setTabOrder(self.ui.lineEdit, self.ui.lineEdit_2)
+
         self.ui.show()
 
         self.sock = object
@@ -29,7 +32,7 @@ class logIn(QtWidgets.QDialog):
         userID =  self.ui.lineEdit.text()
         password = self.ui.lineEdit_2.text()
 
-        # 나중에 주석 해제
+        # # 나중에 주석 해제
         # try:
         #     self.sock = networkServer.networkServer()
         #     courses = self.sock.send_login_message(userID, password)

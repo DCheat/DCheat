@@ -19,8 +19,11 @@ class networkServer(object):
             self.clientsock.connect((config.config.HOST, config.config.PORT))
         except Exception as e:
             print(e)
-        print('asdf')
+
         self.userNumber = 0
+
+    def close(self):
+        self.clientsock.close()
 
     def send_login_message(self, userID = '', password = ''):
         loginInfo = '{},{}'.format(userID, password)

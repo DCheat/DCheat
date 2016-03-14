@@ -94,3 +94,9 @@ class adminSelectCourse(QtWidgets.QDialog):
         allowSite = [1]
 
         register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime, banProgram, allowSite)
+
+    def closeEvent(self, event):
+        from DCheat.src import warningPopup
+
+        event.ignore()
+        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock)

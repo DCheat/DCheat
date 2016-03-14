@@ -44,3 +44,9 @@ class selectCourse(QtWidgets.QDialog):
         self.ui.reject()
 
         webView.webView(program=banProgram, web=allowWeb, sock=self.sock)
+
+    def closeEvent(self, event):
+        from DCheat.src import warningPopup
+
+        event.ignore()
+        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock)

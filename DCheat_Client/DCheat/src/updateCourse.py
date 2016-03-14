@@ -120,3 +120,9 @@ class updateCourse(QtWidgets.QDialog):
             self.allowList.append(pos)
 
         print(self.allowList)
+
+    def closeEvent(self, event):
+        from DCheat.src import warningPopup
+
+        event.ignore()
+        result = warningPopup.warningPopup('종료하시겠습니까?\n 종료하시면 현재 입력한 데이터는 모두 사라집니다.', self.ui, self.sock)

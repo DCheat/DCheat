@@ -49,3 +49,9 @@ class webView(QtWidgets.QMainWindow):
     @pyqtSlot()
     def slot_reload(self):
         self.ui.webView.reload()
+
+    def closeEvent(self, event):
+        from DCheat.src import warningPopup
+
+        event.ignore()
+        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock)
