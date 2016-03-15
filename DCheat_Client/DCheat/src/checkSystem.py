@@ -16,6 +16,7 @@ import multiprocessing
 
 class checkSystem(multiprocessing.Process):
     def __init__(self, banList):
+        multiprocessing.Process.__init__(self)
         self.clientOS = platform.system()
         self.banList = banList
 
@@ -26,6 +27,7 @@ class checkSystem(multiprocessing.Process):
 
     def run(self):
         self.pre_check()
+
         while True:
             if self.clientOS == config.config.OS_WINDOWS:
                 self.check_in_windows()
@@ -55,10 +57,14 @@ class checkSystem(multiprocessing.Process):
 
             else:
                 checkingPoint = 0
-                processPath = process.ExecutablePath.split(config.config.WINDOWS_DIRECTORY_SEPARATOR)
+                processPath = process.ExecutablePath
 
+                if processPath is not None:
+                    processPath = processPath.split(config.config.WINDOWS_DIRECTORY_SEPARATOR)
+                    checkingPoint += self.check_path(processPath)
+
+                print(processPath)
                 checkingPoint += self.check_name(process.Name)
-                checkingPoint += self.check_path(processPath)
                 checkingPoint += self.check_port(process.ProcessId)
 
                 if checkingPoint > 10:
@@ -84,10 +90,13 @@ class checkSystem(multiprocessing.Process):
                     continue
 
                 checkingPoint = 0
-                processPath = process.exe().split(config.config.LINUX_DIRECTORY_SEPARATOR)
+                processPath = process.exe()
+
+                if processPath is not None:
+                    processPath = processPath.split(config.config.LINUX_DIRECTORY_SEPARATOR)
+                    checkingPoint += self.check_path(processPath)
 
                 checkingPoint += self.check_name(process.name())
-                checkingPoint += self.check_path(processPath)
                 checkingPoint += self.check_port(pid)
 
                 if checkingPoint > 10:
