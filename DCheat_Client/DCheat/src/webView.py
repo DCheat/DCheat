@@ -26,10 +26,10 @@ class webView(QtWidgets.QMainWindow):
         self.allowWeb = web
         self.sock = sock
 
-        for i in range(len(self.allowWeb)):
+        for i in self.allowWeb:
             view = QWebView()
-            view.load(QUrl(self.allowWeb[i]))
-            self.ui.tabWidget.addTab(view, self.allowWeb[i].lstrip('https://www.'))
+            view.load(QUrl(config.config.ALLOW_SITE[i]))
+            self.ui.tabWidget.addTab(view, config.config.ALLOW_SITE[i].lstrip('https://www.'))
 
         self.ui.webView.load(QUrl('http://www.kookmin.ac.kr'))
 

@@ -38,8 +38,8 @@ class selectCourse(QtWidgets.QDialog):
         # if banProgram is -1:
         #     asdf
 
-        banProgram = ['KakaoTalk', 'Skype']
-        allowWeb = ['https://algolab.kookmin.ac.kr', 'http://www.daum.net']
+        banProgram = [6, 9]
+        allowWeb = [1, 2]
 
         self.ui.reject()
 
