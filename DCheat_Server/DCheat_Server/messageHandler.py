@@ -1,6 +1,7 @@
 import os
 import socketserver
 from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
+                                            select_unfinished_test_course_for_master,\
                                             select_user_index,\
                                             select_master_index,\
                                             select_course_index,\
