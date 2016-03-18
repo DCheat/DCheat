@@ -32,7 +32,7 @@ def select_master_info(masterIndex):
                      Master.email).\
               filter(Master.index == masterIndex).first()
               
-def select_master_check(masterId, masterPassword):
+def select_master_check(masterId):
     return dao.query(Master.index,
                      Master.password).\
               filter(Master.id == masterId).first()
