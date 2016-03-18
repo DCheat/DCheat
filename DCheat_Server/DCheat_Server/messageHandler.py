@@ -1,9 +1,12 @@
 import os
 import socketserver
+from werkzeug.security import generate_password_hash
+from DCheat_Server.DCheat_py3des import TripleDES
 from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
                                             select_unfinished_test_course_for_master,\
                                             select_user_index,\
                                             select_master_index,\
+                                            select_master_check,\
                                             select_course_index,\
                                             select_course,\
                                             select_allow_list_index,\
@@ -47,16 +50,30 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
         password = data.split(";")[2].split(",")[1]
-        sendData = ''
-        try:
-            if len(password) != 0:
-                idIndex = select_master_index(id)
+        
+        if len(password) != 0:
+            try:
+                idIndex = select_master_check(id, generate_password_hash(TripleDES.encrypt(str(password))))
+            except:
+                self.request.send('0'.encode('utf-8'))
+                return
+            try:
                 courseList = select_unfinished_test_course_for_master(idIndex)
-            else:
+            except:
+                courseList = ''
+        else:
+            try:
                 idIndex = select_user_index(id)
+            except:
+                self.request.send('0'.encode('utf-8'))
+                return
+            
+            try:
                 courseList = select_unfinished_test_course_for_user(idIndex)
-        except:
-            return 0
+            except:
+                self.request.send('-1'.encode('utf-8'))
+                return
+            
         courseList = str(courseList).strip('[]').replace(' ', '')
         sendData = idIndex+"^"+courseList
         self.request.send(sendData.encode('utf-8'))
@@ -148,8 +165,6 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 
         return 
     def sign_up_handler():
-        return
-    def user_allow_ban_list_handler():
         return
     def send_email_handler():
         return
