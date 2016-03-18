@@ -50,6 +50,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
         password = data.split(";")[2].split(",")[1]
+        toalData = ''
         
         if len(password) != 0:
             try:
@@ -63,8 +64,18 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 return
             try:
                 courseList = select_unfinished_test_course_for_master(idIndex)
+                for courseInfo in courseList:
+                    banList = select_ban_list_index(courseInfo.index)
+                    allowList = select_allow_list_index(courseInfo.index)
+                    str(banList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
+                    str(allowList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
+                    courseData = courseInfo.testName + "," + courseInfo.startDate + "," + courseInfo.endDate + "," + banList  + allowList + str(courseInfo[4])
+                                 
+                    totalData = totalData + '^' + courseData
+                    
             except:
                 courseList = ''
+            totalData.lstrip('^')
         else:
             try:
                 idIndex = select_user_index(id)
