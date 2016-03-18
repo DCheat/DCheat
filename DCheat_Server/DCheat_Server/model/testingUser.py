@@ -6,7 +6,7 @@
 """
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.dialects.mysql import INTEGER
+from sqlalchemy.dialects.mysql import INTEGER, DATETIME
 
 from DCheat_Server.model import Base
 from DCheat_Server.model.testInfo import TestInfo
