@@ -12,6 +12,7 @@ from PyQt5 import uic
 from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from DCheat import config
+from DCheat.src import warningPopup
 import datetime
 import csv
 
@@ -60,7 +61,10 @@ class registerCourse(QtWidgets.QDialog):
         self.ui.textEdit_2.setText(filename)
 
         csvFile = open(filename, 'r')
-        self.students = csv.reader(csvFile)
+        data = csv.reader(csvFile)
+
+        for i in data:
+            self.students.append(i)
 
     @pyqtSlot()
     def register_slot(self):
@@ -75,7 +79,17 @@ class registerCourse(QtWidgets.QDialog):
 
         print(courseDate)
 
-        self.sock.make_course(self.ui.lineEdit.text(), courseDate, self.banList, self.allowList, self.students)
+        result = self.sock.make_course(self.ui.lineEdit.text(), courseDate, self.banList, self.allowList, self.students)
+
+        if result is 1:
+            self.ui.reject()
+
+        elif result is 2:
+            warningPopup.warningPopup('같은 이름의 시험이 존재합니다. 다른 이름으로 다시 시도하세요.')
+
+        elif result is 0:
+            warningPopup.warningPopup('등록이 실패했습니다. 다시 시도 하세요.')
+
 
     def set_ban_list(self):
         sender = self.sender()

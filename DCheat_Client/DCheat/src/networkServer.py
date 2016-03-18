@@ -9,6 +9,7 @@
 
 import socket
 from DCheat import config
+from DCheat.src import warningPopup
 
 BUFFER_SIZE = 4096
 
@@ -30,108 +31,125 @@ class networkServer(object):
         message = (config.config.MESSAGE_FORM.format(0, config.config.HEADER_SIGNIN, loginInfo)).encode('utf-8')
 
         try:
-            self.clientsock.sendall(message)
+            self.clientsock.send(message)
             recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
-
+            print(recvMessage)
         except Exception as e:
-            print(e)
-            return -1
-
-        if recvMessage == '0':
+            warningPopup.warningPopup('접속 문제입니다. 다시 시도하세요.')
             self.clientsock.close()
             return 0
 
-        if password == '':
+        if recvMessage == '0':
+            warningPopup.warningPopup('잘못된 아이디 또는 비밀번호를 입력하셨습니다.')
+            self.clientsock.close()
+            return 0
+
+        elif recvMessage == '-1':
+            warningPopup.warningPopup('볼수 있는 시험이 없습니다.')
+            self.clientsock.close()
+            return 0
+
+        if len(password) is 0:
             recvMessage = recvMessage.split('^')
 
             self.userNumber = recvMessage[0]
 
-            return recvMessage[1].split(',')
+            courseList = recvMessage[1].split(',')
+
+            return courseList
 
         else:
             recvMessage = recvMessage.split('^')
+            courseInfo = recvMessage[1:]
 
-            self.userNumber = recvMessage[0]
-
-            courseInfo = []
-            for info in range(1, len(recvMessage)):
-                course = info.split('$')
-                courseInfo.append(course)
+            self.userNumber = int(recvMessage[0])
 
             return courseInfo
 
     def send_select_course(self, courseName):
-        message = bytes(config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, courseName))
+        message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, courseName)).encode('utf-8')
 
         try:
             self.clientsock.sendall(message)
-            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).encode('utf-8')
+            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
 
         except Exception as e:
             return -1
 
-        message = recvMessage.split('^')
-        banProgram = message[0].split(',')
-        allowWeb = message[1].split(',')
+        message = recvMessage.split(',')
+        tempbanProgram = message[0].split('*')
+        tempallowWeb = message[1].split('*')
+
+        banProgram = []
+        allowWeb = []
+
+        for i in tempbanProgram:
+            banProgram.append(int(i))
+
+        for i in tempallowWeb:
+            allowWeb.append(int(i))
 
         return banProgram, allowWeb
 
     def send_sensing_info(self, programIndex, point):
         sensingMessage = '{},{}'.format(programIndex, point)
-        message = bytes(config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, sensingMessage))
+        message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, sensingMessage)).encode('utf-8')
 
         while True:
             try:
                 self.clientsock.sendall(message)
-                recvMessage = self.clientsock.recv(BUFFER_SIZE)
+                recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
 
             except Exception as e:
-                return -1
-
-            if recvMessage.encode('utf-8') == '1':
-                break
+                pass
 
     def make_course(self, courseName, courseDate, programList, siteList, students):
-        programList = str(programList).strip('[]').replace(' ', '')
-        siteList = str(siteList).strip('[]').replace(' ', '')
+        programList = str(programList).strip('[]').replace(' ', '').replace(',', '*')
+        siteList = str(siteList).strip('[]').replace(' ', '').replace(',', '*')
 
         stdList = ''
 
         for std in students:
-            stdList = stdList + (str(std).strip('[]').replace(' ', '')) + '$'
+            stdList = stdList + (str(std).strip('[]').replace(' ', '')).replace(',', '$') + '*'
 
-        stdList.rstrip('$')
+        stdList.rstrip('*')
 
-        makeMessage = '{}^{}^{}^{}^{}'.format(courseName, courseDate, programList, siteList, stdList)
-        message = config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)
+        makeMessage = '{},{},{},{},{}'.format(courseName, courseDate, programList, siteList, stdList)
+        message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)).encode('utf-8')
+        print(message, 1)
 
         try:
-            self.clientsock.sendall(message)
-            recvMessage = self.clientsock.recv(BUFFER_SIZE)
+            self.clientsock.send(message)
+            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
+            print(len(recvMessage))
 
         except Exception as e:
-            return -1
+            print(e, 'asdf')
+            return 0
 
-        if recvMessage.encode('utf-8') == '1':
-            pass
+        if recvMessage.encode('utf-8') == '0':
+            return 0
+
+        elif recvMessage.encode('utf-8') == '2':
+            return 2
 
         else:
-            print('asdf')
+            return 1
 
 
 
     def update_course(self, courseName, courseDate, programList, siteList, students):
-        programList = str(programList).strip('[]').replace(' ', '')
-        siteList = str(siteList).strip('[]').replace(' ', '')
+        programList = str(programList).strip('[]').replace(' ', '').replace(',', '*')
+        siteList = str(siteList).strip('[]').replace(' ', '').replace(',', '*')
 
         stdList = ''
 
         for std in students:
-            stdList = stdList + (str(std).strip('[]').replace(' ', '')) + '$'
+            stdList = stdList + (str(std).strip('[]').replace(' ', '')).replace(',', '$') + '*'
 
-        stdList.rstrip('$')
+        stdList.rstrip('*')
 
-        makeMessage = '{}^{}^{}^{}^{}'.format(courseName, courseDate, programList, siteList, stdList)
+        makeMessage = '{},{},{},{},{}'.format(courseName, courseDate, programList, siteList, stdList)
         message = config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)
 
         try:

@@ -21,23 +21,24 @@ class adminSelectCourse(QtWidgets.QDialog):
 
         self.sock = socket
         self.courseList = courseList
+        print(len(courseList))
 
         i = 0
-        self.courseList = self.courseList.split(',')
         for course in self.courseList:
-            # courseInfo = course.split('$')
-            #
-            # courseLabel = QtWidgets.QLabel(courseInfo[0])
-            # startLabel = QtWidgets.QLabel(courseInfo[1])
-            # endLabel = QtWidgets.QLabel(courseInfo[2])
-            # countLabel = QtWidgets.QLabel(courseInfo[3])
-            # banProrgam = courseInfo[4].split(',')
-            # allowSite = courseInfo[5].split(',')
+            if len(course) is 0:
+                break
 
-            courseLabel = QtWidgets.QLabel(course)
-            startLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
-            endLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
-            countLabel = QtWidgets.QLabel(str(250))
+            courseInfo = course.split(',')
+
+            courseLabel = QtWidgets.QLabel(courseInfo[0])
+            startLabel = QtWidgets.QLabel(courseInfo[1])
+            endLabel = QtWidgets.QLabel(courseInfo[2])
+            countLabel = QtWidgets.QLabel(courseInfo[3])
+
+            # courseLabel = QtWidgets.QLabel(course)
+            # startLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
+            # endLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
+            # countLabel = QtWidgets.QLabel(str(250))
 
             courseLabel.setAlignment(Qt.AlignHCenter)
             startLabel.setAlignment(Qt.AlignHCenter)
@@ -58,40 +59,36 @@ class adminSelectCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def insert_test(self):
-        print('asdfasdf')
-        try:
-            register = registerCourse.registerCourse(self.sock)
-        except Exception as e:
-            print(e)
+        register = registerCourse.registerCourse(self.sock)
 
     def modify_test(self):
         sender = self.sender()
         dataPos = int((sender.pos().y() - 21) / 41)
 
-        # courseInfo = course[dataPos].split('$')
-        #
-        # name = courseInfo[0]
-        # testDate = courseInfo[1].split(' ')[0]
-        # startTime = courseInfo[1].split(' ')[1]
-        # endTime = courseInfo[2].split(' ')[1]
-        # bantemp = courseInfo[4].split(',')
-        # allowtemp = courseInfo[5].split(',')
-        #
-        # banProgram = []
-        # allowSite = []
-        #
-        # for i in bantemp:
-        #     banProgram.append(int(i))
-        #
-        # for i in allotemp:
-        #     allowSite.append(int(i))
+        courseInfo = self.courseList[dataPos].split(',')
 
-        name = 'asdf'
-        testDate = '2012-01-01'
-        startTime = '11:00:00'
-        endTime = '12:00:00'
-        banProgram = [1,2,3,4,5]
-        allowSite = [1]
+        name = courseInfo[0]
+        testDate = courseInfo[1].split(' ')[0]
+        startTime = courseInfo[1].split(' ')[1]
+        endTime = courseInfo[2].split(' ')[1]
+        bantemp = courseInfo[4].split('*')
+        allowtemp = courseInfo[5].split('*')
+
+        banProgram = []
+        allowSite = []
+
+        for i in bantemp:
+            banProgram.append(int(i))
+
+        for i in allowtemp:
+            allowSite.append(int(i))
+
+        # name = 'asdf'
+        # testDate = '2012-01-01'
+        # startTime = '11:00:00'
+        # endTime = '12:00:00'
+        # banProgram = [1,2,3,4,5]
+        # allowSite = [1]
 
         register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime, banProgram, allowSite)
 

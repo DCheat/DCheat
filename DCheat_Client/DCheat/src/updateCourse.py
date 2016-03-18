@@ -78,7 +78,10 @@ class updateCourse(QtWidgets.QDialog):
         self.ui.textEdit_2.setText(filename)
 
         csvFile = open(filename, 'r')
-        self.students = csv.reader(csvFile)
+        data = csv.reader(csvFile)
+
+        for i in data:
+            self.students.append(i)
 
     @pyqtSlot()
     def update_slot(self):

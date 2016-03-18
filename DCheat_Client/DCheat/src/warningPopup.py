@@ -14,7 +14,7 @@ from PyQt5.QtCore import *
 from DCheat import config
 
 class warningPopup(QtWidgets.QDialog):
-    def __init__(self, message, parentUi, sock = None, multiprocess = None, parent=None):
+    def __init__(self, message, parentUi = None, sock = None, multiprocess = None, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/warningPopup.ui', self)
 
@@ -28,15 +28,15 @@ class warningPopup(QtWidgets.QDialog):
 
     @pyqtSlot()
     def ok_slot(self):
-        print('asdf')
-
         if self.sock is not None:
             self.sock.close()
         if self.mp is not None:
             self.mp.terminate()
 
         self.ui.reject()
-        self.parentUi.reject()
+
+        if self.parentUi is not None:
+            self.parentUi.reject()
 
     @pyqtSlot()
     def cancle_slot(self):

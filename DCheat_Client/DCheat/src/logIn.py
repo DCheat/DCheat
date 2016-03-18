@@ -32,19 +32,19 @@ class logIn(QtWidgets.QDialog):
         userID =  self.ui.lineEdit.text()
         password = self.ui.lineEdit_2.text()
 
-        # # 나중에 주석 해제
-        # try:
-        #     self.sock = networkServer.networkServer()
-        #     courses = self.sock.send_login_message(userID, password)
-        # except Exception as e:
-        #     print(e)
+        # 나중에 주석 해제
+        try:
+            self.sock = networkServer.networkServer()
+            courses = self.sock.send_login_message(userID, password)
+        except Exception as e:
+            print(e)
 
-        courses = '1,2,3,4,5'
+        # courses = '1,2,3,4,5'
 
         if courses is 0:
             pass
 
-        if len(password) is 0:
+        elif len(password) is 0:
             self.ui.reject()
             course = selectCourse.selectCourse(courseList=courses, socket=self.sock)
 

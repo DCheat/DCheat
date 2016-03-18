@@ -15,10 +15,13 @@ import time
 import multiprocessing
 
 class checkSystem(multiprocessing.Process):
-    def __init__(self, banList):
+    def __init__(self, banList, sock):
         multiprocessing.Process.__init__(self)
-        self.clientOS = platform.system()
+
         self.banList = banList
+        self.sock = sock
+
+        self.clientOS = platform.system()
         self.tempIndex = 0
 
         self.ext = ''
@@ -74,11 +77,9 @@ class checkSystem(multiprocessing.Process):
                 checkingPoint += self.check_port(process.ProcessId)
                 print('c',checkingPoint)
 
-                if checkingPoint > 10:
-                    print('사용', config.config.BAN_PROGRAM[self.tempIndex])
-
-                elif checkingPoint > 2:
-                    print('{}확률 사용'.format(checkingPoint/20), config.config.BAN_PROGRAM[self.tempIndex])
+                if checkingPoint > 0:
+                    self.sock.send_sensing_info(self.tempIndex, checkingPoint)
+                    self.banList.remove(self.tempIndex)
 
                 else:
                     pass
