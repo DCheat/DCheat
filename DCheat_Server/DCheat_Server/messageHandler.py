@@ -1,6 +1,6 @@
 import os
 import socketserver
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 from DCheat_Server.DCheat_py3des import TripleDES
 from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
                                             select_unfinished_test_course_for_master,\
@@ -53,7 +53,10 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         
         if len(password) != 0:
             try:
-                idIndex = select_master_check(id, generate_password_hash(TripleDES.encrypt(str(password))))
+                masterInfo = select_master_check(id)
+                if check_password_hash(masterInfo.password, TripleDES.encrypt(str(password))) is False:
+                    self.request.send('0'.encode('utf-8'))
+                    return
             except:
                 self.request.send('0'.encode('utf-8'))
                 return
