@@ -76,7 +76,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             except:
                 courseList = ''
                 
-            totalData.lstrip('^')
+            courses.lstrip('^')
         
         else:
             try:
@@ -108,13 +108,13 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     
     def master_add_course_handler(self, data):
         masterIndex = int(data.split(";")[0])
-        addList = data.split(";")[2].split("^")
+        addList = data.split(";")[2].split(",")
         courseName = addList[0]
-        startDate = addList[1].split(",")[0]
-        endDate = addList[1].split(",")[1]
-        banList = addList[2].replace(",", '')
-        allowList = addList[3].replace(",", '')
-        userList = addList[4].split("$")
+        startDate = addList[1].split("*")[0]
+        endDate = addList[1].split("*")[1]
+        banList = addList[2].replace("*", '')
+        allowList = addList[3].replace("*", '')
+        userList = addList[4].split("*")
         try:
             dao.add(insert_course(masterIndex, courseName, startDate, endDate))
             dao.commit()
