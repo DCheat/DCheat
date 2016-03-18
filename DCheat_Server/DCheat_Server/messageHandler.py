@@ -50,7 +50,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
         password = data.split(";")[2].split(",")[1]
-        toalData = ''
+        courses = ''
         
         if len(password) != 0:
             try:
@@ -71,11 +71,13 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                     str(allowList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
                     courseData = courseInfo.testName + "," + courseInfo.startDate + "," + courseInfo.endDate + "," + banList  + allowList + str(courseInfo[4])
                                  
-                    totalData = totalData + '^' + courseData
+                    courses = courses + '^' + courseData
                     
             except:
                 courseList = ''
+                
             totalData.lstrip('^')
+        
         else:
             try:
                 idIndex = select_user_index(id)
@@ -85,12 +87,12 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             
             try:
                 courseList = select_unfinished_test_course_for_user(idIndex)
+                courses = str(courseList).strip('[]').replace(' ', '')
             except:
                 self.request.send('-1'.encode('utf-8'))
                 return
             
-        courseList = str(courseList).strip('[]').replace(' ', '')
-        sendData = str(idIndex)+"^"+courseList
+        sendData = str(idIndex)+"^"+courses
         self.request.send(sendData.encode('utf-8'))
     
     def select_course(self, data):
