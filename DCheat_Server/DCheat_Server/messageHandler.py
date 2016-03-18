@@ -54,6 +54,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         if len(password) != 0:
             try:
                 masterInfo = select_master_check(id)
+                idIndex = masterInfo.index
                 if check_password_hash(masterInfo.password, TripleDES.encrypt(str(password))) is False:
                     self.request.send('0'.encode('utf-8'))
                     return
@@ -78,7 +79,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 return
             
         courseList = str(courseList).strip('[]').replace(' ', '')
-        sendData = idIndex+"^"+courseList
+        sendData = str(idIndex)+"^"+courseList
         self.request.send(sendData.encode('utf-8'))
     
     def select_course(self, data):
