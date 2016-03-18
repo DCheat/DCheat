@@ -115,6 +115,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         banList = addList[2].replace("*", '')
         allowList = addList[3].replace("*", '')
         userList = addList[4].split("*")
+        print(masterIndex,courseName,startDate, endDate, banList, allowList, userList)
         try:
             dao.add(insert_course(masterIndex, courseName, startDate, endDate))
             dao.commit()
