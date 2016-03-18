@@ -32,6 +32,11 @@ def select_master_info(masterIndex):
                      Master.email).\
               filter(Master.index == masterIndex).first()
               
+def select_master_check(masterId, masterPassword):
+    return dao.query(Master.index).\
+              filter(Master.id == masterId,
+                     Master.password == masterPassword).first().index
+              
 def select_course_index(courseName):
     return dao.query(TestInfo.index).\
               filter(TestInfo.testName == courseName).first().index
