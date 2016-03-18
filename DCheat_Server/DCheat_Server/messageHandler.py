@@ -118,19 +118,21 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         try:
             dao.add(insert_course(masterIndex, courseName, startDate, endDate))
             dao.commit()
-        except:
+        except Exception as e:
             dao.rollback()
+            print(e)
             self.request.send("2".encode('utf-8'))
             return 
         testIndex = select_course_index(courseName)
         for userInfo in userList:
             try:
                 userIndex = select_user_index(userInfo[0])
-            except:
+            except Exception as e:
                 try:
                     dao.add(insert_user(userInfo[0], userInfo[2]))
                 except:
                     dao.rollback()
+                    print(e)
                     self.request.send("0".encode('utf-8'))
                     return
                 dao.commit()
