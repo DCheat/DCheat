@@ -32,3 +32,9 @@ class TestingUser (Base) :
                                   ondelete = 'CASCADE'),
                        autoincrement = True,
                        nullable = False)
+    firstLogin = Column(DATETIME,
+                         nullable = False)
+    lastLogin = Column(DATETIME,
+                         nullable = False)
+    lastLogout = Column(DATETIME,
+                         nullable = False)
