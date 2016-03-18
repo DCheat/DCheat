@@ -127,10 +127,10 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         for userInfo in userList:
             try:
                 userIndex = select_user_index(userInfo[0])
-            except Exception as e:
+            except:
                 try:
                     dao.add(insert_user(userInfo[0], userInfo[2]))
-                except:
+                except Exception as e:
                     dao.rollback()
                     print(e)
                     self.request.send("0".encode('utf-8'))
