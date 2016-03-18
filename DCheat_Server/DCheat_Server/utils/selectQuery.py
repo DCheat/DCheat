@@ -87,15 +87,16 @@ def select_unfinished_test_course_for_user(userIndex):
                 filter(and_(TestInfo.endDate > datetime.now(),
                             TestInfo.startDate <= datetime.now())).all()
         
-def select_unfinished_test_course_for_master():
-    return dao.query(TestInfo.testName,
+def select_unfinished_test_course_for_master(masterIndex):
+    return dao.query(TestInfo.index,
+                     TestInfo.testName,
                      TestInfo.startDate,
                      TestInfo.endDate,
                      func.count(TestingUser.userIndex)).\
                 join(TestingUser,
                      TestingUser.testIndex == TestInfo.index).\
                 join(Master,
-                     Master.index == TestInfo.masterIndex).\
+                     Master.index == masterIndex).\
                 filter(TestInfo.endDate > datetime.now()).all()
                 
 def select_master_email():
