@@ -120,6 +120,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             dao.commit()
         except:
             dao.rollback()
+            self.request.send("2".encode('utf-8'))
             return 
         testIndex = select_course_index(courseName)
         for userInfo in userList:
@@ -130,6 +131,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                     dao.add(insert_user(userInfo[0], userInfo[2]))
                 except:
                     dao.rollback()
+                    self.request.send("0".encode('utf-8'))
                     return
                 dao.commit()
                 userIndex = select_user_index(userInfo[0])
@@ -139,7 +141,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         for allowSite in allowList:
             dao.add(inset_allow_list_in_course(testIndex, int(allowSite)))
         dao.commit()
-        return
+        self.request.send("1".encode('utf-8'))
     def master_modify_course_handler(self, data):
         masterIndex = int(data.split(";")[0])
         updateList = data.split(";")[2].split("^")
