@@ -26,26 +26,25 @@ from DCheat_Server.utils.updateQuery import modify_course,\
 class ForkingRequestHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
+        while True:
+            # Echo the back to the client
+            data = self.request.recv(4096)
+            data = data.decode()
         
-                                                    
-        # Echo the back to the client
-        data = self.request.recv(4096)
-        data = data.decode()
-        
-        print("AAAAA")
-        if data.find("SIN") != -1:
-            self.login_handler(data)
-        elif data.find("SCS") != -1:
-            self.select_course(data)
-        elif data.find("ACS") != -1:
-            self.master_add_course_handler(data)
-        elif data.find("UCS") != -1:
-            self.master_modify_course_handler(data)
-        #if data.find("SCS") != -1:
-        #    testIndex = int(data.split()[0])
-        #    programIndexList = select_ban_list_in_test(testIndex)
-        #    siteIndexList = select_allow_site_index()
-        #    return [programIndexList+"^"+siteIndexList]
+            print("AAAAA")
+            if data.find("SIN") != -1:
+                self.login_handler(data)
+            elif data.find("SCS") != -1:
+                self.select_course(data)
+            elif data.find("ACS") != -1:
+                self.master_add_course_handler(data)
+            elif data.find("UCS") != -1:
+                self.master_modify_course_handler(data)
+            #if data.find("SCS") != -1:
+            #    testIndex = int(data.split()[0])
+            #    programIndexList = select_ban_list_in_test(testIndex)
+            #    siteIndexList = select_allow_site_index()
+            #    return [programIndexList+"^"+siteIndexList]
     
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
