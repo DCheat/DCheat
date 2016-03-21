@@ -109,11 +109,11 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         masterIndex = int(data.split(";")[0])
         addList = data.split(";")[2].split(",")
         courseName = addList[0]
-        startDate = addList[1].split("*")[0]
-        endDate = addList[1].split("*")[1]
-        banList = addList[2].replace("*", '')
-        allowList = addList[3].replace("*", '')
-        userList = addList[4].split("*")
+        startDate = addList[1]
+        endDate = addList[2]
+        banList = addList[3].split("*")
+        allowList = addList[4].split("*")
+        userList = addList[5].split("*")
         print(masterIndex,courseName,startDate, endDate, banList, allowList, userList)
         try:
             dao.add(insert_course(masterIndex, courseName, startDate, endDate))
@@ -129,7 +129,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 userIndex = select_user_index(userInfo[0])
             except:
                 try:
-                    dao.add(insert_user(userInfo[0], userInfo[2]))
+                    dao.add(insert_user(userInfo[0], userInfo[1]))
                 except Exception as e:
                     dao.rollback()
                     print(e)
@@ -137,7 +137,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                     return
                 dao.commit()
                 userIndex = select_user_index(userInfo[0])
-                dao.add(insert_user_in_course(testIndex, userIndex))
+            dao.add(insert_user_in_course(testIndex, userIndex))
         for banProgram in banList:
             dao.add(insert_ban_list_in_course(testIndex, int(banProgram)))
         for allowSite in allowList:
