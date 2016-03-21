@@ -9,7 +9,7 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import uic
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt, pyqtSlot
 from DCheat import config
 from DCheat.src import networkServer
 from DCheat.src import selectCourse
@@ -51,3 +51,18 @@ class logIn(QtWidgets.QDialog):
         else:
             self.ui.reject()
             course = adminSelectCourse.adminSelectCourse(courseList=courses, socket=self.sock)
+
+    def closeEvent(self, event):
+        from DCheat.src import warningPopup
+
+        event.ignore()
+        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock)
+
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == Qt.Key_Escape:
+            print('1213341234')
+            pass
+
+        if QKeyEvent.key() == Qt.Key_Enter or QKeyEvent.key() == Qt.Key_Return:
+            print('afasdgsadfas')
+            self.slot_login()

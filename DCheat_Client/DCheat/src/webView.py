@@ -13,6 +13,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtWebKitWidgets import QWebView
 from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWebKit import *
 from DCheat import config
 from DCheat.src import checkSystem
@@ -63,3 +64,7 @@ class webView(QtWidgets.QMainWindow):
 
         event.ignore()
         result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, self.mp)
+
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == Qt.Key_Escape:
+            pass

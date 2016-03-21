@@ -10,7 +10,7 @@
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5 import QtGui
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt, pyqtSlot, QDate, QTime
 from DCheat import config
 import datetime
 import csv
@@ -129,3 +129,7 @@ class updateCourse(QtWidgets.QDialog):
 
         event.ignore()
         result = warningPopup.warningPopup('종료하시겠습니까?\n 종료하시면 현재 입력한 데이터는 모두 사라집니다.', self.ui, self.sock)
+
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == Qt.Key_Escape:
+            pass

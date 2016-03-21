@@ -10,7 +10,7 @@
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5 import QtGui
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt, pyqtSlot
 from DCheat import config
 
 class warningPopup(QtWidgets.QDialog):
@@ -41,3 +41,7 @@ class warningPopup(QtWidgets.QDialog):
     @pyqtSlot()
     def cancle_slot(self):
         self.ui.reject()
+
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == Qt.Key_Escape:
+            pass

@@ -9,7 +9,7 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import uic
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt, pyqtSlot
 from DCheat import config
 from DCheat.src import registerCourse
 from DCheat.src import updateCourse
@@ -97,3 +97,7 @@ class adminSelectCourse(QtWidgets.QDialog):
 
         event.ignore()
         result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock)
+
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == Qt.Key_Escape:
+            pass

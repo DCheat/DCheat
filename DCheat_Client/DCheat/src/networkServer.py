@@ -30,17 +30,14 @@ class networkServer(object):
             print(recvMessage)
         except Exception as e:
             warningPopup.warningPopup('접속 문제입니다. 다시 시도하세요.')
-            clientsock.close()
             return 0
 
         if recvMessage == '0':
             warningPopup.warningPopup('잘못된 아이디 또는 비밀번호를 입력하셨습니다.')
-            clientsock.close()
             return 0
 
         elif recvMessage == '-1':
             warningPopup.warningPopup('볼수 있는 시험이 없습니다.')
-            clientsock.close()
             return 0
 
         if len(password) is 0:
