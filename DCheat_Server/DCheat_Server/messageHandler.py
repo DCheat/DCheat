@@ -1,5 +1,6 @@
 import os
 import socketserver
+from DCheat.database import dao
 from werkzeug.security import check_password_hash
 from DCheat_Server.DCheat_py3des import TripleDES
 from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
