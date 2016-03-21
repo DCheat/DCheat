@@ -1,6 +1,6 @@
 import os
 import socketserver
-from DCheat.database import dao
+from DCheat_Server.database import dao
 from werkzeug.security import check_password_hash
 from DCheat_Server.DCheat_py3des import TripleDES
 from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
@@ -125,26 +125,33 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             self.request.send("2".encode('utf-8'))
             return 
         testIndex = select_course_index(courseName)
-        for userInfo in userList:
-            try:
-                userIndex = select_user_index(userInfo[0])
-            except:
+
+        if len(userList[0]) is not 0:
+            for userInfo in userList:
                 try:
-                    dao.add(insert_user(userInfo[0], userInfo[1]))
-                except Exception as e:
-                    dao.rollback()
-                    print(e)
-                    self.request.send("0".encode('utf-8'))
-                    return
-                dao.commit()
-                userIndex = select_user_index(userInfo[0])
-            dao.add(insert_user_in_course(testIndex, userIndex))
-        for banProgram in banList:
-            dao.add(insert_ban_list_in_course(testIndex, int(banProgram)))
-        for allowSite in allowList:
-            dao.add(inset_allow_list_in_course(testIndex, int(allowSite)))
+                    userIndex = select_user_index(userInfo[0])
+                except:
+                    try:
+                        dao.add(insert_user(userInfo[0], userInfo[1]))
+                    except Exception as e:
+                        dao.rollback()
+                        print(e)
+                        self.request.send("0".encode('utf-8'))
+                        return
+                    dao.commit()
+                    userIndex = select_user_index(userInfo[0])
+                dao.add(insert_user_in_course(testIndex, userIndex))
+
+        if len(banList[0]) is not 0:
+            for banProgram in banList:
+                dao.add(insert_ban_list_in_course(testIndex, int(banProgram)))
+
+        if len(allowList[0]) is not 0:
+            for allowSite in allowList:
+                dao.add(insert_allow_list_in_course(testIndex, int(allowSite)))
         dao.commit()
         self.request.send("1".encode('utf-8'))
+
     def master_modify_course_handler(self, data):
         masterIndex = int(data.split(";")[0])
         updateList = data.split(";")[2].split("^")
@@ -171,7 +178,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 modify_ban_list_in_course(courseIndex, int(banIndex))
             except:
                 insert_ban_list_in_course(courseIndex, int(banIndex))
-        for webIndex in AllowList:
+        for webIndex in allowList:
             try:
                 modify_allow_list_in_course(courseIndex, int(webIndex))
             except:
