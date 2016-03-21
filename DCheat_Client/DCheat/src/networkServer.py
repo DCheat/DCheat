@@ -7,7 +7,7 @@
     :copyright: Hwang Sek-jin
 """
 
-import socket
+from DCheat import clientsock
 from DCheat import config
 from DCheat.src import warningPopup
 
@@ -15,38 +15,32 @@ BUFFER_SIZE = 4096
 
 class networkServer(object):
     def __init__(self):
-        self.clientsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            self.clientsock.connect((config.config.HOST, config.config.PORT))
-        except Exception as e:
-            print(e)
-
         self.userNumber = 0
 
     def close(self):
-        self.clientsock.close()
+        clientsock.close()
 
     def send_login_message(self, userID = '', password = ''):
         loginInfo = '{},{}'.format(userID, password)
         message = (config.config.MESSAGE_FORM.format(0, config.config.HEADER_SIGNIN, loginInfo)).encode('utf-8')
 
         try:
-            self.clientsock.send(message)
-            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
+            clientsock.send(message)
+            recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
             print(recvMessage)
         except Exception as e:
             warningPopup.warningPopup('접속 문제입니다. 다시 시도하세요.')
-            self.clientsock.close()
+            clientsock.close()
             return 0
 
         if recvMessage == '0':
             warningPopup.warningPopup('잘못된 아이디 또는 비밀번호를 입력하셨습니다.')
-            self.clientsock.close()
+            clientsock.close()
             return 0
 
         elif recvMessage == '-1':
             warningPopup.warningPopup('볼수 있는 시험이 없습니다.')
-            self.clientsock.close()
+            clientsock.close()
             return 0
 
         if len(password) is 0:
@@ -70,8 +64,8 @@ class networkServer(object):
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_SELECT_COURSE, courseName)).encode('utf-8')
 
         try:
-            self.clientsock.sendall(message)
-            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
+            clientsock.sendall(message)
+            recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
 
         except Exception as e:
             return -1
@@ -97,8 +91,8 @@ class networkServer(object):
 
         while True:
             try:
-                self.clientsock.sendall(message)
-                recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
+                clientsock.sendall(message)
+                recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
 
             except Exception as e:
                 pass
@@ -119,18 +113,17 @@ class networkServer(object):
         print(message, 1)
 
         try:
-            self.clientsock.send(message)
-            recvMessage = (self.clientsock.recv(BUFFER_SIZE)).decode()
-            print(len(recvMessage))
+            clientsock.send(message)
+            recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
 
         except Exception as e:
             print(e, 'asdf')
             return 0
 
-        if recvMessage.encode('utf-8') == '0':
+        if recvMessage == '0':
             return 0
 
-        elif recvMessage.encode('utf-8') == '2':
+        elif recvMessage == '2':
             return 2
 
         else:
@@ -153,8 +146,8 @@ class networkServer(object):
         message = config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)
 
         try:
-            self.clientsock.sendall(message)
-            recvMessage = self.clientsock.recv(BUFFER_SIZE)
+            clientsock.sendall(message)
+            recvMessage = clientsock.recv(BUFFER_SIZE)
 
         except Exception as e:
             return -1
