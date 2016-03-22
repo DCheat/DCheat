@@ -33,8 +33,8 @@ class TestingUser (Base) :
                        autoincrement = True,
                        nullable = False)
     firstLogin = Column(DATETIME,
-                         nullable = False)
+                         nullable = True)
     lastLogin = Column(DATETIME,
-                         nullable = False)
+                         nullable = True)
     lastLogout = Column(DATETIME,
-                         nullable = False)
+                         nullable = True)
