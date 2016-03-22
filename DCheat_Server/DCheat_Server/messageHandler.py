@@ -78,7 +78,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 courses = ''                    
             
                 
-            courses.lstrip('^')
+            courses = courses.lstrip('^')
         
         else:
             try:
