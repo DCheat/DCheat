@@ -41,6 +41,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 self.master_add_course_handler(data)
             elif data.find("UCS") != -1:
                 self.master_modify_course_handler(data)
+            elif data.find("SCL") != -1:
+                self.request.close()
             #if data.find("SCS") != -1:
             #    testIndex = int(data.split()[0])
             #    programIndexList = select_ban_list_in_test(testIndex)
