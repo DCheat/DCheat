@@ -27,6 +27,7 @@ class config(object):
     HEADER_CHEACK = 'PCH'
     HEADER_ADD_COURSE = 'ACS'
     HEADER_UPDATE_COURSE = 'UCS'
+    HEADER_CLOSE_SOCKET = 'SCL'
 
     MESSAGE_FORM = '{};{};{}'
 

@@ -18,6 +18,12 @@ class networkServer(object):
         self.userNumber = 0
 
     def close(self):
+        message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_CLOSE_SOCKET, 0)).encode('utf-8')
+        try:
+            clientsock.send(message)
+        except Exception as e:
+            pass
+
         clientsock.close()
 
     def send_login_message(self, userID = '', password = ''):
@@ -107,7 +113,7 @@ class networkServer(object):
 
         makeMessage = '{},{},{},{},{}'.format(courseName, courseDate, programList, siteList, stdList)
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)).encode('utf-8')
-        print(message, 1)
+        print(message, 1, message.decode())
 
         try:
             clientsock.send(message)
