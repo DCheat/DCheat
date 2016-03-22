@@ -130,6 +130,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
 
         if len(userList[0]) is not 0:
             for userInfo in userList:
+                userInfo = userInfo.split('$')
                 try:
                     userIndex = select_user_index(userInfo[0])
                 except:
