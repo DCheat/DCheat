@@ -91,14 +91,17 @@ def select_unfinished_test_course_for_master(masterIndex):
     return dao.query(TestInfo.index,
                      TestInfo.testName,
                      TestInfo.startDate,
-                     TestInfo.endDate,
-                     func.count(TestingUser.userIndex)).\
+                     TestInfo.endDate).\
                 join(TestingUser,
                      TestingUser.testIndex == TestInfo.index).\
                 join(Master,
                      Master.index == masterIndex).\
                 filter(TestInfo.endDate > datetime.now()).all()
                 
+def select_user_count(testIndex):
+    return dao.query(TestingUser).\
+              filter(TestingUser.testIndex == testIndex).count()
+              
 def select_master_email():
     return dao.query(Master.emailAddress).\
                 join(TestInfo,
