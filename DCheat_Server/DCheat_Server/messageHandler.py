@@ -120,7 +120,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             except Exception as e:
                 dao.rollback()
                 print(e)
-                self.request.send("2".encode('utf-8'))
+                self.request.send("0".encode('utf-8'))
                 return 
             testIndex = select_course_index(courseName)
 
@@ -137,7 +137,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         except Exception as e:
                             dao.rollback()
                             print(e)
-                            self.request.send("0".encode('utf-8'))
+                            self.request.send("-1".encode('utf-8'))
                             return
                         dao.commit()
                         userIndex = select_user_index(userInfo[0])
