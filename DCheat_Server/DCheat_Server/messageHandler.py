@@ -43,11 +43,6 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 self.master_modify_course_handler(data)
             elif data.find("SCL") != -1:
                 self.request.close()
-            #if data.find("SCS") != -1:
-            #    testIndex = int(data.split()[0])
-            #    programIndexList = select_ban_list_in_test(testIndex)
-            #    siteIndexList = select_allow_site_index()
-            #    return [programIndexList+"^"+siteIndexList]
     
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
@@ -119,41 +114,45 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         userList = addList[5].split("*")
         print(masterIndex,courseName,startDate, endDate, banList, allowList, userList)
         try:
-            dao.add(insert_course(masterIndex, courseName, startDate, endDate))
-            dao.commit()
-        except Exception as e:
-            dao.rollback()
-            print(e)
-            self.request.send("2".encode('utf-8'))
-            return 
-        testIndex = select_course_index(courseName)
+            try:
+                dao.add(insert_course(masterIndex, courseName, startDate, endDate))
+                dao.commit()
+            except Exception as e:
+                dao.rollback()
+                print(e)
+                self.request.send("2".encode('utf-8'))
+                return 
+            testIndex = select_course_index(courseName)
 
-        if len(userList[0]) is not 0:
-            for userInfo in userList:
-                userInfo = userInfo.split('$')
-                try:
-                    userIndex = select_user_index(userInfo[0])
-                except:
+            if len(userList[0]) is not 0:
+                for userInfo in userList:
                     try:
-                        dao.add(insert_user(userInfo[0], userInfo[1]))
-                    except Exception as e:
-                        dao.rollback()
-                        print(e)
-                        self.request.send("0".encode('utf-8'))
-                        return
-                    dao.commit()
-                    userIndex = select_user_index(userInfo[0])
-                dao.add(insert_user_in_course(testIndex, userIndex))
+                        userIndex = select_user_index(userInfo[0])
+                    except:
+                        try:
+                            dao.add(insert_user(userInfo[0], userInfo[1]))
+                        except Exception as e:
+                            dao.rollback()
+                            print(e)
+                            self.request.send("0".encode('utf-8'))
+                            return
+                        dao.commit()
+                        userIndex = select_user_index(userInfo[0])
+                    dao.add(insert_user_in_course(testIndex, userIndex))
 
-        if len(banList[0]) is not 0:
-            for banProgram in banList:
-                dao.add(insert_ban_list_in_course(testIndex, int(banProgram)))
+            if len(banList[0]) is not 0:
+                for banProgram in banList:
+                    dao.add(insert_ban_list_in_course(testIndex, int(banProgram)))
 
-        if len(allowList[0]) is not 0:
-            for allowSite in allowList:
-                dao.add(insert_allow_list_in_course(testIndex, int(allowSite)))
-        dao.commit()
-        self.request.send("1".encode('utf-8'))
+            if len(allowList[0]) is not 0:
+                for allowSite in allowList:
+                    dao.add(insert_allow_list_in_course(testIndex, int(allowSite)))
+            dao.commit()
+            self.request.send("1".encode('utf-8'))
+        except Exception as e:
+            print(e)
+            dao.rollback()
+            self.request.send("0".encode('utf-8'))
 
     def master_modify_course_handler(self, data):
         masterIndex = int(data.split(";")[0])
@@ -200,5 +199,3 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         return
     def send_email_handler():
         return
-        
-    
