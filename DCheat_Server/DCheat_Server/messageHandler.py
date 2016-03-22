@@ -114,6 +114,16 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         userList = addList[5].split("*")
         print(masterIndex,courseName,startDate, endDate, banList, allowList, userList)
         try:
+            try:
+                dao.add(insert_course(masterIndex, courseName, startDate, endDate))
+                dao.commit()
+            except Exception as e:
+                dao.rollback()
+                print(e)
+                self.request.send("0".encode('utf-8'))
+                return 
+            testIndex = select_course_index(courseName)
+
             if len(userList[0]) is not 0:
                 for userInfo in userList:
                     userInfo = userInfo.split('$')
@@ -127,21 +137,11 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         except Exception as e:
                             dao.rollback()
                             print(e)
-                            self.request.send("0".encode('utf-8'))
+                            self.request.send("-1".encode('utf-8'))
                             return
                         dao.commit()
                         userIndex = select_user_index(userInfo[0])
                     dao.add(insert_user_in_course(testIndex, userIndex))
-            try:
-                dao.add(insert_course(masterIndex, courseName, startDate, endDate))
-                dao.commit()
-            except Exception as e:
-                dao.rollback()
-                print(e)
-                self.request.send("2".encode('utf-8'))
-                return 
-            testIndex = select_course_index(courseName)
-
 
             if len(banList[0]) is not 0:
                 for banProgram in banList:
