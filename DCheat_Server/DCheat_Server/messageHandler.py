@@ -11,7 +11,8 @@ from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_us
                                             select_course_index,\
                                             select_course,\
                                             select_allow_list_index,\
-                                            select_ban_list_index
+                                            select_ban_list_index,\
+                                            select_user_count
 from DCheat_Server.utils.insertQuery import insert_allow_list_in_course,\
                                             insert_ban_list_in_course,\
                                             insert_course,\
@@ -61,17 +62,21 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 return
             try:
                 courseList = select_unfinished_test_course_for_master(idIndex)
+
                 for courseInfo in courseList:
+                    userCount = select_user_count(courseInfo.index)
                     banList = select_ban_list_index(courseInfo.index)
                     allowList = select_allow_list_index(courseInfo.index)
-                    str(banList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
-                    str(allowList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
-                    courseData = courseInfo.testName + "," + courseInfo.startDate + "," + courseInfo.endDate + "," + banList  + allowList + str(courseInfo[4])
+                    
+                    banList = str(banList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
+                    allowList = str(allowList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
+                    
+                    courseData = courseInfo.testName + "," + courseInfo.startDate + "," + courseInfo.endDate + "," + banList  + allowList + str(userCount)
                                  
                     courses = courses + '^' + courseData
-                    
             except:
-                courseList = ''
+                courses = ''                    
+            
                 
             courses.lstrip('^')
         
