@@ -21,10 +21,11 @@ class adminSelectCourse(QtWidgets.QDialog):
 
         self.sock = socket
         self.courseList = courseList
-        print(len(courseList))
+        print(courseList, 'asdf')
 
         i = 0
         for course in self.courseList:
+            print(course)
             if len(course) is 0:
                 break
 
@@ -59,7 +60,7 @@ class adminSelectCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def insert_test(self):
-        register = registerCourse.registerCourse(self.sock)
+        register = registerCourse.registerCourse(self.sock, self.ui, self.courseList)
 
     def modify_test(self):
         sender = self.sender()

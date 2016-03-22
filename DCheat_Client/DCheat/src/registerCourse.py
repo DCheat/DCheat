@@ -17,10 +17,14 @@ import datetime
 import csv
 
 class registerCourse(QtWidgets.QDialog):
-    def __init__(self, socket, parent=None):
+    def __init__(self, socket, pui, pCourseList, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/registerCourse.ui', self)
+
         self.sock = socket
+        self.pui = pui
+        self.pCourseList = pCourseList
+
         self.banList = []
         self.allowList = []
         self.students = []
@@ -57,7 +61,6 @@ class registerCourse(QtWidgets.QDialog):
     def search_slot(self):
         filename, _filter = QtWidgets.QFileDialog.getOpenFileName(self, 'open file', '/', 'CSV파일 (*.csv)', '*.csv')
 
-        print(filename, _filter)
         self.ui.textEdit_2.setText(filename)
 
         csvFile = open(filename, 'r')
@@ -77,17 +80,22 @@ class registerCourse(QtWidgets.QDialog):
 
         courseDate = '{} {},{} {}'.format(date, startTime, date, endTime)
 
-        print(courseDate)
-
         result = self.sock.make_course(self.ui.lineEdit.text(), courseDate, self.banList, self.allowList, self.students)
 
         if result is 1:
+            programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
+            siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
+            newCourse = self.ui.lineEdit.text() + ',' +  courseDate + ',' +  programList + ',' + siteList + ',' + str(len(self.students))
+            self.pCourseList.append(newCourse)
+            self.pui.reject()
             self.ui.reject()
-
-        elif result is 2:
-            warningPopup.warningPopup('같은 이름의 시험이 존재합니다. 다른 이름으로 다시 시도하세요.')
+            from DCheat.src import adminSelectCourse
+            course = adminSelectCourse.adminSelectCourse(courseList=self.pCourseList, socket=self.sock)
 
         elif result is 0:
+            warningPopup.warningPopup('같은 이름의 시험이 존재합니다. 다른 이름으로 다시 시도하세요.')
+
+        elif result is -1:
             warningPopup.warningPopup('등록이 실패했습니다. 다시 시도 하세요.')
 
 
@@ -102,8 +110,6 @@ class registerCourse(QtWidgets.QDialog):
         else:
             self.banList.append(pos)
 
-        print(self.banList)
-
     def set_allow_list(self):
         sender = self.sender()
 
@@ -114,8 +120,6 @@ class registerCourse(QtWidgets.QDialog):
 
         else:
             self.allowList.append(pos)
-
-        print(self.allowList, self.ui.lineEdit.text())
 
     def closeEvent(self, event):
         from DCheat.src import warningPopup

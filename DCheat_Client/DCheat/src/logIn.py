@@ -46,11 +46,11 @@ class logIn(QtWidgets.QDialog):
 
         elif len(password) is 0:
             self.ui.reject()
-            course = selectCourse.selectCourse(courseList=courses, socket=self.sock)
+            course = selectCourse.selectCourse(courses, self.sock)
 
         else:
             self.ui.reject()
-            course = adminSelectCourse.adminSelectCourse(courseList=courses, socket=self.sock)
+            course = adminSelectCourse.adminSelectCourse(courses, self.sock)
 
     def closeEvent(self, event):
         from DCheat.src import warningPopup

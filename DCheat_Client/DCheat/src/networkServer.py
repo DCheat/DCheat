@@ -29,7 +29,8 @@ class networkServer(object):
     def send_login_message(self, userID = '', password = ''):
         loginInfo = '{},{}'.format(userID, password)
         message = (config.config.MESSAGE_FORM.format(0, config.config.HEADER_SIGNIN, loginInfo)).encode('utf-8')
-
+        q = message.decode().split(',')
+        print(type(q[1]))
         try:
             clientsock.send(message)
             recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
@@ -109,9 +110,10 @@ class networkServer(object):
         for std in students:
             stdList = stdList + (str(std).strip('[]').replace(' ', '')).replace(',', '$') + '*'
 
-        stdList.rstrip('*')
+        stdList = stdList.rstrip('*')
 
         makeMessage = '{},{},{},{},{}'.format(courseName, courseDate, programList, siteList, stdList)
+        makeMessage = makeMessage.replace("'", '')
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)).encode('utf-8')
         print(message, 1, message.decode())
 
@@ -123,14 +125,14 @@ class networkServer(object):
             print(e, 'asdf')
             return 0
 
-        if recvMessage == '0':
-            return 0
+        if recvMessage == '1':
+            return 1
 
-        elif recvMessage == '2':
-            return 2
+        elif recvMessage == '-1':
+            return -1
 
         else:
-            return 1
+            return 0
 
 
 
@@ -143,7 +145,7 @@ class networkServer(object):
         for std in students:
             stdList = stdList + (str(std).strip('[]').replace(' ', '')).replace(',', '$') + '*'
 
-        stdList.rstrip('*')
+        stdList = stdList.rstrip('*')
 
         makeMessage = '{},{},{},{},{}'.format(courseName, courseDate, programList, siteList, stdList)
         message = config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_ADD_COURSE, makeMessage)
@@ -153,10 +155,13 @@ class networkServer(object):
             recvMessage = clientsock.recv(BUFFER_SIZE)
 
         except Exception as e:
-            return -1
+            return 0
 
         if recvMessage.encode('utf-8') == '1':
             pass
 
+        elif recvMessage.encode('utf-8') == '-1':
+            return -1
+
         else:
-            print('asdf')
+            return 0
