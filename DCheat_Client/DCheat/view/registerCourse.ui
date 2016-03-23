@@ -125,6 +125,23 @@
    <layout class="QHBoxLayout" name="horizontalLayout_5">
     <item>
      <widget class="QDateEdit" name="dateEdit">
+      <property name="minimumDateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2016</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
+      <property name="minimumDate">
+       <date>
+        <year>2016</year>
+        <month>1</month>
+        <day>1</day>
+       </date>
+      </property>
       <property name="calendarPopup">
        <bool>true</bool>
       </property>
@@ -132,6 +149,16 @@
     </item>
     <item>
      <widget class="QTimeEdit" name="timeEdit">
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2000</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
       <property name="displayFormat">
        <string>hh:mm</string>
       </property>

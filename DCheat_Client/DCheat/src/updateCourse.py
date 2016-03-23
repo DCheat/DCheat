@@ -10,13 +10,15 @@
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, pyqtSlot, QDate, QTime
+from PyQt5.QtCore import Qt, pyqtSlot, QDate, QTime, pyqtSignal
 from DCheat import config
 import datetime
 import csv
 
 class updateCourse(QtWidgets.QDialog):
-    def __init__(self, socket, name, testDate, startTime, endTime, banList, allowList, parent=None):
+    rejectSignal = pyqtSignal(str)
+
+    def __init__(self, socket, name, testDate, startTime, endTime, banList, allowList, stdCount, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/updateCourse.ui', self)
         self.sock = socket
@@ -27,6 +29,7 @@ class updateCourse(QtWidgets.QDialog):
         self.endTime = endTime.split(':')
         self.banList = banList
         self.allowList = allowList
+        self.stdCount = stdCount
 
         self.ui.label_5.setText(self.name)
 
@@ -96,7 +99,10 @@ class updateCourse(QtWidgets.QDialog):
 
         print(courseDate)
 
-        self.sock.update_course(self.name, courseDate, self.banList, self.allowList, self.students)
+        result = self.sock.update_course(self.name, courseDate, self.banList, self.allowList, self.students)
+
+        if result is 1:
+            self.rejectSignal.emit(self.makeMessage(courseDate))
 
     def set_ban_list(self):
         sender = self.sender()
@@ -133,3 +139,8 @@ class updateCourse(QtWidgets.QDialog):
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:
             pass
+
+    def makeMessage(self, courseDate):
+        programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
+        siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
+        return '{},{},{},{},{}'.format(self.ui.lineEdit.text(), courseDate, programList, siteList, str(len(self.students) + self.stdCount))

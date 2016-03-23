@@ -10,13 +10,15 @@
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from DCheat import config
 from DCheat.src import warningPopup
 import datetime
 import csv
 
 class registerCourse(QtWidgets.QDialog):
+    rejectSignal = pyqtSignal(str)
+
     def __init__(self, socket, pui, pCourseList, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/registerCourse.ui', self)
@@ -71,6 +73,14 @@ class registerCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def register_slot(self):
+        if len(self.ui.lineEdit.text()) < 3:
+            warningPopup.warningPopup('과목 이름은 4자리 이상으로 해주세요.')
+            return
+
+        if self.ui.timeEdit.time() >= self.ui.timeEdit_2.time():
+            warningPopup.warningPopup('시험 시간을 다시 확인하세요.')
+            return
+
         self.banList.sort()
         self.allowList.sort()
 
@@ -83,20 +93,17 @@ class registerCourse(QtWidgets.QDialog):
         result = self.sock.make_course(self.ui.lineEdit.text(), courseDate, self.banList, self.allowList, self.students)
 
         if result is 1:
-            programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
-            siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
-            newCourse = self.ui.lineEdit.text() + ',' +  courseDate + ',' +  programList + ',' + siteList + ',' + str(len(self.students))
-            self.pCourseList.append(newCourse)
-            self.pui.reject()
-            self.ui.reject()
-            from DCheat.src import adminSelectCourse
-            course = adminSelectCourse.adminSelectCourse(courseList=self.pCourseList, socket=self.sock)
+            try:
+                self.rejectSignal.emit(self.makeMessage(courseDate))
+                self.ui.reject()
+            except Exception as e:
+                print(e)
 
         elif result is 0:
             warningPopup.warningPopup('같은 이름의 시험이 존재합니다. 다른 이름으로 다시 시도하세요.')
 
         elif result is -1:
-            warningPopup.warningPopup('등록이 실패했습니다. 다시 시도 하세요.')
+            warningPopup.warningPopup('학생 등록에 실패했습니다. csv파일 양식 확인 후 다시 시도하세요.')
 
 
     def set_ban_list(self):
@@ -130,3 +137,8 @@ class registerCourse(QtWidgets.QDialog):
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:
             pass
+
+    def makeMessage(self, courseDate):
+        programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
+        siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
+        return '{},{},{},{},{}'.format(self.ui.lineEdit.text(), courseDate, programList, siteList, str(len(self.students)))

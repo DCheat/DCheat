@@ -21,59 +21,39 @@ class adminSelectCourse(QtWidgets.QDialog):
 
         self.sock = socket
         self.courseList = courseList
+        self.register = object
+        self.dataPos = -1
         print(courseList, 'asdf')
 
-        i = 0
-        for course in self.courseList:
-            print(course)
-            if len(course) is 0:
-                break
+        pListWidget = QtWidgets.QWidget()
+        self.ui.scrollArea.setWidgetResizable(True)
+        self.ui.scrollArea.setWidget(pListWidget)
+        self.pListLayout = QtWidgets.QGridLayout()
+        self.pListLayout.setAlignment(Qt.AlignTop)
+        pListWidget.setLayout(self.pListLayout)
 
-            courseInfo = course.split(',')
-
-            courseLabel = QtWidgets.QLabel(courseInfo[0])
-            startLabel = QtWidgets.QLabel(courseInfo[1])
-            endLabel = QtWidgets.QLabel(courseInfo[2])
-            countLabel = QtWidgets.QLabel(courseInfo[3])
-
-            # courseLabel = QtWidgets.QLabel(course)
-            # startLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
-            # endLabel = QtWidgets.QLabel('0000-00-00 00:00:00')
-            # countLabel = QtWidgets.QLabel(str(250))
-
-            courseLabel.setAlignment(Qt.AlignHCenter)
-            startLabel.setAlignment(Qt.AlignHCenter)
-            endLabel.setAlignment(Qt.AlignHCenter)
-            countLabel.setAlignment(Qt.AlignHCenter)
-
-            button = QtWidgets.QPushButton("수정")
-            button.clicked.connect(self.modify_test)
-
-            self.ui.gridLayout.addWidget(courseLabel, i, 0)
-            self.ui.gridLayout.addWidget(startLabel, i, 1)
-            self.ui.gridLayout.addWidget(endLabel, i, 2)
-            self.ui.gridLayout.addWidget(countLabel, i, 3)
-            self.ui.gridLayout.addWidget(button, i, 4)
-            i+=1
+        self.makeCourseLayout()
 
         self.ui.show()
 
     @pyqtSlot()
     def insert_test(self):
-        register = registerCourse.registerCourse(self.sock, self.ui, self.courseList)
+        self.register = registerCourse.registerCourse(self.sock, self.ui, self.courseList)
+        self.register.rejectSignal.connect(self.registerHandler)
 
     def modify_test(self):
         sender = self.sender()
-        dataPos = int((sender.pos().y() - 21) / 41)
+        self.dataPos = int((sender.pos().y() - 21) / 41)
 
-        courseInfo = self.courseList[dataPos].split(',')
+        courseInfo = self.courseList[self.dataPos].split(',')
 
         name = courseInfo[0]
         testDate = courseInfo[1].split(' ')[0]
         startTime = courseInfo[1].split(' ')[1]
         endTime = courseInfo[2].split(' ')[1]
-        bantemp = courseInfo[4].split('*')
-        allowtemp = courseInfo[5].split('*')
+        bantemp = courseInfo[3].split('*')
+        allowtemp = courseInfo[4].split('*')
+        stdCount = int(courseInfo[5])
 
         banProgram = []
         allowSite = []
@@ -84,14 +64,8 @@ class adminSelectCourse(QtWidgets.QDialog):
         for i in allowtemp:
             allowSite.append(int(i))
 
-        # name = 'asdf'
-        # testDate = '2012-01-01'
-        # startTime = '11:00:00'
-        # endTime = '12:00:00'
-        # banProgram = [1,2,3,4,5]
-        # allowSite = [1]
-
-        register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime, banProgram, allowSite)
+        self.register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime, banProgram, allowSite, stdCount)
+        self.register.rejectSignal.connect(self.registerHandler)
 
     def closeEvent(self, event):
         from DCheat.src import warningPopup
@@ -102,3 +76,46 @@ class adminSelectCourse(QtWidgets.QDialog):
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:
             pass
+
+    def registerHandler(self, message):
+        if self.dataPos is -1:
+            self.courseList.append(message)
+
+        else:
+            del self.courseList[self.dataPos]
+            self.courseList.insert(self.dataPos, message)
+            pass
+
+        self.makeCourseLayout()
+        self.ui.show()
+        print(message)
+
+
+    def makeCourseLayout(self):
+        listPos = 0
+        for course in self.courseList:
+            print(course)
+            if len(course) is 0:
+                break
+
+            courseInfo = course.split(',')
+
+            courseLabel = QtWidgets.QLabel(courseInfo[0])
+            startLabel = QtWidgets.QLabel(courseInfo[1])
+            endLabel = QtWidgets.QLabel(courseInfo[2])
+            countLabel = QtWidgets.QLabel(courseInfo[5])
+
+            courseLabel.setAlignment(Qt.AlignHCenter)
+            startLabel.setAlignment(Qt.AlignHCenter)
+            endLabel.setAlignment(Qt.AlignHCenter)
+            countLabel.setAlignment(Qt.AlignHCenter)
+
+            button = QtWidgets.QPushButton("수정")
+            button.clicked.connect(self.modify_test)
+
+            self.pListLayout.addWidget(courseLabel, listPos, 0)
+            self.pListLayout.addWidget(startLabel, listPos, 1)
+            self.pListLayout.addWidget(endLabel, listPos, 2)
+            self.pListLayout.addWidget(countLabel, listPos, 3)
+            self.pListLayout.addWidget(button, listPos, 4)
+            listPos += 1
