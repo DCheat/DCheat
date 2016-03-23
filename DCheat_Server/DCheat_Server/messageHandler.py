@@ -164,12 +164,12 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
 
     def master_modify_course_handler(self, data):
         masterIndex = int(data.split(";")[0])
-        updateList = data.split(";")[2].split("^")
-        startDate = updateList[0].split(",")[0]
-        endDate = updateList[0].split(",")[1]
-        banList = updateList[1].replace(",", '')
-        allowList = updateList[2].replace(",", '')
-        userList = updateList[3].split("$")
+        updateList = data.split(";")[2].split(",")
+        startDate = updateList[0]
+        endDate = updateList[1]
+        banList = updateList[2].split("*")
+        allowList = updateList[3].split("*")
+        userList = updateList[4].split("*")
         courseIndex = select_course(masterIndex)
         modify_course(startDate = startDate,
                       endDate = endDate)
@@ -194,6 +194,9 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             except:
                 modify_allow_list_in_course(courseIndex, int(webIndex))
         for userInfo in userList:
+            userInfo = userInfo.split('$')
+            userInfo[0] = userInfo[0].encode('utf-8')
+            userInfo[1] = userInfo[1].encode('utf-8')
             try:
                 userIndex = select_user_index(userInfo[0])
             except:
