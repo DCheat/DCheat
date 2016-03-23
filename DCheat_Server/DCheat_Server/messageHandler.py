@@ -102,10 +102,10 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         sendData = ''
         courseIndex = select_course_index(courseName)
         siteIndexList = select_allow_list_index(courseIndex)
-        siteIndexList = str(siteIndexList).strip('[]').replace(' ','').replace('(','').replace(',)','')
+        siteIndexList = str(siteIndexList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',', '*')
         programIndexList = select_ban_list_index(courseIndex)
-        programIndexList = str(programIndexList).strip('[]').replace(' ','').replace('(','').replace(',)','')
-        sendData = programIndexList+"^"+siteIndexList
+        programIndexList = str(programIndexList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',', '*')
+        sendData = programIndexList+","+siteIndexList
         self.request.send(sendData.encode('utf-8'))
     
     def master_add_course_handler(self, data):
