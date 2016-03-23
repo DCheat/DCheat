@@ -171,7 +171,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         allowList = updateList[3].split("*")
         userList = updateList[4].split("*")
         courseIndex = select_course(masterIndex)
-        modify_course(startDate = startDate,
+        modify_course(courseIndex = masterIndex,
+                      startDate = startDate,
                       endDate = endDate)
         try:
             dao.commit()
