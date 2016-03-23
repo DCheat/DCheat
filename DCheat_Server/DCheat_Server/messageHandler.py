@@ -193,7 +193,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             try:
                 modify_allow_list_in_course(courseIndex, int(webIndex))
             except:
-                modify_allow_list_in_course(courseIndex, int(webIndex))
+                insert_allow_list_in_course(courseIndex, int(webIndex))
         for userInfo in userList:
             userInfo = userInfo.split('$')
             userInfo[0] = userInfo[0].encode('utf-8')
