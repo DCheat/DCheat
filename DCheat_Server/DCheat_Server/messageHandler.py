@@ -71,7 +71,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                     banList = str(banList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
                     allowList = str(allowList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',','*')
                     
-                    courseData = courseInfo.testName + "," + str(courseInfo.startDate) + "," + str(courseInfo.endDate) + "," + banList  + allowList + str(userCount)
+                    courseData = courseInfo.testName + "," + str(courseInfo.startDate) + "," + str(courseInfo.endDate) + "," + banList  + "," + allowList + "," + str(userCount)
                                  
                     courses = courses + '^' + courseData
             except:
