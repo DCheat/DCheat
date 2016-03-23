@@ -200,7 +200,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             try:
                 userIndex = select_user_index(userInfo[0])
             except:
-                dao.add(insert_user(userInfo[0], userInfo[2]))
+                dao.add(insert_user(userInfo[0], userInfo[1]))
                 dao.commit()
                 userIndex = select_user_index(userInfo[0])
                 dao.add(insert_user_in_course(testIndex, userIndex))
