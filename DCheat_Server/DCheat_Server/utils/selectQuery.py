@@ -22,6 +22,11 @@ def select_user_info(userIndex):
 def select_user_index(userId):
     return dao.query(User.index).\
               filter(User.id == userId).first().index
+              
+def select_user_process_info(testIndex, userIndex):
+    return dao.query(TestingUser.processInformation).\
+              filter(TestingUser.testIndex == testIndex,
+                     TestingUser.userIndex == userIndex).first()
 
 def select_master_index(masterId):
     return dao.query(Master.index).\
