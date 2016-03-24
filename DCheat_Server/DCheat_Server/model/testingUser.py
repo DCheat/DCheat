@@ -38,3 +38,5 @@ class TestingUser (Base) :
                          nullable = True)
     lastLogout = Column(DATETIME,
                          nullable = True)
+    individualInformation = column(VARCHAR(255),
+                                   nullable = Ture)
