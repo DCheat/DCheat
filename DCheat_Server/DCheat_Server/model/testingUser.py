@@ -6,7 +6,7 @@
 """
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.dialects.mysql import INTEGER, DATETIME
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
 
 from DCheat_Server.model import Base
 from DCheat_Server.model.testInfo import TestInfo
@@ -39,4 +39,4 @@ class TestingUser (Base) :
     lastLogout = Column(DATETIME,
                          nullable = True)
     individualInformation = Column(VARCHAR(255),
-                                   nullable = Ture)
+                                   nullable = True)
