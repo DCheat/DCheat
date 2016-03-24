@@ -63,6 +63,9 @@ class registerCourse(QtWidgets.QDialog):
     def search_slot(self):
         filename, _filter = QtWidgets.QFileDialog.getOpenFileName(self, 'open file', '/', 'CSV파일 (*.csv)', '*.csv')
 
+        if len(filename) is 0:
+            return
+
         self.ui.textEdit_2.setText(filename)
 
         csvFile = open(filename, 'r')
@@ -74,7 +77,7 @@ class registerCourse(QtWidgets.QDialog):
     @pyqtSlot()
     def register_slot(self):
         if len(self.ui.lineEdit.text()) < 3:
-            warningPopup.warningPopup('과목 이름은 4자리 이상으로 해주세요.')
+            warningPopup.warningPopup('과목 이름은 4자 이상으로 해주세요.')
             return
 
         if self.ui.timeEdit.time() >= self.ui.timeEdit_2.time():
@@ -100,11 +103,13 @@ class registerCourse(QtWidgets.QDialog):
                 print(e)
 
         elif result is 0:
-            warningPopup.warningPopup('같은 이름의 시험이 존재합니다. 다른 이름으로 다시 시도하세요.')
+            warningPopup.warningPopup('같은 이름의 시험이 존재합니다. 다른 이름을 사용하세요..')
 
         elif result is -1:
+            self.students = []
+            self.rejectSignal.emit(self.makeMessage(courseDate))
+            self.ui.reject()
             warningPopup.warningPopup('학생 등록에 실패했습니다. csv파일 양식 확인 후 다시 시도하세요.')
-
 
     def set_ban_list(self):
         sender = self.sender()

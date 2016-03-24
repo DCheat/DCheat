@@ -21,7 +21,6 @@ class selectCourse(QtWidgets.QDialog):
         self.sock = socket
 
         self.courseList = courseList
-        self.courseList = courseList.split(',')
 
         for course in self.courseList:
             self.ui.listWidget.addItem(course)
@@ -31,19 +30,15 @@ class selectCourse(QtWidgets.QDialog):
     @pyqtSlot()
     def slot_select(self):
         index = self.ui.listWidget.currentRow()
-        print(index)
 
         # 나중에 주석 해제
-        # banProgram, allowWeb = self.sock.send_selectCourse(self.courseList[index])
-        # if banProgram is -1:
-        #     asdf
-
-        banProgram = [6, 9]
-        allowWeb = [1, 2]
+        banProgram, allowWeb = self.sock.send_select_course(self.courseList[index])
+        if banProgram is 0:
+            return
 
         self.ui.reject()
 
-        webView.webView(program=banProgram, web=allowWeb, sock=self.sock)
+        webView.webView(banProgram, allowWeb, self.courseList[index], self.sock)
 
     def closeEvent(self, event):
         from DCheat.src import warningPopup

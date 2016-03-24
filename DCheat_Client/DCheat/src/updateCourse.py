@@ -11,6 +11,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, pyqtSlot, QDate, QTime, pyqtSignal
+from DCheat.src import warningPopup
 from DCheat import config
 import datetime
 import csv
@@ -31,6 +32,7 @@ class updateCourse(QtWidgets.QDialog):
         self.allowList = allowList
         self.stdCount = stdCount
 
+        self.students = []
         self.ui.label_5.setText(self.name)
 
 
@@ -75,9 +77,12 @@ class updateCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def search_slot(self):
-        filename, _filter = QtWidgets.QFileDialog.getOpenFileName(self, 'open file', '/', 'CSV파일 (*.csv)', '*.csv')
+        filename, _filter = QtWidgets.QFileDialog.getOpenFileName(self, 'open file', '/',
+                                                                  'CSV파일 (*.csv)', '*.csv')
 
-        print(filename, _filter)
+        if len(filename) is 0:
+            return
+
         self.ui.textEdit_2.setText(filename)
 
         csvFile = open(filename, 'r')
@@ -88,16 +93,19 @@ class updateCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def update_slot(self):
+        if self.ui.timeEdit.time() >= self.ui.timeEdit_2.time():
+            warningPopup.warningPopup('시험 시간을 다시 확인하세요.')
+            return
+
         self.banList.sort()
         self.allowList.sort()
 
-        date = str(datetime.date(self.ui.dateEdit.date().year(), self.ui.dateEdit.date().month(), self.ui.dateEdit.date().day()))
+        date = str(datetime.date(self.ui.dateEdit.date().year(), self.ui.dateEdit.date().month(),
+                                 self.ui.dateEdit.date().day()))
         startTime = str(datetime.time(self.timeEdit.time().hour(), self.timeEdit.time().minute()))
         endTime = str(datetime.time(self.timeEdit_2.time().hour(), self.timeEdit_2.time().minute()))
 
         courseDate = '{} {},{} {}'.format(date, startTime, date, endTime)
-
-        print(courseDate)
 
         result = self.sock.update_course(self.name, courseDate, self.banList, self.allowList, self.students)
 
@@ -115,8 +123,6 @@ class updateCourse(QtWidgets.QDialog):
         else:
             self.banList.append(pos)
 
-        print(self.banList)
-
     def set_allow_list(self):
         sender = self.sender()
 
@@ -128,13 +134,12 @@ class updateCourse(QtWidgets.QDialog):
         else:
             self.allowList.append(pos)
 
-        print(self.allowList)
-
     def closeEvent(self, event):
         from DCheat.src import warningPopup
 
         event.ignore()
-        result = warningPopup.warningPopup('종료하시겠습니까?\n 종료하시면 현재 입력한 데이터는 모두 사라집니다.', self.ui, self.sock)
+        result = warningPopup.warningPopup('종료하시겠습니까?\n 종료하시면 현재 입력한 데이터는 모두 사라집니다.',
+                                           self.ui, self.sock)
 
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:
@@ -143,4 +148,5 @@ class updateCourse(QtWidgets.QDialog):
     def makeMessage(self, courseDate):
         programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
         siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
-        return '{},{},{},{},{}'.format(self.ui.lineEdit.text(), courseDate, programList, siteList, str(len(self.students) + self.stdCount))
+        return '{},{},{},{},{}'.format(self.ui.lineEdit.text(), courseDate, programList,
+                                       siteList, str(len(self.students) + self.stdCount))

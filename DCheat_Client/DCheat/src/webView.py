@@ -17,15 +17,17 @@ from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWebKit import *
 from DCheat import config
 from DCheat.src import checkSystem
+import os
 
 class webView(QtWidgets.QMainWindow):
-    def __init__(self, program, web, sock, parent=None):
+    def __init__(self, program, web, courseName, sock, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH + 'view/webView.ui', self)
 
         self.banProgram = program
         self.allowWeb = web
         self.sock = sock
+        self.courseName = courseName
 
         for i in self.allowWeb:
             view = QWebView()
@@ -35,8 +37,8 @@ class webView(QtWidgets.QMainWindow):
         self.ui.webView.load(QUrl('http://www.kookmin.ac.kr'))
 
         try:
-            self.mp = checkSystem.checkSystem(self.banProgram, self.sock)
-            self.mp.daemon = True
+            self.mp = checkSystem.checkSystem(self.banProgram, os.getpid(), self.sock)
+            # self.mp.daemon = True
             self.mp.start()
         except Exception as e:
             print(e)
@@ -61,9 +63,32 @@ class webView(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         from DCheat.src import warningPopup
+        print(self.pPipe.recv())
 
         event.ignore()
-        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, self.mp)
+
+        try:
+            newdatasize = os.path.getsize('newdata.bin')
+        except os.error:
+            newdatasize = 0
+
+        try:
+            datasize = os.path.getsize('data.bin')
+        except os.error:
+            datasize = 0
+
+        if newdatasize > datasize:
+            fp = open('newdata.bin')
+
+        else:
+            fp = open('data.bin')
+
+        data = fp.read().decode()
+
+        connecMessage = '%s,%s'%(self.courseName, data)
+
+        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, self.mp, connecMessage)
+
 
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:

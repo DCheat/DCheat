@@ -60,9 +60,7 @@ class logIn(QtWidgets.QDialog):
 
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:
-            print('1213341234')
             pass
 
         if QKeyEvent.key() == Qt.Key_Enter or QKeyEvent.key() == Qt.Key_Return:
-            print('afasdgsadfas')
             self.slot_login()

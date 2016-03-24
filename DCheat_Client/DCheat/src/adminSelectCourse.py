@@ -58,13 +58,20 @@ class adminSelectCourse(QtWidgets.QDialog):
         banProgram = []
         allowSite = []
 
-        for i in bantemp:
-            banProgram.append(int(i))
+        try:
+            for i in bantemp:
+                banProgram.append(int(i))
+        except Exception as e:
+            pass
 
-        for i in allowtemp:
-            allowSite.append(int(i))
+        try:
+            for i in allowtemp:
+                allowSite.append(int(i))
+        except Exception as e:
+            pass
 
-        self.register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime, banProgram, allowSite, stdCount)
+        self.register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime,
+                                                  banProgram, allowSite, stdCount)
         self.register.rejectSignal.connect(self.registerHandler)
 
     def closeEvent(self, event):
