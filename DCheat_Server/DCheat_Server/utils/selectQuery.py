@@ -89,7 +89,8 @@ def select_unfinished_test_course_for_user(userIndex):
                      TestingUser.testIndex == TestInfo.index).\
                 join(User,
                      User.index == userIndex).\
-                filter(and_(TestInfo.endDate > datetime.now(),
+                filter(TestingUser.userIndex == userIndex,
+                       and_(TestInfo.endDate > datetime.now(),
                             TestInfo.startDate <= datetime.now())).all()
         
 def select_unfinished_test_course_for_master(masterIndex):
