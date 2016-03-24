@@ -163,15 +163,15 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             self.request.send("0".encode('utf-8'))
 
     def master_modify_course_handler(self, data):
-        masterIndex = int(data.split(";")[0])
         updateList = data.split(";")[2].split(",")
-        startDate = updateList[0]
-        endDate = updateList[1]
-        banList = updateList[2].split("*")
-        allowList = updateList[3].split("*")
-        userList = updateList[4].split("*")
-        courseIndex = select_course(masterIndex)
-        modify_course(courseIndex = masterIndex,
+        courseName = updateList[0]
+        startDate = updateList[1]
+        endDate = updateList[2]
+        banList = updateList[3].split("*")
+        allowList = updateList[4].split("*")
+        userList = updateList[5].split("*")
+        courseIndex = select_course_index(courseName)
+        modify_course(courseName = courseName,
                       startDate = startDate,
                       endDate = endDate)
         try:
