@@ -1,3 +1,4 @@
+from DCheat_Server.database import dao
 from DCheat_Server.model.testInfo import TestInfo
 from DCheat_Server.model.banList import BanList
 from DCheat_Server.model.allowList import AllowList
