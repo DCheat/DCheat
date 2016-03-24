@@ -23,7 +23,8 @@ from DCheat_Server.utils.updateQuery import modify_course,\
                                             delete_ban_list_in_course,\
                                             modify_ban_list_in_course,\
                                             delete_allow_list_in_course,\
-                                            modify_allow_list_in_course
+                                            modify_allow_list_in_course,\
+                                            update_user_process_info
 
 
 class ForkingRequestHandler(socketserver.BaseRequestHandler):
@@ -44,7 +45,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             elif data.find("UCS") != -1:
                 self.master_modify_course_handler(data)
             elif data.find("SCL") != -1:
-                self.request.close()
+                self.user_logout_handler(data)
     
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
@@ -100,7 +101,24 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         
     def user_logout_handler(self, data):
         userIndex = int(data.split(";")[0])
-        processList = data.split(";")[2]
+        courseName = data.split(";")[2]
+        processList = data.split(":")[3].split(",")[1]
+        courseIndex = select_course_index(courseName)
+        processInfo = ''
+        if len(processList) is 0:
+            self.request.close()
+        else:
+            try:
+                processInfo = select_user_process_info(courseIndex, userIndex)
+                processList = processList.split("*")
+                for process in processList:
+                    if processInfo.find(process) == -1:
+                        processInfo = processInfo + "*" + process
+                update_user_process_info(courseIndex, userIndex, processInfo)
+                                        
+            except:
+                update_user_process_info(courseIndex, userIndex, processList)
+        return
     
     def select_course(self, data):
         courseName = data.split(";")[2]
