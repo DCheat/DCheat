@@ -6,6 +6,7 @@ from DCheat_Server.DCheat_py3des import TripleDES
 from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_user,\
                                             select_unfinished_test_course_for_master,\
                                             select_user_index,\
+                                            select_user_process_info,\
                                             select_master_index,\
                                             select_master_check,\
                                             select_course_index,\
@@ -89,13 +90,17 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             
             try:
                 courseList = select_unfinished_test_course_for_user(idIndex)
-                courses = str(courseList).strip('[]').replace(' ', '')
+                courses = str(courseList).strip('[]').replace('(','').replace(',)','').replace("'", '')
             except:
                 self.request.send('-1'.encode('utf-8'))
                 return
             
         sendData = str(idIndex)+"^"+courses
         self.request.send(sendData.encode('utf-8'))
+        
+    def user_logout_handler(self, data):
+        userIndex = int(data.split(";")[0])
+        processList = data.split(";")[2]
     
     def select_course(self, data):
         courseName = data.split(";")[2]
@@ -214,6 +219,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             self.request.send("0".encode('utf-8'))
             return
         self.request.send("1".encode('utf-8'))
+        
     def sign_up_handler():
         return
     def send_email_handler():
