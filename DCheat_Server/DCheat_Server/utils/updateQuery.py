@@ -9,7 +9,7 @@ def modify_course(courseIndex, startDate, endDate):
     dao.query(TestInfo).\
         filter(TestInfo.index == courseIndex).\
         update(dict(startDate = startDate,
-                    endDate = endDate))
+                    endDate = endDate)) 
         
 def delete_ban_list_in_course(courseIndex):
     dao.query(BanList).\
@@ -32,3 +32,13 @@ def modify_allow_list_in_course(courseIndex, webIndex):
         filter(AllowList.testIndex == courseIndex,
                AllowList.banIndex == webIndex).\
         update(dict(isDeleted = "FALSE"))
+
+'''
+Update User's Process Information
+'''
+def update_user_process_info(testIndex, userIndex, processInfo):
+    dao.query(TestingUser).\
+        filter(TestingUser.testIndex == testIndex,
+               TesingUser.userIndex == userIndex).\
+        update(dict(processInformation = processInfo))
+    
