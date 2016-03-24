@@ -111,6 +111,8 @@ class updateCourse(QtWidgets.QDialog):
 
         if result is 1:
             self.rejectSignal.emit(self.makeMessage(courseDate))
+        else:
+            result = warningPopup.warningPopup('수정에 실패했습니다. csv파일 등을 확인해보세요.')
 
     def set_ban_list(self):
         sender = self.sender()
@@ -139,7 +141,7 @@ class updateCourse(QtWidgets.QDialog):
 
         event.ignore()
         result = warningPopup.warningPopup('종료하시겠습니까?\n 종료하시면 현재 입력한 데이터는 모두 사라집니다.',
-                                           self.ui, self.sock)
+                                           self.ui)
 
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:

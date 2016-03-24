@@ -23,7 +23,6 @@ class adminSelectCourse(QtWidgets.QDialog):
         self.courseList = courseList
         self.register = object
         self.dataPos = -1
-        print(courseList, 'asdf')
 
         pListWidget = QtWidgets.QWidget()
         self.ui.scrollArea.setWidgetResizable(True)
@@ -95,13 +94,12 @@ class adminSelectCourse(QtWidgets.QDialog):
 
         self.makeCourseLayout()
         self.ui.show()
-        print(message)
 
 
     def makeCourseLayout(self):
         listPos = 0
+
         for course in self.courseList:
-            print(course)
             if len(course) is 0:
                 break
 
