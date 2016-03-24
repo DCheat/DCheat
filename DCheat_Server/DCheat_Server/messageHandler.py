@@ -171,42 +171,46 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         allowList = updateList[4].split("*")
         userList = updateList[5].split("*")
         courseIndex = select_course_index(courseName)
-        modify_course(courseName = courseName,
-                      startDate = startDate,
-                      endDate = endDate)
-        try:
-            dao.commit()
-        except:
-            dao.rollback()
+        
         try:
             delete_ban_list_in_course(courseIndex)
             delete_allow_list_in_course(courseIndex)
             dao.commit()
         except:
-            dao.rollback()
-        for banIndex in banList:
-            try:
-                modify_ban_list_in_course(courseIndex, int(banIndex))
-            except:
-                insert_ban_list_in_course(courseIndex, int(banIndex))
-        for webIndex in allowList:
-            try:
-                modify_allow_list_in_course(courseIndex, int(webIndex))
-            except:
-                insert_allow_list_in_course(courseIndex, int(webIndex))
-        for userInfo in userList:
-            userInfo = userInfo.split('$')
-            userInfo[0] = userInfo[0].encode('utf-8')
-            userInfo[1] = userInfo[1].encode('utf-8')
-            try:
-                userIndex = select_user_index(userInfo[0])
-            except:
-                dao.add(insert_user(userInfo[0], userInfo[1]))
-                dao.commit()
-                userIndex = select_user_index(userInfo[0])
+            dao.rollbak()
+            self.request.send("0".encode('utf-8'))
+            return
+        
+        try:
+            modify_course(courseName = courseName,
+                          startDate = startDate,
+                          endDate = endDate)
+        
+            for banIndex in banList:
+                try:
+                    modify_ban_list_in_course(courseIndex, int(banIndex))
+                except:
+                    insert_ban_list_in_course(courseIndex, int(banIndex))
+            for webIndex in allowList:
+                try:
+                    modify_allow_list_in_course(courseIndex, int(webIndex))
+                except:
+                    insert_allow_list_in_course(courseIndex, int(webIndex))
+            for userInfo in userList:
+                userInfo = userInfo.split('$')
+                userInfo[0] = userInfo[0].encode('utf-8')
+                userInfo[1] = userInfo[1].encode('utf-8')
+                try:
+                    userIndex = select_user_index(userInfo[0])
+                except:
+                    dao.add(insert_user(userInfo[0], userInfo[1]))
+                    dao.commit()
+                    userIndex = select_user_index(userInfo[0])
                 dao.add(insert_user_in_course(testIndex, userIndex))
-                
-        return 
+        except:
+            self.request.send("0".encode('utf-8'))
+            return
+        self.request.send("1".encode('utf-8'))
     def sign_up_handler():
         return
     def send_email_handler():
