@@ -6,9 +6,9 @@ from DCheat_Server.model.allowList import AllowList
 '''
 update Course Start date
 '''
-def modify_course(courseIndex, startDate, endDate):
+def modify_course(courseName, startDate, endDate):
     dao.query(TestInfo).\
-        filter(TestInfo.index == courseIndex).\
+        filter(TestInfo.testName == courseName).\
         update(dict(startDate = startDate,
                     endDate = endDate)) 
         
