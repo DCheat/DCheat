@@ -46,6 +46,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 self.master_modify_course_handler(data)
             elif data.find("SCL") != -1:
                 self.user_logout_handler(data)
+                return
     
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
@@ -121,8 +122,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             except:
                 update_user_process_info(courseIndex, userIndex, processList)
         
-        self.request.close()
         self.request.send('1'.encode('utf-8'))
+        self.request.close()
         return
     
     def select_course(self, data):
