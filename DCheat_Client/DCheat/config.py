@@ -33,7 +33,7 @@ class config(object):
 
     ALLOW_SITE = ['allowSite', 'http://cyber2010.kookmin.ac.kr/', 'https://algolab.kookmin.ac.kr']
 
-    BAN_PROGRAM = ['banProgram', 'KakaoTalk', 'Line', 'NateOn', 'Skype', 'Tictoc', 'Between', 'IExplorer', 'Chrome', 'FireFox']
+    BAN_PROGRAM = ['banProgram', 'IExplorer', 'Chrome', 'FireFox', 'swing', 'edge', 'KakaoTalk', 'Line', 'NateOn', 'Skype', 'Tictoc', 'Between']
     BAN_PROGRAM_PNAME = ['banProgramPName', 'iexplorer', 'chrome', 'firefox', 'swing', 'edge', 'KakaoTalk', 'LINE', 'NateOnMain', 'Skype', 'Tictoc', 'couple']
     BAN_PROGRAM_PATH = ['banProgramPath', ["Internet Explorer", ""], ["Goole", "Chrome"], ["Mozilla Firefox", ""], ["Swing", ""], ["Edge", ""],
                         ["Kakao", "KakaoTalk"], ["LINE", "LINE"], ["SK Communications", "NATEON"], ["Skype", "phone"], ["Tictoc", "bin"], ["Between", ""]]
