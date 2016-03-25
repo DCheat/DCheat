@@ -108,9 +108,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         processList = data.split(":")[3].split(",")[1]
         courseIndex = select_course_index(courseName)
         processInfo = ''
-        if len(processList) is 0:
-            self.request.close()
-        else:
+            
+        if len(processList) is not 0:
             try:
                 processInfo = select_user_process_info(courseIndex, userIndex)
                 processList = processList.split("*")
@@ -121,6 +120,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                                         
             except:
                 update_user_process_info(courseIndex, userIndex, processList)
+        
+        self.request.close()
         self.request.send('1'.encode('utf-8'))
         return
     
