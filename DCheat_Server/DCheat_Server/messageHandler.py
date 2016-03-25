@@ -91,6 +91,9 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             
             try:
                 courseList = select_unfinished_test_course_for_user(idIndex)
+                if len(courseList) is 0:
+                  self.request.send('-1'.encode('utf-8'))
+                  return
                 courses = str(courseList).strip('[]').replace('(','').replace(',)','').replace("'", '')
             except:
                 self.request.send('-1'.encode('utf-8'))
