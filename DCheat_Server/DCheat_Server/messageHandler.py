@@ -121,6 +121,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                                         
             except:
                 update_user_process_info(courseIndex, userIndex, processList)
+        self.request.send('1'.encode('utf-8'))
         return
     
     def select_course(self, data):
