@@ -84,13 +84,15 @@ class adminSelectCourse(QtWidgets.QDialog):
             pass
 
     def registerHandler(self, message):
+        if message == '0':
+            return
+
         if self.dataPos is -1:
             self.courseList.append(message)
 
         else:
             del self.courseList[self.dataPos]
             self.courseList.insert(self.dataPos, message)
-            pass
 
         self.makeCourseLayout()
         self.ui.show()
@@ -123,4 +125,5 @@ class adminSelectCourse(QtWidgets.QDialog):
             self.pListLayout.addWidget(endLabel, listPos, 2)
             self.pListLayout.addWidget(countLabel, listPos, 3)
             self.pListLayout.addWidget(button, listPos, 4)
+            print(listPos)
             listPos += 1

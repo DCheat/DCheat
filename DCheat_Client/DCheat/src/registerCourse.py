@@ -9,7 +9,6 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import uic
-from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from DCheat import config
 from DCheat.src import warningPopup
@@ -145,6 +144,12 @@ class registerCourse(QtWidgets.QDialog):
             pass
 
     def makeMessage(self, courseDate):
+        endTime = datetime.datetime(self.ui.dateEdit.date().year(), self.ui.dateEdit.date().month(), self.ui.dateEdit.date().day(),
+                          self.timeEdit_2.time().hour(), self.timeEdit_2.time().minute())
+
+        if datetime.datetime.now() > endTime:
+            return '0'
+
         programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
         siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
         return '{},{},{},{},{}'.format(self.ui.lineEdit.text(), courseDate, programList, siteList, str(len(self.students)))

@@ -17,13 +17,14 @@ class networkServer(object):
     def __init__(self):
         self.userNumber = 0
 
-    def close(self, closeMessage):
+    def closeSocket(self, closeMessage):
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_CLOSE_SOCKET,
                                                      closeMessage)).encode('utf-8')
         try:
             clientsock.send(message)
+            recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
         except Exception as e:
-            pass
+            print(e)
 
         clientsock.close()
 

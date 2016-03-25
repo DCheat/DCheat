@@ -19,7 +19,6 @@ class selectCourse(QtWidgets.QDialog):
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/selectCourse.ui', self)
 
         self.sock = socket
-
         self.courseList = courseList
 
         for course in self.courseList:

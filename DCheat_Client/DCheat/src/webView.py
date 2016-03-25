@@ -8,13 +8,10 @@
 """
 
 from PyQt5 import uic
-from PyQt5 import QtGui
-from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtWebKitWidgets import QWebView
 from PyQt5.QtCore import *
 from PyQt5.QtCore import Qt, pyqtSlot
-from PyQt5.QtWebKit import *
 from DCheat import config
 from DCheat.src import checkSystem
 import os
@@ -38,7 +35,7 @@ class webView(QtWidgets.QMainWindow):
 
         try:
             self.mp = checkSystem.checkSystem(self.banProgram, os.getpid(), self.sock)
-            # self.mp.daemon = True
+            self.mp.daemon = True
             self.mp.start()
         except Exception as e:
             print(e)
@@ -63,31 +60,43 @@ class webView(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         from DCheat.src import warningPopup
-        print(self.pPipe.recv())
-
         event.ignore()
+
+        datasize = 0
+        newdatasize = 0
 
         try:
             newdatasize = os.path.getsize('newdata.bin')
-        except os.error:
-            newdatasize = 0
+        except:
+            pass
 
         try:
             datasize = os.path.getsize('data.bin')
-        except os.error:
-            datasize = 0
+        except:
+            pass
 
         if newdatasize > datasize:
-            fp = open('newdata.bin')
+            try:
+                fp = open('newdata.bin')
+            except Exception as e:
+                print(e)
 
         else:
-            fp = open('data.bin')
+            try:
+                fp = open('data.bin')
+            except Exception as e:
+                print(e)
+        try:
+            data = fp.read()
+            fp.close()
+            connecMessage = '%s,%s'%(self.courseName, data)
+        except Exception as e:
+            print(e)
 
-        data = fp.read().decode()
-
-        connecMessage = '%s,%s'%(self.courseName, data)
-
-        result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, self.mp, connecMessage)
+        try:
+            result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, self.mp, connecMessage)
+        except Exception as e:
+            print(e)
 
 
     def keyPressEvent(self, QKeyEvent):

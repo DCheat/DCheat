@@ -51,7 +51,10 @@ class checkSystem(multiprocessing.Process):
             if pid == self.ppid:
                 continue
 
-            process = psutil.Process(pid)
+            try:
+                process = psutil.Process(pid)
+            except:
+                continue
 
             for i in self.banList:
                 if config.config.BAN_PROGRAM_PNAME[i]+self.ext == process.name():
@@ -74,19 +77,22 @@ class checkSystem(multiprocessing.Process):
             self.tempIndex = 0
 
             checkingPoint = 0
-            processPath = process.ExecutablePath
+
+            try:
+                processPath = process.ExecutablePath
+            except:
+                continue
 
             if processPath is None:
                 continue
 
             processPath = processPath.split(config.config.WINDOWS_DIRECTORY_SEPARATOR)
-
             checkingPoint += self.check_name(process.Name)
             checkingPoint += self.check_path(processPath)
             checkingPoint += self.check_port(process.ProcessId)
 
             if checkingPoint > 0:
-                self.sock.send_sensing_info(self.tempIndex, checkingPoint)
+                # self.sock.send_sensing_info(self.tempIndex, checkingPoint)
                 self.banList.remove(self.tempIndex)
 
             else:
@@ -102,7 +108,7 @@ class checkSystem(multiprocessing.Process):
             if pid < 100:
                 continue
 
-            self.tempIndex  = 0
+            self.tempIndex = 0
 
             try:
                 process = psutil.Process(pid)
@@ -155,8 +161,7 @@ class checkSystem(multiprocessing.Process):
                     self.tempIndex = i
                     pathCheck += 1
 
-                if config.config.BAN_PROGRAM_PATH[i][1] in processPath\
-                    or config.config.BAN_PROGRAM_PATH[i][1] == "":
+                if config.config.BAN_PROGRAM_PATH[i][1] in processPath:
                     pathCheck += 1
 
         pathCheck = pathCheck * 2
@@ -171,7 +176,7 @@ class checkSystem(multiprocessing.Process):
 
         connecList = processInfo.connections()
 
-        if self.tempIndex > 0:
+        if self.tempIndex > 0 and config.config.BAN_PROGRAM_RPORT[self.tempIndex] is not 0:
             for connec in connecList:
                 if connec[5] == config.config.CONNECTION_STATUS_ESTABLISHED:
                     if connec[4][1] == config.config.BAN_PROGRAM_RPORT[self.tempIndex]:
@@ -187,14 +192,18 @@ class checkSystem(multiprocessing.Process):
         return 0
 
     def makeConnecList(self, pid):
-        pInfo = psutil.Process(pid)
-        pName = pInfo.name()
+        try:
+            pInfo = psutil.Process(pid)
+            pName = pInfo.name()
 
-        if len(pInfo.connections()) > 0 and (pName in self.connecList) is False:
-            self.connecList.append(pName)
+            if len(pInfo.connections()) > 0 and (pName in self.connecList) is False:
+                self.connecList.append(pName)
 
-        fp = open('newdata.bin', 'wb')
-        fp.write(str(self.connecList).strip('[]').replace(' ', '').replace(',', '*').encode('utf-8'))
-        fp.close()
+            fp = open('newdata.bin', 'wb')
+            fp.write(str(self.connecList).strip('[]').replace(' ', '').replace(',', '*').encode('utf-8'))
+            fp.close()
 
-        os.rename('newdata.bin', 'data.bin')
+            os.remove('data.bin')
+            os.rename('newdata.bin', 'data.bin')
+        except Exception as e:
+            print(e)

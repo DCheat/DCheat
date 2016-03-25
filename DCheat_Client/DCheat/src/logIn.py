@@ -23,28 +23,25 @@ class logIn(QtWidgets.QDialog):
         self.ui.lineEdit_2.setEchoMode(2)
         QtWidgets.QWidget.setTabOrder(self.ui.lineEdit, self.ui.lineEdit_2)
 
-        self.ui.show()
+        self.sock = networkServer.networkServer()
 
-        self.sock = object
+        self.ui.show()
 
     @pyqtSlot()
     def slot_login(self):
         userID =  self.ui.lineEdit.text()
         password = self.ui.lineEdit_2.text()
 
-        # 나중에 주석 해제
         try:
-            self.sock = networkServer.networkServer()
             courses = self.sock.send_login_message(userID, password)
         except Exception as e:
             print(e)
-
-        # courses = '1,2,3,4,5'
 
         if courses is 0:
             pass
 
         elif len(password) is 0:
+            print(courses)
             self.ui.reject()
             course = selectCourse.selectCourse(courses, self.sock)
 
