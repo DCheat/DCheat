@@ -46,7 +46,9 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 self.master_modify_course_handler(data)
             elif data.find("SCL") != -1:
                 self.user_logout_handler(data)
-                return
+                break
+          
+        return
     
     def login_handler(self, data):
         id = data.split(";")[2].split(",")[0]
