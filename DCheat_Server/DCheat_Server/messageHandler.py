@@ -245,7 +245,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         dao.commit()
                         userIndex = select_user_index(userInfo[0])
                     dao.add(insert_user_in_course(testIndex, userIndex))
-                    dao.commit()
+                dao.commit()
         except:
             self.request.send("0".encode('utf-8'))
             return
