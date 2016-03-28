@@ -218,15 +218,17 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         userIndex = select_user_index(userInfo[0])
 
                     dao.add(insert_user_in_course(courseIndex, userIndex))
+
+                delete_ban_list_in_course(courseIndex)
+                delete_allow_list_in_course(courseIndex)
+
                 dao.commit()
         except Exception as e:
+            dao.rollback()
             self.request.send("0".encode('utf-8'))
             return
 
         try:
-            delete_ban_list_in_course(courseIndex)
-            delete_allow_list_in_course(courseIndex)
-
             modify_course(courseName = courseName,
                           startDate = startDate,
                           endDate = endDate)
