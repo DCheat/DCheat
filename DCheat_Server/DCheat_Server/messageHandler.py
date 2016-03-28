@@ -233,19 +233,19 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         modify_allow_list_in_course(courseIndex, int(webIndex))
                     except:
                         insert_allow_list_in_course(courseIndex, int(webIndex))
-                        
-            for userInfo in userList:
-                userInfo = userInfo.split('$')
-                userInfo[0] = userInfo[0].encode('utf-8')
-                userInfo[1] = userInfo[1].encode('utf-8')
-                try:
-                    userIndex = select_user_index(userInfo[0])
-                except:
-                    dao.add(insert_user(userInfo[0], userInfo[1]))
+            if len(userList[0]) is not 0:
+                for userInfo in userList:
+                    userInfo = userInfo.split('$')
+                    userInfo[0] = userInfo[0].encode('utf-8')
+                    userInfo[1] = userInfo[1].encode('utf-8')
+                    try:
+                        userIndex = select_user_index(userInfo[0])
+                    except:
+                        dao.add(insert_user(userInfo[0], userInfo[1]))
+                        dao.commit()
+                        userIndex = select_user_index(userInfo[0])
+                    dao.add(insert_user_in_course(testIndex, userIndex))
                     dao.commit()
-                    userIndex = select_user_index(userInfo[0])
-                dao.add(insert_user_in_course(testIndex, userIndex))
-                dao.commit()
         except:
             self.request.send("0".encode('utf-8'))
             return
