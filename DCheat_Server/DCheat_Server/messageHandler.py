@@ -220,16 +220,20 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                           startDate = startDate,
                           endDate = endDate)
         
-            for banIndex in banList:
-                try:
-                    modify_ban_list_in_course(courseIndex, int(banIndex))
-                except:
-                    insert_ban_list_in_course(courseIndex, int(banIndex))
-            for webIndex in allowList:
-                try:
-                    modify_allow_list_in_course(courseIndex, int(webIndex))
-                except:
-                    insert_allow_list_in_course(courseIndex, int(webIndex))
+            if len(banList[0]) is not 0:
+                for banIndex in banList:
+                    try:
+                        modify_ban_list_in_course(courseIndex, int(banIndex))
+                    except:
+                        insert_ban_list_in_course(courseIndex, int(banIndex))
+                        
+            if len(allowList[0]) is not 0:
+                for webIndex in allowList:
+                    try:
+                        modify_allow_list_in_course(courseIndex, int(webIndex))
+                    except:
+                        insert_allow_list_in_course(courseIndex, int(webIndex))
+                        
             for userInfo in userList:
                 userInfo = userInfo.split('$')
                 userInfo[0] = userInfo[0].encode('utf-8')
