@@ -250,7 +250,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             dao.commit()
         except:
             dao.rollback()
-            self.request.send("-1".encode('utf-8'))
+            self.request.send("0".encode('utf-8'))
             return
         self.request.send("1".encode('utf-8'))
         
