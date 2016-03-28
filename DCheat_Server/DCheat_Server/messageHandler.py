@@ -216,6 +216,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             modify_course(courseName = courseName,
                           startDate = startDate,
                           endDate = endDate)
+                          
+            dao.commit()
         
             if len(banList[0]) is not 0:
                 for banIndex in banList:
@@ -242,7 +244,6 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         dao.commit()
                         userIndex = select_user_index(userInfo[0])
                     dao.add(insert_user_in_course(testIndex, userIndex))
-                dao.commit()
         except:
             self.request.send("0".encode('utf-8'))
             return
