@@ -202,50 +202,53 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         allowList = updateList[4].split("*")
         userList = updateList[5].split("*")
         courseIndex = select_course_index(courseName)
-        
+
         try:
-            delete_ban_list_in_course(courseIndex)
-            delete_allow_list_in_course(courseIndex)
-            dao.commit()
-        except:
-            dao.rollback()
-            self.request.send("0".encode('utf-8'))
-            return
-        
-        try:
-            modify_course(courseName = courseName,
-                          startDate = startDate,
-                          endDate = endDate)
-                          
-            dao.commit()
-        
-            if len(banList[0]) is not 0:
-                for banIndex in banList:
-                    try:
-                        modify_ban_list_in_course(courseIndex, int(banIndex))
-                    except:
-                        insert_ban_list_in_course(courseIndex, int(banIndex))
-                        
-            if len(allowList[0]) is not 0:
-                for webIndex in allowList:
-                    try:
-                        modify_allow_list_in_course(courseIndex, int(webIndex))
-                    except:
-                        insert_allow_list_in_course(courseIndex, int(webIndex))
-            if len(userList[0]) is not 0:
+            if len(userList) is not 0:
                 for userInfo in userList:
                     userInfo = userInfo.split('$')
                     userInfo[0] = userInfo[0].encode('utf-8')
                     userInfo[1] = userInfo[1].encode('utf-8')
+
                     try:
                         userIndex = select_user_index(userInfo[0])
                     except:
                         dao.add(insert_user(userInfo[0], userInfo[1]))
                         dao.commit()
                         userIndex = select_user_index(userInfo[0])
-                    dao.add(insert_user_in_course(testIndex, userIndex))
-        except:
+
+                    dao.add(insert_user_in_course(courseIndex, userIndex))
+                dao.commit()
+        except Exception as e:
             self.request.send("0".encode('utf-8'))
+            return
+
+        try:
+            delete_ban_list_in_course(courseIndex)
+            delete_allow_list_in_course(courseIndex)
+
+            modify_course(courseName = courseName,
+                          startDate = startDate,
+                          endDate = endDate)
+
+            if len(banList[0]) is not 0:
+                for banIndex in banList:
+                    try:
+                        modify_ban_list_in_course(courseIndex, int(banIndex))
+                    except:
+                        insert_ban_list_in_course(courseIndex, int(banIndex))
+
+            if len(allowList[0]) is not 0:
+                for webIndex in allowList:
+                    try:
+                        modify_allow_list_in_course(courseIndex, int(webIndex))
+                    except:
+                        insert_allow_list_in_course(courseIndex, int(webIndex))
+
+            dao.commit()
+        except:
+            dao.rollback()
+            self.request.send("-1".encode('utf-8'))
             return
         self.request.send("1".encode('utf-8'))
         
