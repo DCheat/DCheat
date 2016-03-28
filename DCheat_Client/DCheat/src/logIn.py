@@ -41,7 +41,6 @@ class logIn(QtWidgets.QDialog):
             pass
 
         elif len(password) is 0:
-            print(courses)
             self.ui.reject()
             course = selectCourse.selectCourse(courses, self.sock)
 

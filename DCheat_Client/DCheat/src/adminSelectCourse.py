@@ -33,8 +33,6 @@ class adminSelectCourse(QtWidgets.QDialog):
 
         self.makeCourseLayout()
 
-        self.ui.show()
-
     @pyqtSlot()
     def insert_test(self):
         self.register = registerCourse.registerCourse(self.sock, self.ui, self.courseList)
@@ -42,7 +40,8 @@ class adminSelectCourse(QtWidgets.QDialog):
 
     def modify_test(self):
         sender = self.sender()
-        self.dataPos = int((sender.pos().y() - 21) / 41)
+        self.dataPos = int((sender.pos().y() - 9) / 29)
+        print(sender.pos().y())
 
         courseInfo = self.courseList[self.dataPos].split(',')
 
@@ -84,21 +83,30 @@ class adminSelectCourse(QtWidgets.QDialog):
             pass
 
     def registerHandler(self, message):
+        print(self.dataPos)
         if message == '0':
-            return
+            pass
 
-        if self.dataPos is -1:
+        elif self.dataPos is -1:
             self.courseList.append(message)
 
         else:
             del self.courseList[self.dataPos]
             self.courseList.insert(self.dataPos, message)
+            self.dataPos = -1
 
         self.makeCourseLayout()
-        self.ui.show()
-
 
     def makeCourseLayout(self):
+        try:
+            if self.pListLayout.count() is not 0:
+                while self.pListLayout.count():
+                    item = self.pListLayout.takeAt(0)
+                    wid = item.widget()
+                    wid.deleteLater()
+        except Exception as e:
+            print(e)
+
         listPos = 0
 
         for course in self.courseList:
@@ -125,5 +133,6 @@ class adminSelectCourse(QtWidgets.QDialog):
             self.pListLayout.addWidget(endLabel, listPos, 2)
             self.pListLayout.addWidget(countLabel, listPos, 3)
             self.pListLayout.addWidget(button, listPos, 4)
-            print(listPos)
             listPos += 1
+
+        self.ui.show()

@@ -127,7 +127,6 @@ class networkServer(object):
         try:
             clientsock.send(message)
             recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
-
         except Exception as e:
             return 0
 
@@ -139,8 +138,6 @@ class networkServer(object):
 
         else:
             return 0
-
-
 
     def update_course(self, courseName, courseDate, programList, siteList, students):
         programList = str(programList).strip('[]').replace(' ', '').replace(',', '*')
@@ -154,17 +151,18 @@ class networkServer(object):
         stdList = stdList.rstrip('*')
 
         makeMessage = '{},{},{},{},{}'.format(courseName, courseDate, programList, siteList, stdList)
+        makeMessage = makeMessage.replace("'", '')
+        print(makeMessage)
         message = config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_UPDATE_COURSE,
                                                     makeMessage).encode('utf-8')
 
         try:
             clientsock.sendall(message)
             recvMessage = clientsock.recv(BUFFER_SIZE).decode()
-
         except Exception as e:
             return 0
 
-        if recvMessage.encode('utf-8') == '1':
+        if recvMessage == '1':
             return 1
 
         else:

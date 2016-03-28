@@ -110,6 +110,8 @@ class updateCourse(QtWidgets.QDialog):
 
         if result is 1:
             self.rejectSignal.emit(self.makeMessage(courseDate))
+            self.ui.reject()
+
         else:
             result = warningPopup.warningPopup('수정에 실패했습니다. csv파일 등을 확인해보세요.')
 
@@ -147,13 +149,17 @@ class updateCourse(QtWidgets.QDialog):
             pass
 
     def makeMessage(self, courseDate):
-        endTime = datetime.datetime(self.ui.dateEdit.date().year(), self.ui.dateEdit.date().month(), self.ui.dateEdit.date().day(),
-                          self.timeEdit_2.time().hour(), self.timeEdit_2.time().minute())
+        try:
+            endTime = datetime.datetime(self.ui.dateEdit.date().year(), self.ui.dateEdit.date().month(),
+                                        self.ui.dateEdit.date().day(), self.timeEdit_2.time().hour(),
+                                        self.timeEdit_2.time().minute())
 
-        if datetime.datetime.now() > endTime:
-            return '0'
+            if datetime.datetime.now() > endTime:
+                return '0'
 
-        programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
-        siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
-        return '{},{},{},{},{}'.format(self.ui.lineEdit.text(), courseDate, programList,
-                                       siteList, str(len(self.students) + self.stdCount))
+            programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
+            siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
+            return '{},{},{},{},{}'.format(self.name, courseDate, programList,
+                                           siteList, str(len(self.students) + self.stdCount))
+        except Exception as e:
+            print(e)
