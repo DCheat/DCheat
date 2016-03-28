@@ -204,11 +204,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         courseIndex = select_course_index(courseName)
         
         try:
-            if len(banList[0]) is not 0:
-                delete_ban_list_in_course(courseIndex)
-            
-            if len(allowList[0]) is not 0:
-                delete_allow_list_in_course(courseIndex)
+            delete_ban_list_in_course(courseIndex)
+            delete_allow_list_in_course(courseIndex)
             dao.commit()
         except:
             dao.rollback()
