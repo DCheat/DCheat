@@ -204,7 +204,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         courseIndex = select_course_index(courseName)
 
         try:
-            if len(userList) is not 0:
+            if len(userList[0]) is not 0:
                 for userInfo in userList:
                     userInfo = userInfo.split('$')
                     userInfo[0] = userInfo[0].encode('utf-8')
