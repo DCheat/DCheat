@@ -44,6 +44,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 self.master_add_course_handler(data)
             elif data.find("UCS") != -1:
                 self.master_modify_course_handler(data)
+            elif data.find("PCH") != -1:
+                self.send_email_handler()
             elif data.find("SCL") != -1:
                 self.user_logout_handler(data)
                 break
@@ -170,12 +172,12 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                     except:
                         try:
                             dao.add(insert_user(userInfo[0], userInfo[1]))
+                            dao.commit()
                         except Exception as e:
                             dao.rollback()
                             print(e)
                             self.request.send("-1".encode('utf-8'))
                             return
-                        dao.commit()
                         userIndex = select_user_index(userInfo[0])
                     dao.add(insert_user_in_course(testIndex, userIndex))
 
@@ -186,6 +188,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             if len(allowList[0]) is not 0:
                 for allowSite in allowList:
                     dao.add(insert_allow_list_in_course(testIndex, int(allowSite)))
+
             dao.commit()
             self.request.send("1".encode('utf-8'))
         except Exception as e:
@@ -204,7 +207,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         courseIndex = select_course_index(courseName)
 
         try:
-            if len(userList[0]) is not 0:
+            if len(userList) is not 0:
                 for userInfo in userList:
                     userInfo = userInfo.split('$')
                     userInfo[0] = userInfo[0].encode('utf-8')
@@ -225,7 +228,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                 dao.commit()
         except Exception as e:
             dao.rollback()
-            self.request.send("0".encode('utf-8'))
+            self.request.send("-1".encode('utf-8'))
             return
 
         try:
@@ -250,11 +253,16 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             dao.commit()
         except:
             dao.rollback()
-            self.request.send("0".encode('utf-8'))
+            self.request.send("-1".encode('utf-8'))
             return
-        self.request.send("1".encode('utf-8'))
+        try:
+            userCount = select_user_count(courseIndex)
+        except Exception as e:
+            self.request.send("-1".encode('utf-8'))
+
+        self.request.send(str(userCount).encode('utf-8'))
         
-    def sign_up_handler():
+    def sign_up_handler(self):
         return
-    def send_email_handler():
+    def send_email_handler(self):
         return
