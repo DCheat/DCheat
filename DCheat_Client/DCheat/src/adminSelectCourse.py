@@ -20,7 +20,8 @@ class adminSelectCourse(QtWidgets.QDialog):
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/adminSelectCourse.ui', self)
 
         self.sock = socket
-        self.courseList = courseList
+        self.courseList = []
+        self.courseList = self.courseList + courseList
         self.register = object
         self.dataPos = -1
 
@@ -69,7 +70,7 @@ class adminSelectCourse(QtWidgets.QDialog):
             pass
 
         self.register = updateCourse.updateCourse(self.sock, name, testDate, startTime, endTime,
-                                                  banProgram, allowSite, stdCount)
+                                                  banProgram, allowSite)
         self.register.rejectSignal.connect(self.registerHandler)
 
     def closeEvent(self, event):

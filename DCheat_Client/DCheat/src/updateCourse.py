@@ -18,7 +18,7 @@ import csv
 class updateCourse(QtWidgets.QDialog):
     rejectSignal = pyqtSignal(str)
 
-    def __init__(self, socket, name, testDate, startTime, endTime, banList, allowList, stdCount, parent=None):
+    def __init__(self, socket, name, testDate, startTime, endTime, banList, allowList, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.ui = uic.loadUi(config.config.ROOT_PATH +'view/updateCourse.ui', self)
         self.sock = socket
@@ -29,7 +29,6 @@ class updateCourse(QtWidgets.QDialog):
         self.endTime = endTime.split(':')
         self.banList = banList
         self.allowList = allowList
-        self.stdCount = stdCount
 
         self.students = []
         self.ui.label_5.setText(self.name)
@@ -108,12 +107,12 @@ class updateCourse(QtWidgets.QDialog):
 
         result = self.sock.update_course(self.name, courseDate, self.banList, self.allowList, self.students)
 
-        if result is 1:
-            self.rejectSignal.emit(self.makeMessage(courseDate))
-            self.ui.reject()
+        if result == -1:
+            result = warningPopup.warningPopup('수정에 실패했습니다. csv파일 등을 확인해보세요.')
 
         else:
-            result = warningPopup.warningPopup('수정에 실패했습니다. csv파일 등을 확인해보세요.')
+            self.rejectSignal.emit(self.makeMessage(courseDate, result))
+            self.ui.reject()
 
     def set_ban_list(self):
         sender = self.sender()
@@ -148,7 +147,7 @@ class updateCourse(QtWidgets.QDialog):
         if QKeyEvent.key() == Qt.Key_Escape:
             pass
 
-    def makeMessage(self, courseDate):
+    def makeMessage(self, courseDate, stdCount):
         try:
             endTime = datetime.datetime(self.ui.dateEdit.date().year(), self.ui.dateEdit.date().month(),
                                         self.ui.dateEdit.date().day(), self.timeEdit_2.time().hour(),
@@ -160,6 +159,6 @@ class updateCourse(QtWidgets.QDialog):
             programList = str(self.banList).strip('[]').replace(' ', '').replace(',', '*')
             siteList = str(self.allowList).strip('[]').replace(' ', '').replace(',', '*')
             return '{},{},{},{},{}'.format(self.name, courseDate, programList,
-                                           siteList, str(len(self.students) + self.stdCount))
+                                           siteList, stdCount)
         except Exception as e:
             print(e)

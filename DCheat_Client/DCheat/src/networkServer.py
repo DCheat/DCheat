@@ -160,10 +160,10 @@ class networkServer(object):
             clientsock.sendall(message)
             recvMessage = clientsock.recv(BUFFER_SIZE).decode()
         except Exception as e:
-            return 0
+            return -1
 
-        if recvMessage == '1':
-            return 1
+        if recvMessage == '-1':
+            return -1
 
         else:
-            return 0
+            return recvMessage
