@@ -31,7 +31,7 @@ def delete_allow_list_in_course(courseIndex):
 def modify_allow_list_in_course(courseIndex, webIndex):
     dao.query(AllowList).\
         filter(AllowList.testIndex == courseIndex,
-               AllowList.webIndex == webIndex).\
+               AllowList.banIndex == webIndex).\
         update(dict(isDeleted = "FALSE"))
 
 '''

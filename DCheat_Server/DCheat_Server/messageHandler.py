@@ -13,7 +13,8 @@ from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_us
                                             select_course,\
                                             select_allow_list_index,\
                                             select_ban_list_index,\
-                                            select_user_count
+                                            select_user_count,\
+                                            select_user_in_course
 from DCheat_Server.utils.insertQuery import insert_allow_list_in_course,\
                                             insert_ban_list_in_course,\
                                             insert_course,\
@@ -219,8 +220,11 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         dao.add(insert_user(userInfo[0], userInfo[1]))
                         dao.commit()
                         userIndex = select_user_index(userInfo[0])
-
-                    dao.add(insert_user_in_course(courseIndex, userIndex))
+                    try:
+                        tempIndex = select_user_in_course(courseIndex, userIndex)
+                    except Exception as e:
+                        dao.add(insert_user_in_course(courseIndex, userIndex))
+                        dao.commit()
 
                 delete_ban_list_in_course(courseIndex)
                 delete_allow_list_in_course(courseIndex)
