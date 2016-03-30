@@ -24,12 +24,14 @@ class TestingUser (Base) :
                        ForeignKey(TestInfo.index,
                                   onupdate = 'CASCADE',
                                   ondelete = 'CASCADE'),
+                       primary_key = True,
                        autoincrement = True,
                        nullable = False)
     userIndex = Column(INTEGER(unsigned = True),
                        ForeignKey(User.index,
                                   onupdate = 'CASCADE',
                                   ondelete = 'CASCADE'),
+                       primary_key = True,
                        autoincrement = True,
                        nullable = False)
     firstLogin = Column(DATETIME,
