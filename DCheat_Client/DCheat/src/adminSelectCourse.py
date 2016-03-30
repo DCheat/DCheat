@@ -22,6 +22,7 @@ class adminSelectCourse(QtWidgets.QDialog):
         self.sock = socket
         self.courseList = []
         self.courseList = self.courseList + courseList
+        print(type(self.courseList))
         self.register = object
         self.dataPos = -1
 
@@ -89,7 +90,9 @@ class adminSelectCourse(QtWidgets.QDialog):
             pass
 
         elif self.dataPos is -1:
+            print(self.courseList)
             self.courseList.append(message)
+            print(self.courseList)
 
         else:
             del self.courseList[self.dataPos]

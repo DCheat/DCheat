@@ -46,6 +46,8 @@ class logIn(QtWidgets.QDialog):
 
         else:
             self.ui.reject()
+            if len(courses[0]) is 0:
+                courses = []
             course = adminSelectCourse.adminSelectCourse(courses, self.sock)
 
     def closeEvent(self, event):
