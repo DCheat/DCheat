@@ -14,7 +14,7 @@ from DCheat_Server.model.master import Master
 from datetime import datetime
 from sqlalchemy import func, and_
 
-def select_user_in_course(userIndex, courseIndex):
+def select_user_in_course(courseIndex, userIndex):
     return dao.query(TestingUser.index).\
               filter(TestingUser.userIndex == userIndex,
                      TestingUser.testIndex == courseIndex).index
