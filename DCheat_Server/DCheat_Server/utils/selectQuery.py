@@ -17,7 +17,7 @@ from sqlalchemy import func, and_
 def select_user_in_course(courseIndex, userIndex):
     return dao.query(TestingUser.index).\
               filter(TestingUser.userIndex == userIndex,
-                     TestingUser.testIndex == courseIndex).index
+                     TestingUser.testIndex == courseIndex).first().index
 
 def select_user_info(userIndex):
     return dao.query(User.id,
