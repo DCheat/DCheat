@@ -1,5 +1,5 @@
-import os
 import socketserver
+from DCheat_Server.celeryServer.task import sendMail
 from DCheat_Server.database import dao
 from werkzeug.security import check_password_hash
 from DCheat_Server.DCheat_py3des import TripleDES
@@ -46,7 +46,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             elif data.find("UCS") != -1:
                 self.master_modify_course_handler(data)
             elif data.find("PCH") != -1:
-                self.send_email_handler()
+                self.send_email_handler(data)
             elif data.find("SCL") != -1:
                 self.user_logout_handler(data)
                 break
@@ -266,7 +266,12 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
 
         self.request.send(str(userCount).encode('utf-8'))
         
-    def sign_up_handler(self):
+    def sign_up_handler(self, data):
         return
-    def send_email_handler(self):
+    def send_email_handler(self, data):
+        # 작성중
+        info = data.split(";")
+        userIndex = int(info[0])
+        programInfo = info[2].split(',')
+        sendMail.delay()
         return
