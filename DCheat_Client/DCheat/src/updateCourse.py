@@ -117,7 +117,7 @@ class updateCourse(QtWidgets.QDialog):
     def set_ban_list(self):
         sender = self.sender()
 
-        pos = int((sender.pos().y() - 9) / 19) + 1
+        pos = int((sender.pos().y() - 9) / 22) + 1
 
         if pos in self.banList:
             self.banList.remove(pos)
@@ -128,7 +128,7 @@ class updateCourse(QtWidgets.QDialog):
     def set_allow_list(self):
         sender = self.sender()
 
-        pos = int((sender.pos().y() - 9) / 19) + 1
+        pos = int((sender.pos().y() - 9) / 22) + 1
 
         if pos in self.allowList:
             self.allowList.remove(pos)

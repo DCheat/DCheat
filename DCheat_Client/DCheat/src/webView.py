@@ -34,7 +34,7 @@ class webView(QtWidgets.QMainWindow):
         self.ui.webView.load(QUrl('http://www.kookmin.ac.kr'))
 
         try:
-            self.mp = checkSystem.checkSystem(self.banProgram, os.getpid(), self.sock)
+            self.mp = checkSystem.checkSystem(self.courseName, self.banProgram, os.getpid(), self.sock)
             self.mp.daemon = True
             self.mp.start()
         except Exception as e:

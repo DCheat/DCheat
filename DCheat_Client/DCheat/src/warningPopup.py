@@ -7,6 +7,7 @@
     :copyright: Hwang Sek-jin
 """
 
+import sys
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
@@ -38,7 +39,10 @@ class warningPopup(QtWidgets.QDialog):
             self.ui.reject()
 
             if self.parentUi is not None:
-                self.parentUi.reject()
+                try:
+                    self.parentUi.reject()
+                except Exception as e:
+                    sys.exit()
         except Exception as e:
             print(e)
 

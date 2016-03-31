@@ -16,9 +16,10 @@ import time
 import multiprocessing
 
 class checkSystem(multiprocessing.Process):
-    def __init__(self, banList, ppid, sock):
+    def __init__(self, courseName, banList, ppid, sock):
         multiprocessing.Process.__init__(self)
 
+        self.courseName = courseName
         self.banList = banList
         self.sock = sock
         self.ppid = ppid
@@ -28,6 +29,7 @@ class checkSystem(multiprocessing.Process):
         self.tempIndex = 0
 
         self.ext = ''
+        self.thispid = os.getpid()
 
         if self.clientOS == config.config.OS_WINDOWS:
             self.ext = '.exe'
@@ -48,7 +50,7 @@ class checkSystem(multiprocessing.Process):
         processes = psutil.pids()
 
         for pid in processes:
-            if pid == self.ppid:
+            if pid == self.ppid or pid == self.pid or pid < 100:
                 continue
 
             try:
@@ -68,10 +70,7 @@ class checkSystem(multiprocessing.Process):
             print(e)
 
         for process in processes.Win32_Process():
-            if process.ProcessId == self.ppid:
-                continue
-
-            if process.ProcessId < 100:
+            if process.ProcessId == self.ppid or process.ProcessId == self.pid or process.ProcessId < 100:
                 continue
 
             self.tempIndex = 0
@@ -91,8 +90,8 @@ class checkSystem(multiprocessing.Process):
             checkingPoint += self.check_path(processPath)
             checkingPoint += self.check_port(process.ProcessId)
 
-            if checkingPoint > 0:
-                # self.sock.send_sensing_info(self.tempIndex, checkingPoint)
+            if checkingPoint > 2:
+                # self.sock.send_sensing_info(self.tempIndex, checkingPoint, self.courseName)
                 self.banList.remove(self.tempIndex)
 
             else:
@@ -102,10 +101,7 @@ class checkSystem(multiprocessing.Process):
         processes = psutil.pids()
 
         for pid in processes:
-            if pid == self.ppid:
-                continue
-
-            if pid < 100:
+            if pid == self.ppid or pid == self.pid or pid < 100:
                 continue
 
             self.tempIndex = 0
@@ -127,7 +123,7 @@ class checkSystem(multiprocessing.Process):
             checkingPoint += self.check_path(processPath)
             checkingPoint += self.check_port(pid)
 
-            if checkingPoint > 0:
+            if checkingPoint > 2:
                 self.sock.send_sensing_info(self.tempIndex, checkingPoint)
                 self.banList.remove(self.tempIndex)
 
@@ -162,6 +158,7 @@ class checkSystem(multiprocessing.Process):
                     pathCheck += 1
 
                 if config.config.BAN_PROGRAM_PATH[i][1] in processPath:
+                    self.tempIndex = i
                     pathCheck += 1
 
         pathCheck = pathCheck * 2
@@ -196,14 +193,19 @@ class checkSystem(multiprocessing.Process):
             pInfo = psutil.Process(pid)
             pName = pInfo.name()
 
-            if len(pInfo.connections()) > 0 and (pName in self.connecList) is False:
+            if len(pInfo.connections()) > 0 and (pName in self.connecList) is False\
+                and pid != self.ppid and pid != self.pid:
                 self.connecList.append(pName)
 
             fp = open('newdata.bin', 'wb')
-            fp.write(str(self.connecList).strip('[]').replace(' ', '').replace(',', '*').encode('utf-8'))
+            fp.write(str(self.connecList).strip('[]').replace(' ', '').replace("'", '').replace(',', '*').encode('utf-8'))
             fp.close()
 
             os.remove('data.bin')
+        except Exception as e:
+            print(e)
+
+        try:
             os.rename('newdata.bin', 'data.bin')
         except Exception as e:
             print(e)

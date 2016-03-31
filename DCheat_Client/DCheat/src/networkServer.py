@@ -95,8 +95,8 @@ class networkServer(object):
 
         return banProgram, allowWeb
 
-    def send_sensing_info(self, programIndex, point):
-        sensingMessage = '{},{}'.format(programIndex, point)
+    def send_sensing_info(self, programIndex, point, courseName):
+        sensingMessage = '{},{},{}'.format(programIndex, point, courseName)
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_CHEACK,
                                                      sensingMessage)).encode('utf-8')
 
