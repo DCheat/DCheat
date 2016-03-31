@@ -84,6 +84,10 @@ def select_ban_program_in_test():
                      BanList.banIndex == BanProgram.index).\
                 join(TestInfo,
                      TestInfo.index == BanList.testIndex).all()
+
+def select_ban_program_name(programIndex):
+    return dao.query(BanProgram.programName).\
+            filter(BanProgram.index == programIndex).first()
             
 def select_ban_list_in_test(testIndex):
     return dao.query(BanList.banIndex).all()
@@ -111,10 +115,11 @@ def select_user_count(testIndex):
     return dao.query(TestingUser).\
               filter(TestingUser.testIndex == testIndex).count()
               
-def select_master_email():
+def select_master_email(courseName):
     return dao.query(Master.emailAddress).\
                 join(TestInfo,
-                     TestInfo.masterIndex == Master.index).first()
+                     TestInfo.masterIndex == Master.index).\
+                filter(TestInfo.testName == courseName).first()
 
 
     

@@ -14,6 +14,9 @@ from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_us
                                             select_allow_list_index,\
                                             select_ban_list_index,\
                                             select_user_count,\
+                                            select_master_email,\
+                                            select_user_info,\
+                                            select_ban_program_name,\
                                             select_user_in_course
 from DCheat_Server.utils.insertQuery import insert_allow_list_in_course,\
                                             insert_ban_list_in_course,\
@@ -269,9 +272,11 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def sign_up_handler(self, data):
         return
     def send_email_handler(self, data):
-        # 작성중
         info = data.split(";")
         userIndex = int(info[0])
         programInfo = info[2].split(',')
-        sendMail.delay()
+        userInfo = select_user_info(userIndex)
+        mailAddress = select_master_email(programInfo[2])
+        programName = select_ban_program_name(programInfo[0])
+        sendMail.delay(userInfo[0], userInfo[1], programName, programInfo[1], mailAddress)
         return
