@@ -272,11 +272,14 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def sign_up_handler(self, data):
         return
     def send_email_handler(self, data):
-        info = data.split(";")
-        userIndex = int(info[0])
-        programInfo = info[2].split(',')
-        userInfo = select_user_info(userIndex)
-        mailAddress = select_master_email(programInfo[2])
-        programName = select_ban_program_name(programInfo[0])
-        sendMail.delay(userInfo[0], userInfo[1], programName, programInfo[1], mailAddress)
+        try:
+            info = data.split(";")
+            userIndex = int(info[0])
+            programInfo = info[2].split(',')
+            userInfo = select_user_info(userIndex)
+            mailAddress = select_master_email(programInfo[2])
+            programName = select_ban_program_name(programInfo[0])
+            sendMail.delay(userInfo[0], userInfo[1], programName, programInfo[1], mailAddress)
+        except Exception as e:
+            print(e)
         return
