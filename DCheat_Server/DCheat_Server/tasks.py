@@ -1,7 +1,7 @@
 # -*-coding: utf-8 -*-
 from __future__ import absolute_import
 
-from .celery import app
+from celeryServer import app
 
 @app.task(name = 'task.sendMail')
 def sendMail(stdCode, stdName, programName, score, adminAddress):

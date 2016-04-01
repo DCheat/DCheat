@@ -14,11 +14,14 @@ from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_us
                                             select_unfinished_test_course_for_master,\
                                             select_user_index,\
                                             select_user_process_info, \
-    select_master_check,\
+                                            select_master_check,\
                                             select_course_index, \
-    select_allow_list_index,\
+                                            select_allow_list_index,\
                                             select_ban_list_index,\
                                             select_user_count,\
+                                            select_user_info,\
+                                            select_master_email,\
+                                            select_ban_program_name,\
                                             select_user_in_course
 from DCheat_Server.utils.updateQuery import modify_course,\
                                             delete_ban_list_in_course,\
@@ -269,9 +272,14 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
     def sign_up_handler(self, data):
         return
     def send_email_handler(self, data):
-        # 작성중
-        info = data.split(";")
-        userIndex = int(info[0])
-        programInfo = info[2].split(',')
-        sendMail.delay()
+        try:
+            info = data.split(";")
+            userIndex = int(info[0])
+            programInfo = info[2].split(',')
+            userInfo = select_user_info(userIndex)
+            mailAddress = select_master_email(programInfo[2])
+            programName = select_ban_program_name(programInfo[0])
+            sendMail.delay(userInfo[0], userInfo[1], programName, programInfo[1], mailAddress)
+        except Exception as e:
+            print(e)
         return
