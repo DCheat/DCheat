@@ -91,7 +91,7 @@ class checkSystem(multiprocessing.Process):
             checkingPoint += self.check_port(process.ProcessId)
 
             if checkingPoint > 2:
-                # self.sock.send_sensing_info(self.tempIndex, checkingPoint, self.courseName)
+                self.sock.send_sensing_info(self.tempIndex, checkingPoint, self.courseName)
                 self.banList.remove(self.tempIndex)
 
             else:
