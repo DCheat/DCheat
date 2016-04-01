@@ -1,7 +1,7 @@
 # -*-coding: utf-8 -*-
 from __future__ import absolute_import
 
-from DCheat_Server.celeryServer import app
+from celeryServer import app
 
 @app.task(name = 'task.send_mail')
 def send_mail(stdCode, stdName, programName, score, adminAddress):

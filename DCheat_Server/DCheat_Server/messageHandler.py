@@ -4,7 +4,7 @@ from werkzeug.security import check_password_hash
 
 from DCheat_Server.DCheat_py3des import TripleDES
 from DCheat_Server.database import dao
-from DCheat_Server.tasks import sendMail
+from DCheat_Server.tasks import send_mail
 from DCheat_Server.utils.insertQuery import insert_allow_list_in_course,\
                                             insert_ban_list_in_course,\
                                             insert_course,\
@@ -277,9 +277,9 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             userIndex = int(info[0])
             programInfo = info[2].split(',')
             userInfo = select_user_info(userIndex)
-            mailAddress = select_master_email(programInfo[2])
-            programName = select_ban_program_name(programInfo[0])
-            sendMail.delay(userInfo[0], userInfo[1], programName, programInfo[1], mailAddress)
+            mailAddress = select_master_email(programInfo[2])[0]
+            programName = select_ban_program_name(programInfo[0])[0]
+            send_mail.delay(userInfo[0], userInfo[1], programName, programInfo[1], mailAddress)
         except Exception as e:
             print(e)
         return
