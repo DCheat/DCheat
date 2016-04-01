@@ -3,9 +3,6 @@ from __future__ import absolute_import
 from celeryServer import app
 import sys
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
 @app.task(name = 'task.send_mail')
 def send_mail(stdCode, stdName, programName, score, adminAddress):
     import smtplib
