@@ -6,7 +6,7 @@
 """
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.dialects.mysql import VARCHAR, INTEGER, DATETIME
+from sqlalchemy.dialects.mysql import VARCHAR, INTEGER, DATETIME, ENUM
 
 from DCheat_Server.model import Base
 from DCheat_Server.model.master import Master
@@ -31,4 +31,8 @@ class TestInfo (Base) :
                          nullable = False)
     endDate = Column(DATETIME,
                          nullable = False)
+    makeChart = Column(ENUM ('TRUE',
+                             'FALSE'),
+                       default = 'FALSE',
+                       nullable = False)
     

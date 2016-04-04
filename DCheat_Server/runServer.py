@@ -1,22 +1,30 @@
 import os
 import DCheat_Server
-import socketserver
 from socketserver import ThreadingTCPServer
 from DCheat_Server.messageHandler import ForkingRequestHandler
+from DCheat_Server.chart import chart
 
 class ForkingServer(ThreadingTCPServer):
     allow_reuse_address = True
 
 
 if __name__ == '__main__':
-    address = ('', 9410)  # let the kernel assign a portf
-    server = ForkingServer(address,
-                               ForkingRequestHandler)
-    ip, port = server.server_address  # what port was assigned?
+    try:
+        address = ('', 9410)  # let the kernel assign a portf
+        server = ForkingServer(address,
+                                   ForkingRequestHandler)
+        ip, port = server.server_address  # what port was assigned?
 
-    print('Server loop running in process:', os.getpid())
-    server.serve_forever()
+        chartThread = chart()
+        chartThread.start()
 
-    # Clean up
-    #server.shutdown()
-    #server.socket.close()
+
+        print('Server loop running in process:', os.getpid())
+        server.serve_forever()
+
+    except (KeyboardInterrupt, SystemExit):
+        server.socket.close()
+        try:
+            server.shutdown(1)
+        except:
+            pass

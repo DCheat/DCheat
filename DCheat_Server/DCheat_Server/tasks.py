@@ -38,3 +38,7 @@ def send_mail(stdCode, stdName, programName, score, adminAddress):
     s = smtplib.SMTP('localhost')
     s.sendmail(serverAddress, [adminAddress], message.as_string())
     s.quit()
+
+@app.task(name = 'task.send_char_with_mail')
+def send_chart_with_mail(adminAddress, filePath):
+    pass

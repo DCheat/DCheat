@@ -121,5 +121,14 @@ def select_master_email(courseName):
                      TestInfo.masterIndex == Master.index).\
                 filter(TestInfo.testName == courseName).first()
 
+def select_end_course_for_chart():
+    return dao.query(TestInfo.index, TestInfo.masterIndex, TestInfo.testName).\
+                filter(TestInfo.endDate <= datetime.now(), TestInfo.makeChart == 'FALSE').all()
 
-    
+def select_user_in_end_course(courseIndex):
+    tempQuery = dao.query(TestingUser).\
+                filter(TestingUser.testIndex == courseIndex).subquery()
+
+    return dao.query(User.name, tempQuery.firstLogin, tempQuery.lastLogin, tempQuery.lastLogout, tempQuery.individualInfomation).\
+                join(User,
+                     User.index == tempQuery.userIndex).all()
