@@ -36,15 +36,19 @@ class checkSystem(multiprocessing.Process):
 
     def run(self):
         self.pre_check()
+        time.sleep(5)
 
-        while True:
-            if self.clientOS == config.config.OS_WINDOWS:
-                self.check_in_windows()
+        try:
+            while True:
+                if self.clientOS == config.config.OS_WINDOWS:
+                    self.check_in_windows()
 
-            else:
-                self.check_in_linux()
+                else:
+                    self.check_in_linux()
 
-            time.sleep(59)
+                time.sleep(25)
+        except Exception as e:
+            print(e)
 
     def pre_check(self):
         processes = psutil.pids()
@@ -55,13 +59,13 @@ class checkSystem(multiprocessing.Process):
 
             try:
                 process = psutil.Process(pid)
+
+                for i in self.banList:
+                    if config.config.BAN_PROGRAM_PNAME[i]+self.ext == process.name():
+                        process.kill()
+                        break
             except:
                 continue
-
-            for i in self.banList:
-                if config.config.BAN_PROGRAM_PNAME[i]+self.ext == process.name():
-                    process.kill()
-                    break
 
     def check_in_windows(self):
         try:
@@ -70,32 +74,33 @@ class checkSystem(multiprocessing.Process):
             print(e)
 
         for process in processes.Win32_Process():
-            if process.ProcessId == self.ppid or process.ProcessId == self.pid or process.ProcessId < 100:
+            try:
+                if process.ProcessId == self.ppid or process.ProcessId == self.pid or process.ProcessId < 100:
+                    continue
+
+                processPath = process.ExecutablePath
+                processName = process.Name
+                processId = process.ProcessId
+            except Exception as e:
                 continue
 
             self.tempIndex = 0
 
             checkingPoint = 0
 
-            try:
-                processPath = process.ExecutablePath
-            except:
-                continue
-
             if processPath is None:
                 continue
-
             processPath = processPath.split(config.config.WINDOWS_DIRECTORY_SEPARATOR)
-            checkingPoint += self.check_name(process.Name)
+            checkingPoint += self.check_name(processName)
             checkingPoint += self.check_path(processPath)
-            checkingPoint += self.check_port(process.ProcessId)
+            checkingPoint += self.check_port(processId)
 
             if checkingPoint > 2:
                 self.sock.send_sensing_info(self.tempIndex, checkingPoint, self.courseName)
                 self.banList.remove(self.tempIndex)
 
             else:
-                self.makeConnecList(process.ProcessId)
+                self.makeConnecList(processId)
 
     def check_in_linux(self):
         processes = psutil.pids()

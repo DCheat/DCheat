@@ -100,13 +100,10 @@ class networkServer(object):
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_CHEACK,
                                                      sensingMessage)).encode('utf-8')
 
-        while True:
-            try:
-                clientsock.sendall(message)
-                recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
-
-            except Exception as e:
-                pass
+        try:
+            clientsock.sendall(message)
+        except Exception as e:
+            pass
 
     def make_course(self, courseName, courseDate, programList, siteList, students):
         programList = str(programList).strip('[]').replace(' ', '').replace(',', '*')

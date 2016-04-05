@@ -37,4 +37,4 @@ class config(object):
     BAN_PROGRAM_PNAME = ['banProgramPName', 'iexplore', 'chrome', 'firefox', 'swing', 'edge', 'KakaoTalk', 'LINE', 'NateOnMain', 'Skype', 'Tictoc', 'couple']
     BAN_PROGRAM_PATH = ['banProgramPath', ["Internet Explorer", ""], ["Goole", "Chrome"], ["Mozilla Firefox", ""], ["Swing", ""], ["Edge", ""],
                         ["Kakao", "KakaoTalk"], ["LINE", "LINE"], ["SK Communications", "NATEON"], ["Skype", "phone"], ["Tictoc", "bin"], ["Between", ""]]
-    BAN_PROGRAM_RPORT = ['banProgramRPort', 0, 0, 0, 0, 0, 5223, 443, 5004, 12350, 23018, 0]
+    BAN_PROGRAM_RPORT = ['banProgramRPort', 0, 0, 0, 0, 0, 5223, 0, 5004, 12350, 23018, 0]
