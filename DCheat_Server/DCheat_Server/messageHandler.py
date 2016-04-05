@@ -169,8 +169,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             if len(userList[0]) is not 0:
                 for userInfo in userList:
                     userInfo = userInfo.split('$')
-                    userInfo[0] = userInfo[0].encode('utf-8')
-                    userInfo[1] = userInfo[1].encode('utf-8')
+                    userInfo[0] = userInfo[0]
+                    userInfo[1] = userInfo[1]
                     try:
                         userIndex = select_user_index(userInfo[0])
                     except:
@@ -214,8 +214,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             if len(userList) is not 0:
                 for userInfo in userList:
                     userInfo = userInfo.split('$')
-                    userInfo[0] = userInfo[0].encode('utf-8')
-                    userInfo[1] = userInfo[1].encode('utf-8')
+                    userInfo[0] = userInfo[0]
+                    userInfo[1] = userInfo[1]
 
                     try:
                         userIndex = select_user_index(userInfo[0])
