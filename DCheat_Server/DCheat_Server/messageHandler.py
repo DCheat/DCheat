@@ -220,15 +220,14 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         dao.commit()
                         userIndex = select_user_index(userInfo[0])
                     try:
-                        tempIndex = select_user_in_course(courseIndex, userIndex)
+                        existUserIndex = select_user_in_course(courseIndex, userIndex)
                     except Exception as e:
                         dao.add(insert_user_in_course(courseIndex, userIndex))
-                        dao.commit()
 
                 delete_ban_list_in_course(courseIndex)
                 delete_allow_list_in_course(courseIndex)
-
                 dao.commit()
+                
         except Exception as e:
             dao.rollback()
             self.request.send("-1".encode('utf-8'))
