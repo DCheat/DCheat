@@ -223,10 +223,10 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         existUserIndex = select_user_in_course(courseIndex, userIndex)
                     except Exception as e:
                         dao.add(insert_user_in_course(courseIndex, userIndex))
+                        dao.commit()
 
                 delete_ban_list_in_course(courseIndex)
                 delete_allow_list_in_course(courseIndex)
-                dao.commit()
                 
         except Exception as e:
             dao.rollback()
