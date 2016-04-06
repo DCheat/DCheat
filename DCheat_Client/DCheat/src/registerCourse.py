@@ -31,6 +31,7 @@ class registerCourse(QtWidgets.QDialog):
         self.students = []
 
         # QtWidgets.QWidget.setTabOrder(self.ui.lineEdit, self.ui.dateEdit)
+        self.ui.dateEdit.setDate(datetime.datetime.now().date())
 
         pListWidget = QtWidgets.QWidget()
         self.ui.scrollArea.setWidgetResizable(True)
