@@ -209,7 +209,7 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         courseIndex = select_course_index(courseName)
 
         try:
-            if len(userList) is not 0:
+            if len(userList[0]) is not 0:
                 for userInfo in userList:
                     userInfo = userInfo.split('$')
 
@@ -225,8 +225,8 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
                         dao.add(insert_user_in_course(courseIndex, userIndex))
                         dao.commit()
 
-                delete_ban_list_in_course(courseIndex)
-                delete_allow_list_in_course(courseIndex)
+            delete_ban_list_in_course(courseIndex)
+            delete_allow_list_in_course(courseIndex)
                 
         except Exception as e:
             dao.rollback()
@@ -241,16 +241,16 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             if len(banList[0]) is not 0:
                 for banIndex in banList:
                     try:
-                        modify_ban_list_in_course(courseIndex, int(banIndex))
-                    except:
                         insert_ban_list_in_course(courseIndex, int(banIndex))
+                    except:
+                        modify_ban_list_in_course(courseIndex, int(banIndex))
 
             if len(allowList[0]) is not 0:
                 for webIndex in allowList:
                     try:
-                        modify_allow_list_in_course(courseIndex, int(webIndex))
-                    except:
                         insert_allow_list_in_course(courseIndex, int(webIndex))
+                    except:
+                        modify_allow_list_in_course(courseIndex, int(webIndex))
 
             dao.commit()
         except:
