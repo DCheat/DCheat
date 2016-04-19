@@ -22,10 +22,8 @@ class adminSelectCourse(QtWidgets.QDialog):
         self.sock = socket
         self.courseList = []
         self.courseList = self.courseList + courseList
-        print(type(self.courseList))
         self.register = object
         self.dataPos = -1
-
         pListWidget = QtWidgets.QWidget()
         self.ui.scrollArea.setWidgetResizable(True)
         self.ui.scrollArea.setWidget(pListWidget)
@@ -43,7 +41,6 @@ class adminSelectCourse(QtWidgets.QDialog):
     def modify_test(self):
         sender = self.sender()
         self.dataPos = int((sender.pos().y() - 9) / 29)
-        print(sender.pos().y())
 
         courseInfo = self.courseList[self.dataPos].split(',')
 
@@ -85,14 +82,11 @@ class adminSelectCourse(QtWidgets.QDialog):
             pass
 
     def registerHandler(self, message):
-        print(self.dataPos)
         if message == '0':
             pass
 
         elif self.dataPos is -1:
-            print(self.courseList)
             self.courseList.append(message)
-            print(self.courseList)
 
         else:
             del self.courseList[self.dataPos]

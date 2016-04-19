@@ -149,7 +149,6 @@ class networkServer(object):
 
         makeMessage = '{},{},{},{},{}'.format(courseName, courseDate, programList, siteList, stdList)
         makeMessage = makeMessage.replace("'", '')
-        print(makeMessage)
         message = config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_UPDATE_COURSE,
                                                     makeMessage).encode('utf-8')
 
