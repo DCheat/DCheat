@@ -241,14 +241,14 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
             if len(banList[0]) is not 0:
                 for banIndex in banList:
                     try:
-                        insert_ban_list_in_course(courseIndex, int(banIndex))
+                        dao.add(insert_ban_list_in_course(courseIndex, int(banIndex)))
                     except:
                         modify_ban_list_in_course(courseIndex, int(banIndex))
 
             if len(allowList[0]) is not 0:
                 for webIndex in allowList:
                     try:
-                        insert_allow_list_in_course(courseIndex, int(webIndex))
+                        dao.add(insert_allow_list_in_course(courseIndex, int(webIndex)))
                     except:
                         modify_allow_list_in_course(courseIndex, int(webIndex))
 
