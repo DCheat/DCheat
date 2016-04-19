@@ -61,7 +61,8 @@ def select_allow_site_list():
 
 def select_allow_list_index(testIndex):
     return dao.query(AllowList.webIndex).\
-              filter(AllowList.testIndex == testIndex).all()
+              filter(AllowList.testIndex == testIndex,
+                     AllowList.isDeleted == 'FALSE').all()
 
 def select_allow_site_in_test():
     return dao.query(AllowSite.siteURL,
@@ -73,7 +74,8 @@ def select_allow_site_in_test():
                      
 def select_ban_list_index(testIndex):
     return dao.query(BanList.banIndex).\
-              filter(BanList.testIndex == testIndex).all()
+              filter(BanList.testIndex == testIndex,
+                     BanList.isDeleted == 'FALSE').all()
                     
 def select_ban_program_in_test():
     return dao.query(BanProgram.processName,
