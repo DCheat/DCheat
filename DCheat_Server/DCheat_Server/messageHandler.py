@@ -113,22 +113,24 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         
     def user_logout_handler(self, data):
         userIndex = int(data.split(";")[0])
-        courseName = data.split(";")[2]
-        processList = data.split(":")[3].split(",")[1]
-        courseIndex = select_course_index(courseName)
-        processInfo = ''
-            
-        if len(processList) is not 0:
-            try:
-                processInfo = select_user_process_info(courseIndex, userIndex)
-                processList = processList.split("*")
-                for process in processList:
-                    if processInfo.find(process) == -1:
-                        processInfo = processInfo + "*" + process
-                update_user_process_info(courseIndex, userIndex, processInfo)
-                                        
-            except:
-                update_user_process_info(courseIndex, userIndex, processList)
+        message = data.split(";")[2]
+        if len(message) is not 0:
+            courseName = message.split(",")[0]
+            processList =  message.split(",")[1]
+            courseIndex = select_course_index(courseName)
+            processInfo = ''
+                
+            if len(processList) is not 0:
+                try:
+                    processInfo = select_user_process_info(courseIndex, userIndex)
+                    processList = processList.split("*")
+                    for process in processList:
+                        if processInfo.find(process) == -1:
+                            processInfo = processInfo + "*" + process
+                    update_user_process_info(courseIndex, userIndex, processInfo)
+                                            
+                except:
+                    update_user_process_info(courseIndex, userIndex, processList)
         
         self.request.send('1'.encode('utf-8'))
         self.request.close()
