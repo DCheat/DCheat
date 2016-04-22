@@ -11,9 +11,10 @@ from PyQt5 import uic
 from PyQt5 import QtWidgets
 from PyQt5.QtWebKitWidgets import QWebView
 from PyQt5.QtCore import *
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, QTime, QTime
 from DCheat import config
 from DCheat.src import checkSystem
+import time
 import os
 
 class webView(QtWidgets.QMainWindow):
@@ -37,6 +38,13 @@ class webView(QtWidgets.QMainWindow):
             self.mp = checkSystem.checkSystem(self.courseName, self.banProgram, os.getpid(), self.sock)
             self.mp.daemon = True
             self.mp.start()
+        except Exception as e:
+            print(e)
+
+        try:
+            self.timer = QTimer(self)
+            self.timer.timeout.connect(self.rest_time_display)
+            self.timer.start(10)
         except Exception as e:
             print(e)
 
@@ -98,7 +106,13 @@ class webView(QtWidgets.QMainWindow):
         except Exception as e:
             print(e)
 
-
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_Escape:
             pass
+
+    def rest_time_display(self):
+        time = QTime.currentTime()
+        text = time.toString("HH:mm:ss")
+
+        self.ui.lcdNumber.display(text)
+        self.timer.start(10)

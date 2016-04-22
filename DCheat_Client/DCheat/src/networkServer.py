@@ -17,9 +17,10 @@ class networkServer(object):
     def __init__(self):
         self.userNumber = 0
 
-    def closeSocket(self, closeMessage):
+    def closeSocket(self, closeMessage = ''):
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_CLOSE_SOCKET,
                                                      closeMessage)).encode('utf-8')
+        print(message)
         try:
             clientsock.send(message)
             recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
