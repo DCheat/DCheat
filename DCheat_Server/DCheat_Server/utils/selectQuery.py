@@ -51,6 +51,10 @@ def select_course_index(courseName):
     return dao.query(TestInfo.index).\
               filter(TestInfo.testName == courseName).first().index
               
+def get_course_end_date(courseIndex):
+    return dao.query(TestInfo.endDate).\
+               filter(TestInfo.index == courseIndex).first().endDate
+              
 def select_course(masterIndex):
     return dao.query(TestInfo.index).\
               filter(TestInfo.masterIndex == masterIndex).first().index   

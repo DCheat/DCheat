@@ -22,7 +22,8 @@ from DCheat_Server.utils.selectQuery import select_unfinished_test_course_for_us
                                             select_user_info,\
                                             select_master_email,\
                                             select_ban_program_name,\
-                                            select_user_in_course
+                                            select_user_in_course,\
+                                            get_course_end_date
 from DCheat_Server.utils.updateQuery import modify_course,\
                                             delete_ban_list_in_course,\
                                             modify_ban_list_in_course,\
@@ -140,11 +141,12 @@ class ForkingRequestHandler(socketserver.BaseRequestHandler):
         courseName = data.split(";")[2]
         sendData = ''
         courseIndex = select_course_index(courseName)
+        endDate = get_course_end_date(courseIndex)
         siteIndexList = select_allow_list_index(courseIndex)
         siteIndexList = str(siteIndexList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',', '*')
         programIndexList = select_ban_list_index(courseIndex)
         programIndexList = str(programIndexList).strip('[]').replace(' ','').replace('(','').replace(',)','').replace(',', '*')
-        sendData = programIndexList+","+siteIndexList
+        sendData = programIndexList+","+siteIndexList+","+str(endDate)
         self.request.send(sendData.encode('utf-8'))
     
     def master_add_course_handler(self, data):
