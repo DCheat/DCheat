@@ -20,7 +20,7 @@ class networkServer(object):
     def closeSocket(self, closeMessage = ''):
         message = (config.config.MESSAGE_FORM.format(self.userNumber, config.config.HEADER_CLOSE_SOCKET,
                                                      closeMessage)).encode('utf-8')
-        print(message)
+
         try:
             clientsock.send(message)
             recvMessage = (clientsock.recv(BUFFER_SIZE)).decode()
@@ -94,7 +94,7 @@ class networkServer(object):
             for i in tempallowWeb:
                 allowWeb.append(int(i))
 
-        return banProgram, allowWeb
+        return banProgram, allowWeb, message[2]
 
     def send_sensing_info(self, programIndex, point, courseName):
         sensingMessage = '{},{},{}'.format(programIndex, point, courseName)

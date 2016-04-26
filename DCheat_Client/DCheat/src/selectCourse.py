@@ -31,13 +31,13 @@ class selectCourse(QtWidgets.QDialog):
         index = self.ui.listWidget.currentRow()
 
         # 나중에 주석 해제
-        banProgram, allowWeb = self.sock.send_select_course(self.courseList[index])
+        banProgram, allowWeb, endTime = self.sock.send_select_course(self.courseList[index])
         if banProgram is 0:
             return
 
         self.ui.reject()
 
-        webView.webView(banProgram, allowWeb, self.courseList[index], self.sock)
+        webView.webView(banProgram, allowWeb, self.courseList[index], endTime, self.sock)
 
     def closeEvent(self, event):
         from DCheat.src import warningPopup
