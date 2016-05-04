@@ -20,7 +20,7 @@ def send_mail(stdCode, stdName, programName, score, adminAddress):
     발신 전용 메일 주소 입니다.
     '''
 
-    if score > 10:
+    if int(score) > 10:
         stdAction = '을 사용했습니다.'
         adminAction = '필요합니다.'
 
