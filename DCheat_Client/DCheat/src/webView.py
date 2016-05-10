@@ -10,8 +10,7 @@
 from PyQt5 import uic
 from PyQt5 import QtWidgets
 from PyQt5.QtWebKitWidgets import QWebView
-from PyQt5.QtCore import *
-from PyQt5.QtCore import Qt, pyqtSlot, QTime, QTime
+from PyQt5.QtCore import Qt, pyqtSlot, QTime, QTime, QUrl, QTimer
 from DCheat import config
 from DCheat.src import checkSystem
 import datetime
