@@ -10,7 +10,7 @@
 from PyQt5 import uic
 from PyQt5 import QtWidgets
 from PyQt5.QtWebKitWidgets import QWebView
-from PyQt5.QtCore import Qt, pyqtSlot, QTime, QTime, QUrl, QTimer
+from PyQt5.QtCore import Qt, pyqtSlot, QUrl, QTimer
 from DCheat import config
 from DCheat.src import checkSystem
 import datetime
@@ -36,7 +36,7 @@ class webView(QtWidgets.QMainWindow):
         self.ui.webView.load(QUrl('http://www.kookmin.ac.kr'))
 
         try:
-            self.mp = checkSystem.checkSystem(self.courseName, self.banProgram, os.getpid(), self.sock)
+            self.mp = checkSystem.checkSystem(self.courseName, self.banProgram, self.sock)
             self.mp.daemon = True
             self.mp.start()
         except Exception as e:

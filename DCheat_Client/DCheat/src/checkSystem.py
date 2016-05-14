@@ -13,16 +13,17 @@ import wmi
 import psutil
 from DCheat import config
 import time
-import multiprocessing
+from PyQt5.QtCore import QThread
+import pythoncom
 
-class checkSystem(multiprocessing.Process):
-    def __init__(self, courseName, banList, ppid, sock):
-        multiprocessing.Process.__init__(self)
+class checkSystem(QThread):
+    def __init__(self, courseName, banList, sock):
+        QThread.__init__(self)
 
         self.courseName = courseName
         self.banList = banList
         self.sock = sock
-        self.ppid = ppid
+        self.pid = os.getpid()
         self.connecList = []
 
         self.clientOS = platform.system()
@@ -35,8 +36,11 @@ class checkSystem(multiprocessing.Process):
             self.ext = '.exe'
 
     def run(self):
-        self.pre_check()
-        time.sleep(5)
+        try:
+            self.pre_check()
+            time.sleep(5)
+        except Exception as e:
+            print(e, '1234')
 
         try:
             while True:
@@ -54,7 +58,7 @@ class checkSystem(multiprocessing.Process):
         processes = psutil.pids()
 
         for pid in processes:
-            if pid == self.ppid or pid == self.pid or pid < 100:
+            if pid == self.pid or pid < 100:
                 continue
 
             try:
@@ -69,13 +73,14 @@ class checkSystem(multiprocessing.Process):
 
     def check_in_windows(self):
         try:
+            pythoncom.CoInitialize()
             processes = wmi.WMI()
         except Exception as e:
             print(e)
 
         for process in processes.Win32_Process():
             try:
-                if process.ProcessId == self.ppid or process.ProcessId == self.pid or process.ProcessId < 100:
+                if process.ProcessId == self.pid or process.ProcessId < 100:
                     continue
 
                 processPath = process.ExecutablePath
@@ -106,7 +111,7 @@ class checkSystem(multiprocessing.Process):
         processes = psutil.pids()
 
         for pid in processes:
-            if pid == self.ppid or pid == self.pid or pid < 100:
+            if pid == self.pid or pid < 100:
                 continue
 
             self.tempIndex = 0
@@ -199,7 +204,7 @@ class checkSystem(multiprocessing.Process):
             pName = pInfo.name()
 
             if len(pInfo.connections()) > 0 and (pName in self.connecList) is False\
-                and pid != self.ppid and pid != self.pid:
+                and pid != self.pid:
                 self.connecList.append(pName)
 
             fp = open('newdata.bin', 'wb')

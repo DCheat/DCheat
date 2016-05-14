@@ -8,6 +8,7 @@
 """
 
 import sys
+import time
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
@@ -29,6 +30,7 @@ class warningPopup(QtWidgets.QDialog):
 
     @pyqtSlot()
     def ok_slot(self):
+        time.sleep(1)
         try:
             if self.sock is not None:
                 self.sock.closeSocket(self.closeMessage)
