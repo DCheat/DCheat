@@ -12,13 +12,13 @@ import platform
 import wmi
 import psutil
 from DCheat import config
-import time
-from PyQt5.QtCore import QThread
+import threading
 import pythoncom
+import time
 
-class checkSystem(QThread):
+class checkSystem(threading.Thread):
     def __init__(self, courseName, banList, sock):
-        QThread.__init__(self)
+        threading.Thread.__init__(self)
 
         self.courseName = courseName
         self.banList = banList
@@ -35,22 +35,21 @@ class checkSystem(QThread):
         if self.clientOS == config.config.OS_WINDOWS:
             self.ext = '.exe'
 
-    def run(self):
         try:
             self.pre_check()
-            time.sleep(5)
+            time.sleep(1)
         except Exception as e:
-            print(e, '1234')
+            print(e)
 
+    def run(self):
+        pythoncom.CoInitialize()
         try:
-            while True:
-                if self.clientOS == config.config.OS_WINDOWS:
-                    self.check_in_windows()
+            if self.clientOS == config.config.OS_WINDOWS:
+                self.check_in_windows()
 
-                else:
-                    self.check_in_linux()
+            else:
+                self.check_in_linux()
 
-                time.sleep(25)
         except Exception as e:
             print(e)
 
@@ -73,7 +72,6 @@ class checkSystem(QThread):
 
     def check_in_windows(self):
         try:
-            pythoncom.CoInitialize()
             processes = wmi.WMI()
         except Exception as e:
             print(e)

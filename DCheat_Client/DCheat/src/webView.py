@@ -15,6 +15,7 @@ from DCheat import config
 from DCheat.src import checkSystem
 import datetime
 import os
+import wmi
 
 class webView(QtWidgets.QMainWindow):
     def __init__(self, program, web, courseName, endTime, sock, parent=None):
@@ -36,13 +37,6 @@ class webView(QtWidgets.QMainWindow):
         self.ui.webView.load(QUrl('http://www.kookmin.ac.kr'))
 
         try:
-            self.mp = checkSystem.checkSystem(self.courseName, self.banProgram, self.sock)
-            self.mp.daemon = True
-            self.mp.start()
-        except Exception as e:
-            print(e)
-
-        try:
             self.timer = QTimer(self)
             self.timer.timeout.connect(self.rest_time_display)
             self.timer.start(900)
@@ -50,6 +44,17 @@ class webView(QtWidgets.QMainWindow):
             print(e)
 
         self.ui.show()
+
+        try:
+            self.threadTimer = QTimer(self)
+            self.threadTimer.timeout.connect(self.check_thread_run)
+
+            self.mp = checkSystem.checkSystem(self.courseName, self.banProgram, self.sock)
+            self.mp.start()
+
+            self.threadTimer.start(30000)
+        except Exception as e:
+            print(e)
 
     @pyqtSlot()
     def slot_back(self):
@@ -76,7 +81,7 @@ class webView(QtWidgets.QMainWindow):
         connecMessage = self.check_other_process()
 
         try:
-            result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, self.mp, connecMessage)
+            result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, connecMessage)
         except Exception as e:
             print(e)
 
@@ -112,6 +117,13 @@ class webView(QtWidgets.QMainWindow):
 
             self.ui.lcdNumber.display(printFormat % (h, m, s))
 
+        except Exception as e:
+            print(e)
+
+    def check_thread_run(self):
+        try:
+            if not (self.mp.isAlive()):
+                self.mp.run()
         except Exception as e:
             print(e)
 
