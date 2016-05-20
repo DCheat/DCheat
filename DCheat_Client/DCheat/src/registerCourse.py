@@ -75,7 +75,6 @@ class registerCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def register_slot(self):
-        print(len(self.ui.lineEdit.text()))
         if len(self.ui.lineEdit.text()) <4:
             warningPopup.warningPopup('과목 이름은 4자 이상으로 해주세요.')
             return
