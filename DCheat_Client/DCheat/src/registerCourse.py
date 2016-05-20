@@ -30,7 +30,6 @@ class registerCourse(QtWidgets.QDialog):
         self.allowList = []
         self.students = []
 
-        # QtWidgets.QWidget.setTabOrder(self.ui.lineEdit, self.ui.dateEdit)
         self.ui.dateEdit.setDate(datetime.datetime.now().date())
 
         pListWidget = QtWidgets.QWidget()
@@ -76,7 +75,8 @@ class registerCourse(QtWidgets.QDialog):
 
     @pyqtSlot()
     def register_slot(self):
-        if len(self.ui.lineEdit.text()) < 3:
+        print(len(self.ui.lineEdit.text()))
+        if len(self.ui.lineEdit.text()) <4:
             warningPopup.warningPopup('과목 이름은 4자 이상으로 해주세요.')
             return
 

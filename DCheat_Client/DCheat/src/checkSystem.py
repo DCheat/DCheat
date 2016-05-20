@@ -9,16 +9,14 @@
 
 import os
 import platform
-import wmi
 import psutil
 from DCheat import config
-import threading
-import pythoncom
+from PyQt5.QtCore import QThread
 import time
 
-class checkSystem(threading.Thread):
+class checkSystem(QThread):
     def __init__(self, courseName, banList, sock):
-        threading.Thread.__init__(self)
+        QThread.__init__(self)
 
         self.courseName = courseName
         self.banList = banList
@@ -33,57 +31,54 @@ class checkSystem(threading.Thread):
         self.thispid = os.getpid()
 
         if self.clientOS == config.config.OS_WINDOWS:
+            self.dirSeperator = config.config.WINDOWS_DIRECTORY_SEPARATOR
             self.ext = '.exe'
+
+        else:
+            self.dirSeperator = config.config.LINUX_DIRECTORY_SEPARATOR
 
         try:
             self.pre_check()
             time.sleep(1)
+
         except Exception as e:
             print(e)
 
     def run(self):
-        pythoncom.CoInitialize()
         try:
-            if self.clientOS == config.config.OS_WINDOWS:
-                self.check_in_windows()
-
-            else:
-                self.check_in_linux()
+            self.check_process()
 
         except Exception as e:
             print(e)
 
     def pre_check(self):
-        processes = psutil.pids()
-
-        for pid in processes:
-            if pid == self.pid or pid < 100:
-                continue
-
+        processes = psutil.process_iter()
+        for process in processes:
             try:
-                process = psutil.Process(pid)
-
                 for i in self.banList:
-                    if config.config.BAN_PROGRAM_PNAME[i]+self.ext == process.name():
+                    if config.config.BAN_PROGRAM_PNAME[i] + self.ext == process.name():
                         process.kill()
                         break
+
             except:
                 continue
 
-    def check_in_windows(self):
+    def check_process(self):
         try:
-            processes = wmi.WMI()
+            processes = psutil.process_iter()
+
         except Exception as e:
             print(e)
 
-        for process in processes.Win32_Process():
+        for process in processes:
             try:
-                if process.ProcessId == self.pid or process.ProcessId < 100:
+                if process.pid == self.pid or process.pid < 100:
                     continue
 
-                processPath = process.ExecutablePath
-                processName = process.Name
-                processId = process.ProcessId
+                processPath = process.exe()
+                processName = process.name()
+                processId = process.pid
+
             except Exception as e:
                 continue
 
@@ -93,7 +88,9 @@ class checkSystem(threading.Thread):
 
             if processPath is None:
                 continue
-            processPath = processPath.split(config.config.WINDOWS_DIRECTORY_SEPARATOR)
+
+            processPath = processPath.split(self.dirSeperator)
+
             checkingPoint += self.check_name(processName)
             checkingPoint += self.check_path(processPath)
             checkingPoint += self.check_port(processId)
@@ -104,39 +101,6 @@ class checkSystem(threading.Thread):
 
             else:
                 self.makeConnecList(processId)
-
-    def check_in_linux(self):
-        processes = psutil.pids()
-
-        for pid in processes:
-            if pid == self.pid or pid < 100:
-                continue
-
-            self.tempIndex = 0
-
-            try:
-                process = psutil.Process(pid)
-            except Exception as e:
-                continue
-
-            checkingPoint = 0
-            processPath = process.exe()
-
-            if processPath is None:
-                continue
-
-            processPath = processPath.split(config.config.LINUX_DIRECTORY_SEPARATOR)
-
-            checkingPoint += self.check_name(process.name())
-            checkingPoint += self.check_path(processPath)
-            checkingPoint += self.check_port(pid)
-
-            if checkingPoint > 2:
-                self.sock.send_sensing_info(self.tempIndex, checkingPoint)
-                self.banList.remove(self.tempIndex)
-
-            else:
-                self.makeConnecList(pid)
 
     def check_name(self, name):
         for i in self.banList:

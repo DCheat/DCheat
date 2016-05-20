@@ -10,7 +10,7 @@
 from PyQt5 import uic
 from PyQt5 import QtWidgets
 from PyQt5.QtWebKitWidgets import QWebView
-from PyQt5.QtCore import Qt, pyqtSlot, QUrl, QTimer
+from PyQt5.QtCore import Qt, pyqtSlot, QUrl, QTimer, QThread
 from DCheat import config
 from DCheat.src import checkSystem
 import datetime
@@ -40,6 +40,7 @@ class webView(QtWidgets.QMainWindow):
             self.timer = QTimer(self)
             self.timer.timeout.connect(self.rest_time_display)
             self.timer.start(900)
+
         except Exception as e:
             print(e)
 
@@ -52,7 +53,8 @@ class webView(QtWidgets.QMainWindow):
             self.mp = checkSystem.checkSystem(self.courseName, self.banProgram, self.sock)
             self.mp.start()
 
-            self.threadTimer.start(30000)
+            self.threadTimer.start(41000)
+
         except Exception as e:
             print(e)
 
@@ -82,6 +84,7 @@ class webView(QtWidgets.QMainWindow):
 
         try:
             result = warningPopup.warningPopup('종료하시겠습니까?', self.ui, self.sock, connecMessage)
+
         except Exception as e:
             print(e)
 
@@ -106,6 +109,7 @@ class webView(QtWidgets.QMainWindow):
 
                     try:
                         result = closePopup.closePopup(self.ui, self.sock, self.mp, connecMessage)
+
                     except Exception as e:
                         print(e)
 
@@ -122,8 +126,8 @@ class webView(QtWidgets.QMainWindow):
 
     def check_thread_run(self):
         try:
-            if not (self.mp.isAlive()):
-                self.mp.run()
+            self.mp.start()
+
         except Exception as e:
             print(e)
 
@@ -133,29 +137,32 @@ class webView(QtWidgets.QMainWindow):
 
         try:
             newdatasize = os.path.getsize('newdata.bin')
-        except:
-            pass
 
-        try:
-            datasize = os.path.getsize('data.bin')
         except:
-            pass
+            try:
+                datasize = os.path.getsize('data.bin')
+
+            except:
+                pass
 
         if newdatasize > datasize:
             try:
                 fp = open('newdata.bin')
+
             except Exception as e:
                 print(e)
 
         else:
             try:
                 fp = open('data.bin')
+
             except Exception as e:
                 print(e)
         try:
             data = fp.read()
             fp.close()
             connecMessage = '%s,%s' % (self.courseName, data)
+
         except Exception as e:
             print(e)
 
